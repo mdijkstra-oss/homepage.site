@@ -1,7 +1,7 @@
 import {Maybe} from "@/utils/types";
 import {QUOTE_CHARS, trimChars} from "@/utils/string";
 
-interface Parse {
+interface Command {
     name: string;
     args: string[];
     argd?: ArgsDictionary;
@@ -13,11 +13,11 @@ enum ControlOperator {
     Or = "||"
 }
 
-function isCommand(item: Parse | ControlOperator): item is Parse {
+function isCommand(item: Command | ControlOperator): item is Command {
     return typeof item === "object" && "name" in item && "args" in item;
 }
 
-function isControlOperator(item: Parse | ControlOperator | string): item is ControlOperator {
+function isControlOperator(item: Command | ControlOperator | string): item is ControlOperator {
     return Object.values(ControlOperator).includes(item as ControlOperator);
 }
 
@@ -25,7 +25,7 @@ type ArgsDictionary = {
     [key: string]: string | boolean;
 };
 
-type CommandList = (Parse | ControlOperator)[];
+type CommandList = (Command | ControlOperator)[];
 
 export function parseCommand(cmd: string): CommandList {
     return parseCommandBase(cmd).map((cmd) => {
@@ -40,7 +40,7 @@ function parseCommandBase(cmd: string): CommandList {
     const result: CommandList = [];
     const tokens = cmd.match(/(?:[^\s"']+|['"][^'"]*['"])+/g) || [];
 
-    let currentCommand: Maybe<Parse> = null;
+    let currentCommand: Maybe<Command> = null;
 
     for (const token of tokens) {
         if (isControlOperator(token)) {
