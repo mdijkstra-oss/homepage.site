@@ -8,8 +8,8 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@icons-pack/react-simple-icons": "^13.7.0",
 		"preact": "^10.25.3",
+		"@icons-pack/react-simple-icons": "^13.7.0",
 		"simple-icons": "^11.0.0"
 	},
 	"devDependencies": {
@@ -17,7 +17,6 @@
 		"@types/node": "^24.2.1",
 		"eslint": "^9.33.0",
 		"eslint-config-preact": "^2.0.0",
-		"jsdom": "^26.1.0",
 		"typescript": "^5.9.2",
 		"vite": "^6.0.4",
 		"vitest": "^1.0.0"

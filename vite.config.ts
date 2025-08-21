@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { configDefaults } from 'vitest/config';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -13,6 +12,7 @@ export default defineConfig({
 			'@': path.resolve(__dirname, './src/'),
 		},
 	},
+	// @ts-ignore - not sure why IDE is complaining here...
 	test: {
 		globals: true,
 		environment: 'jsdom',

@@ -1,43 +1,55 @@
 import { render } from 'preact';
+import {useReducer, useState} from "preact/hooks";
 
-import preactLogo from './assets/preact.svg';
 import './style.css';
 
-export function App() {
-	return (
-		<div>
-			<a href="https://preactjs.com" target="_blank">
-				<img src={preactLogo} alt="Preact logo" height="160" width="160" />
-			</a>
-			<h1>Get Started building Vite-powered Preact Apps </h1>
-			<section>
-				<Resource
-					title="Learn Preact"
-					description="If you're new to Preact, try the interactive tutorial to learn important concepts"
-					href="https://preactjs.com/tutorial"
-				/>
-				<Resource
-					title="Differences to React"
-					description="If you're coming from React, you may want to check out our docs to see where Preact differs"
-					href="https://preactjs.com/guide/v10/differences-to-react"
-				/>
-				<Resource
-					title="Learn Vite"
-					description="To learn more about Vite and how you can customize it to fit your needs, take a look at their excellent documentation"
-					href="https://vitejs.dev"
-				/>
-			</section>
-		</div>
-	);
-}
+import Tabs from '@/components/Tabs';
+import Terminal from '@/components/Terminal';
+import Prompt from '@/components/Prompt';
+import {parseCommand} from "@/domain/command/parse";
+import {executeCommands, ExecutedCommand} from "@/domain/command/exec";
 
-function Resource(props) {
+type AppTheme = 'light' | 'dark';
+
+const App = () => {
+	type AppendExecutedCommand = {
+		action: 'append',
+		payload: ExecutedCommand
+	}
+
+	type CommandList = AppendExecutedCommand
+
+	function commandsReducer(state: ExecutedCommand[], action: CommandList) {
+		return [...state, action.payload]
+	}
+
+	const [executedCommands, dispatch] = useReducer(commandsReducer, []);
+	const [theme, setTheme] = useState<AppTheme>('light');
+
+	const onCommandSubmit = (v: string)=> {
+		const parsed = parseCommand(v);
+		const executed = executeCommands(parsed)
+		if(executed.success) {
+			dispatch({action: 'append', payload: executed.value})
+		}
+		else {
+			console.error(executed.error)
+		}
+	}
+
 	return (
-		<a href={props.href} target="_blank" class="resource">
-			<h2>{props.title}</h2>
-			<p>{props.description}</p>
-		</a>
+		<>
+			<header>
+				<Tabs/>
+			</header>
+			<main>
+				<Terminal executedCommands={executedCommands}/>
+			</main>
+			<footer>
+				<Prompt onSubmit={onCommandSubmit} />
+			</footer>
+		</>
 	);
-}
+};
 
 render(<App />, document.getElementById('app'));
