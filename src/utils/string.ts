@@ -1,6 +1,6 @@
-export const QUOTE_CHARS = ['"', "'"]
+export const QUOTE_CHARS: readonly string[] = ['"', "'"]
 
-export function trimChars(str: string, chars: string[] = [' ']): string {
+export function trimChars(str: string, chars: readonly string[] = [' ']): string {
     const charSet = new Set(chars);
 
     let start = 0;
@@ -15,4 +15,12 @@ export function trimChars(str: string, chars: string[] = [' ']): string {
     }
 
     return str.slice(start, end + 1);
+}
+
+export function reverse(str: string): string {
+    return str.split('').reverse().join('');
+}
+
+export function printJSON(obj: any) {
+    console.log(JSON.stringify(obj, null, 2));
 }

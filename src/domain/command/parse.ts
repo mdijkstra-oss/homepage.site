@@ -1,17 +1,22 @@
 import {Maybe} from "@/utils/types";
 import {QUOTE_CHARS, trimChars} from "@/utils/string";
 
-interface Command {
+export interface Command {
     name: string;
     args: string[];
     argd?: ArgsDictionary;
+    stdin?: string;
 }
 
-enum ControlOperator {
+export enum ControlOperator {
     Pipe = "|",
-    And = "&&",
-    Or = "||"
 }
+
+export type CommandList = (Command | ControlOperator)[];
+
+type ArgsDictionary = {
+    [key: string]: string | boolean;
+};
 
 function isCommand(item: Command | ControlOperator): item is Command {
     return typeof item === "object" && "name" in item && "args" in item;
@@ -20,12 +25,6 @@ function isCommand(item: Command | ControlOperator): item is Command {
 function isControlOperator(item: Command | ControlOperator | string): item is ControlOperator {
     return Object.values(ControlOperator).includes(item as ControlOperator);
 }
-
-type ArgsDictionary = {
-    [key: string]: string | boolean;
-};
-
-type CommandList = (Command | ControlOperator)[];
 
 export function parseCommand(cmd: string): CommandList {
     return parseCommandBase(cmd).map((cmd) => {

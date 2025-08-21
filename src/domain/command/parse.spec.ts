@@ -20,14 +20,6 @@ describe('parseCommand', () => {
     ]);
   });
 
-  it('should parse commands with OR operator', () => {
-    checkCommand('mkdir test || cd test', [
-      {name: 'mkdir', args: ['test'], argd: { test: true }},
-      '||',
-      {name: 'cd', args: ['test'], argd: { test: true }}
-    ]);
-  });
-
   it('should handle empty input', () => {
     checkCommand('', []);
   });
