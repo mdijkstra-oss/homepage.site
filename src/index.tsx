@@ -6,35 +6,32 @@ import './style.css';
 import Tabs from '@/components/Tabs';
 import Terminal from '@/components/Terminal';
 import Prompt from '@/components/Prompt';
-import {parseCommand} from "@/domain/command/parse";
-import {executeCommands, ExecutedCommand} from "@/domain/command/exec";
+import {parseCommand} from "@/domain/command/parse/parse";
+import {ExecutingCommand, toPipeline} from "@/domain/command/exec/exec";
 
 type AppTheme = 'light' | 'dark';
 
+type Actions = 'append'
+type ReducerAction = { type: Actions; payload: ExecutingCommand }
+
 const App = () => {
-	type AppendExecutedCommand = {
-		action: 'append',
-		payload: ExecutedCommand
+
+	function commandsReducer(state: ExecutingCommand[], action: ReducerAction): ExecutingCommand[] {
+		switch (action.type) {
+			case 'append':
+				return [...state, action.payload]
+			default:
+				return state;
+		}
 	}
 
-	type CommandList = AppendExecutedCommand
-
-	function commandsReducer(state: ExecutedCommand[], action: CommandList) {
-		return [...state, action.payload]
-	}
-
-	const [executedCommands, dispatch] = useReducer(commandsReducer, []);
+	const [executingCommands, dispatch] = useReducer(commandsReducer, []);
 	const [theme, setTheme] = useState<AppTheme>('light');
 
-	const onCommandSubmit = (v: string)=> {
-		const parsed = parseCommand(v);
-		const executed = executeCommands(parsed)
-		if(executed.success) {
-			dispatch({action: 'append', payload: executed.value})
-		}
-		else {
-			console.error(executed.error)
-		}
+	const onCommandSubmit = (cmd: string)=> {
+		const parsed = parseCommand(cmd);
+		const stdout = toPipeline(parsed);
+		dispatch({type: 'append', payload: {name: cmd, stdout: toPipeline(parsed)}})
 	}
 
 	return (
@@ -43,7 +40,7 @@ const App = () => {
 				<Tabs/>
 			</header>
 			<main>
-				<Terminal executedCommands={executedCommands}/>
+				<Terminal commands={executingCommands}/>
 			</main>
 			<footer>
 				<Prompt onSubmit={onCommandSubmit} />

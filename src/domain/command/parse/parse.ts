@@ -5,14 +5,13 @@ export interface Command {
     name: string;
     args: string[];
     argd?: ArgsDictionary;
-    stdin?: string;
 }
 
 export enum ControlOperator {
     Pipe = "|",
 }
 
-export type CommandList = (Command | ControlOperator)[];
+export type CommandList = (Command)[];
 
 type ArgsDictionary = {
     [key: string]: string | boolean;
@@ -43,7 +42,8 @@ function parseCommandBase(cmd: string): CommandList {
 
     for (const token of tokens) {
         if (isControlOperator(token)) {
-            result.push(token as ControlOperator);
+            // todo: differentiate between | and && - now just pipe until end
+            // result.push(token as ControlOperator);
             currentCommand = null;
         } else {
             if (!currentCommand) {

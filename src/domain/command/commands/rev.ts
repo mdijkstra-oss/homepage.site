@@ -1,8 +1,5 @@
-import {CommandExecutor, ExecutedCommand} from "@/domain/command/exec";
-import {Command} from "@/domain/command/parse";
+import {Executor} from "@/domain/command/exec/exec";
 import {reverse} from "@/utils/string";
+import {createAggregatingExecutor} from "@/domain/command/exec/executorFactory";
 
-export const rev: CommandExecutor = (command: Command): ExecutedCommand => ({
-    ...command,
-    stdout: reverse(command.stdin)
-})
+export const rev: Executor = createAggregatingExecutor(reverse)

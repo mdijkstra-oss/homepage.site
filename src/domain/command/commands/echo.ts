@@ -1,7 +1,10 @@
-import {CommandExecutor, ExecutedCommand} from "@/domain/command/exec";
-import {Command} from "@/domain/command/parse";
+import {Command} from "@/domain/command/parse/parse";
+import {ExecStream, Executor} from "@/domain/command/exec/exec";
 
-export const echo: CommandExecutor = (command: Command): ExecutedCommand => ({
-    ...command,
-    stdout: command.args.join(' '),
-})
+export const echo: Executor = async function* (command: Command, stdin?: ExecStream): ExecStream {
+    if (stdin) {
+        yield *stdin;
+    } else {
+        yield command.args.join(' ');
+    }
+};

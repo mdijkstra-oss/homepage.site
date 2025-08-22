@@ -1,16 +1,16 @@
 import {FunctionalComponent} from 'preact';
 import TerminalEntry from "@/components/Terminal/components/TerminalEntry";
-import {ExecutedCommand} from "@/domain/command/exec";
+import {ExecutingCommand} from "@/domain/command/exec/exec";
 
 interface TerminalProps {
-    executedCommands: ExecutedCommand[];
+    commands: ExecutingCommand[];
 }
 
-const Terminal: FunctionalComponent<TerminalProps> = ({ executedCommands = [] }) => {
+const Terminal: FunctionalComponent<TerminalProps> = ({ commands = [] }) => {
     return (
         <div class="terminal">
-            {executedCommands.map((command, index) => (
-                <TerminalEntry key={index} command={command} />
+            {commands.map((command, index) => (
+                <TerminalEntry key={index} title={command.name} stdout={command.stdout} />
             ))}
         </div>
     );

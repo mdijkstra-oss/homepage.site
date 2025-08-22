@@ -1,30 +1,54 @@
 import {FunctionalComponent} from "preact";
-import {ExecutedCommand} from "@/domain/command/exec";
+import {ExecStream, ExecutingCommand} from "@/domain/command/exec/exec";
 
 import './style.css'
+import {useEffect, useReducer} from "preact/hooks";
 
 interface TerminalEntryProps {
-    command: ExecutedCommand;
+    stdout: ExecStream;
+    title: string
 }
 
-const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ command }) => {
+type Actions = 'append'
+type ReducerAction = { type: Actions; payload: string }
+
+const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ stdout, title }) => {
+    const [aggregate, dispatch] = useReducer(
+        (state: string, action: ReducerAction) => {
+            switch (action.type) {
+                case 'append':
+                    return state + action.payload;
+                default:
+                    return state;
+            }
+        },
+        ''
+    );
+
+    useEffect(() => {
+        let cancelled = false;
+
+        async function processStream() {
+            for await (const chunk of stdout) {
+                if (cancelled) return;
+                dispatch({ type: 'append', payload: chunk });
+            }
+        }
+
+        void processStream();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [stdout]);
+
     return (
-        <div class="terminal-command">
-            <div class="terminal-input">
-                {command.name} {command.args.join(' ')}
-            </div>
-            {command.stdout && (
-                <div class="terminal-output terminal-stdout">
-                    {command.stdout}
-                </div>
-            )}
-            {command.stderr && (
-                <div class="terminal-output terminal-stderr">
-                    {command.stderr}
-                </div>
-            )}
+        <div className="terminal-command">
+            <div className="terminal-input">{title}</div>
+            <div className="terminal-output terminal-stdout">{aggregate}</div>
         </div>
     );
 };
+
 
 export default TerminalEntry
