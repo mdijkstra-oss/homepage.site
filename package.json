@@ -8,8 +8,9 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"preact": "^10.25.3",
 		"@icons-pack/react-simple-icons": "^13.7.0",
+		"preact": "^10.25.3",
+		"react-markdown": "^10.1.0",
 		"simple-icons": "^11.0.0"
 	},
 	"devDependencies": {

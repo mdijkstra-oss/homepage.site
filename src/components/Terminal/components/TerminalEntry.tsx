@@ -1,5 +1,6 @@
 import {FunctionalComponent} from "preact";
 import {ExecResult, ExecutingCommand} from "@/domain/command/exec/exec";
+import Markdown from 'react-markdown'
 
 import './style.css'
 import {useEffect, useState} from "preact/hooks";
@@ -44,7 +45,11 @@ const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
     return (
         <div className="terminal-command">
             <div className="terminal-input">{ commands.map((c) => c.name).join(":") }</div>
-            { execResult && <div className="terminal-output terminal-stdout">{execResult.result}</div> }
+            { execResult && (
+                <div className="terminal-output terminal-stdout">
+                    <Markdown>{execResult.result}</Markdown>
+                </div>
+            ) }
         </div>
     );
 };
