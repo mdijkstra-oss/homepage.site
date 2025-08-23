@@ -4,7 +4,7 @@ import {QUOTE_CHARS, trimChars} from "@/utils/string";
 export interface Command {
     name: string;
     args: string[];
-    argd?: ArgsDictionary;
+    argd: ArgsDictionary;
 }
 
 export enum ControlOperator {
@@ -47,7 +47,7 @@ function parseCommandBase(cmd: string): CommandList {
             currentCommand = null;
         } else {
             if (!currentCommand) {
-                currentCommand = {name: token, args: []};
+                currentCommand = {name: token, args: [], argd: {}};
                 result.push(currentCommand);
             } else {
                 currentCommand.args.push(trimChars(token, QUOTE_CHARS));

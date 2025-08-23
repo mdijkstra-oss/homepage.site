@@ -1,9 +1,8 @@
-import {Command, CommandList} from "@/domain/command/parse/parse";
+import {CommandList, Command} from "@/domain/command/parse/parse";
 import * as Commands from '../commands'
-import {collectStr} from "@/utils/stream";
 
 export type ExecResult = {
-    payload: string,
+    result: string,
     meta?: {
         tags?: string[],
         isError?: boolean
@@ -13,9 +12,10 @@ export type ExecResult = {
 export type ExecStream = AsyncIterable<ExecResult>;
 
 export type ExecutingCommand = {
-    name: string,
-    stdout: ExecStream
+    commands: CommandList,
+    stdout: ExecStream,
 }
+
 
 export interface Executor {
     (command: Command, stream: ExecStream): ExecStream;

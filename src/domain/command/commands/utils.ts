@@ -14,7 +14,7 @@ export async function anyInput(
 }
 
 export function metaLessResult(payload: string): ExecResult {
-    return { payload: payload }
+    return { result: payload }
 }
 
 export function updatePayload(result: ExecResult, payload: string) {
@@ -23,7 +23,7 @@ export function updatePayload(result: ExecResult, payload: string) {
 
 export function errorResult(error: string | Error): ExecResult {
     return {
-        payload: typeof error == "string" ? error : error.message,
+        result: typeof error == "string" ? error : error.message,
         meta: {
             isError: true
         }

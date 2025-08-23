@@ -10,7 +10,7 @@ const Terminal: FunctionalComponent<TerminalProps> = ({ commands = [] }) => {
     return (
         <div class="terminal">
             {commands.map((command, index) => (
-                <TerminalEntry key={index} title={command.name} stdout={command.stdout} />
+                <TerminalEntry key={index} exec={command} />
             ))}
         </div>
     );

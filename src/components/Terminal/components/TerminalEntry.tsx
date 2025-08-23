@@ -1,18 +1,19 @@
 import {FunctionalComponent} from "preact";
-import {ExecResult, ExecStream, ExecutingCommand} from "@/domain/command/exec/exec";
+import {ExecResult, ExecutingCommand} from "@/domain/command/exec/exec";
 
 import './style.css'
-import {useEffect, useReducer, useState} from "preact/hooks";
+import {useEffect, useState} from "preact/hooks";
 import {errorResult} from "@/domain/command/commands/utils";
 
 interface TerminalEntryProps {
-    stdout: ExecStream;
-    title: string
+    exec: ExecutingCommand;
 }
 
-const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ stdout, title }) => {
+const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
 
-    const [result, setResult] = useState<ExecResult | undefined>()
+    const { commands, stdout } = exec
+
+    const [execResult, setExecResult] = useState<ExecResult | undefined>()
 
     useEffect(() => {
         let cancelled = false;
@@ -20,12 +21,12 @@ const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ stdout, title 
         async function processStream() {
             try {
                 for await (const entry of stdout) {
-                    setResult(entry);
+                    setExecResult(entry);
                     if (cancelled) return;
                 }
             }
             catch (error) {
-                setResult(errorResult(error))
+                setExecResult(errorResult(error))
             }
         }
 
@@ -34,12 +35,16 @@ const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ stdout, title 
         return () => {
             cancelled = true;
         };
-    }, [stdout]);
+    }, [exec]);
+
+    if (!execResult) {
+        return null;
+    }
 
     return (
         <div className="terminal-command">
-            <div className="terminal-input">{title}</div>
-            { result && <div className="terminal-output terminal-stdout">{result.payload}</div> }
+            <div className="terminal-input">{ commands.map((c) => c.name).join(":") }</div>
+            { execResult && <div className="terminal-output terminal-stdout">{execResult.result}</div> }
         </div>
     );
 };
