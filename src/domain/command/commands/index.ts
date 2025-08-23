@@ -1,3 +1,2 @@
-export { echo } from './echo';
-export { rev } from './rev'
-export { type } from './type'
+export { fetch } from './fetch'
+export { uppercase } from './uppercase'

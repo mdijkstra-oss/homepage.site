@@ -2,7 +2,15 @@ import {Command, CommandList} from "@/domain/command/parse/parse";
 import * as Commands from '../commands'
 import {collectStr} from "@/utils/stream";
 
-export type ExecStream = AsyncIterable<string>;
+export type ExecResult = {
+    payload: string,
+    meta?: {
+        tags?: string[],
+        isError?: boolean
+    }
+}
+
+export type ExecStream = AsyncIterable<ExecResult>;
 
 export type ExecutingCommand = {
     name: string,
@@ -10,11 +18,11 @@ export type ExecutingCommand = {
 }
 
 export interface Executor {
-    (command: Command, stream?: ExecStream): ExecStream;
+    (command: Command, stream: ExecStream): ExecStream;
 }
 
 export function toPipeline(commands: CommandList): ExecStream {
-    let input: AsyncIterable<string> | undefined;
+    let input: ExecStream | undefined;
 
     for (const cmd of commands) {
         const executor = executorForName(cmd.name);

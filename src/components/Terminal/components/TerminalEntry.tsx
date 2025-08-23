@@ -1,37 +1,31 @@
 import {FunctionalComponent} from "preact";
-import {ExecStream, ExecutingCommand} from "@/domain/command/exec/exec";
+import {ExecResult, ExecStream, ExecutingCommand} from "@/domain/command/exec/exec";
 
 import './style.css'
-import {useEffect, useReducer} from "preact/hooks";
+import {useEffect, useReducer, useState} from "preact/hooks";
+import {errorResult} from "@/domain/command/commands/utils";
 
 interface TerminalEntryProps {
     stdout: ExecStream;
     title: string
 }
 
-type Actions = 'append'
-type ReducerAction = { type: Actions; payload: string }
-
 const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ stdout, title }) => {
-    const [aggregate, dispatch] = useReducer(
-        (state: string, action: ReducerAction) => {
-            switch (action.type) {
-                case 'append':
-                    return state + action.payload;
-                default:
-                    return state;
-            }
-        },
-        ''
-    );
+
+    const [result, setResult] = useState<ExecResult | undefined>()
 
     useEffect(() => {
         let cancelled = false;
 
         async function processStream() {
-            for await (const chunk of stdout) {
-                if (cancelled) return;
-                dispatch({ type: 'append', payload: chunk });
+            try {
+                for await (const entry of stdout) {
+                    setResult(entry);
+                    if (cancelled) return;
+                }
+            }
+            catch (error) {
+                setResult(errorResult(error))
             }
         }
 
@@ -45,7 +39,7 @@ const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ stdout, title 
     return (
         <div className="terminal-command">
             <div className="terminal-input">{title}</div>
-            <div className="terminal-output terminal-stdout">{aggregate}</div>
+            { result && <div className="terminal-output terminal-stdout">{result.payload}</div> }
         </div>
     );
 };
