@@ -14,16 +14,16 @@ export async function anyInput(
 }
 
 export function metaLessResult(payload: string): ExecResult {
-    return { result: payload }
+    return { payload: payload }
 }
 
-export function updatePayload(result: ExecResult, payload: string) {
+export function updatePayload(result: ExecResult, payload: string): ExecResult {
     return { ...result, payload }
 }
 
 export function errorResult(error: string | Error): ExecResult {
     return {
-        result: typeof error == "string" ? error : error.message,
+        payload: typeof error == "string" ? error : error.message,
         meta: {
             isError: true
         }

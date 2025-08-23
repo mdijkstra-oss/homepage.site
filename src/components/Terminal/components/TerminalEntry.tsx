@@ -22,6 +22,7 @@ const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
         async function processStream() {
             try {
                 for await (const entry of stdout) {
+                    console.debug(entry)
                     setExecResult(entry);
                     if (cancelled) return;
                 }
@@ -47,7 +48,7 @@ const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
             <div className="terminal-input">{ commands.map((c) => c.name).join(":") }</div>
             { execResult && (
                 <div className="terminal-output terminal-stdout">
-                    <Markdown>{execResult.result}</Markdown>
+                    <Markdown>{execResult.payload}</Markdown>
                 </div>
             ) }
         </div>

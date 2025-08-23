@@ -2,7 +2,7 @@ import {CommandList, Command} from "@/domain/command/parse/parse";
 import * as Commands from '../commands'
 
 export type ExecResult = {
-    result: string,
+    payload: string,
     meta?: {
         tags?: string[],
         isError?: boolean
