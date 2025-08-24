@@ -8,7 +8,7 @@ interface TerminalEntryProps {
     exec: ExecutingCommand;
 }
 
-const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
+const Entry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
     const { commands, stdout } = exec;
     const result = useCommandExecution(stdout);
 
@@ -26,4 +26,4 @@ const TerminalEntry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
     );
 };
 
-export default TerminalEntry;
+export default Entry;
