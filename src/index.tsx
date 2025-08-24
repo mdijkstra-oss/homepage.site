@@ -8,20 +8,20 @@ import Terminal from '@/components/Terminal';
 import Prompt from '@/components/Prompt';
 import {parseCommand} from "@/domain/command/parse/parse";
 import {ExecutingCommand, toPipeline} from "@/domain/command/exec/exec";
-import {ArrayReducer, createAction} from "@/utils/reducer";
+import {useArrayReducer} from "@/hooks/useArrayReducer";
+import {createAction} from "@/hooks/reducer";
 
 type AppTheme = 'light' | 'dark';
 
 const App = () => {
 
-	const [executingCommands, dispatch] = useReducer<ExecutingCommand[], ArrayReducer.Action<ExecutingCommand>>(ArrayReducer.create, []);
+	const [executingCommands, dispatch] = useArrayReducer<ExecutingCommand>()
 	const [theme, setTheme] = useState<AppTheme>('light');
 
 	const onCommandSubmit = (cmd: string)=> {
 		const commands = parseCommand(cmd);
 		const stdout = toPipeline(commands);
-		const payload: ExecutingCommand = { commands, stdout }
-		dispatch(createAction('append', payload))
+		dispatch(createAction('append', { commands, stdout }))
 	}
 
 	return (
