@@ -1,8 +1,8 @@
 import { toPipeline } from './exec';
-import {Command, CommandList, ControlOperator} from '../parse/parse';
+import {Command, CommandSequence, ControlOperator} from '../parse/parse';
 import { collectStr } from '@/utils/stream';
 
-async function testPipeline(commands: CommandList, expected?: string) {
+async function testPipeline(commands: CommandSequence, expected?: string) {
     const pipeline = toPipeline(commands);
     const output = await collectStr(pipeline);
     expect(output).toBe(expected);
@@ -26,7 +26,7 @@ describe('Command Execution', () => {
     });
 
     it('should pipe output from echo to rev', async () => {
-        const commands: CommandList = [
+        const commands: CommandSequence = [
             { name: 'echo', args: ['hello'], argd: {} },
             { name: 'rev', args: [], argd: {} }
         ];
@@ -35,7 +35,7 @@ describe('Command Execution', () => {
     });
 
     it('should stop execution when a command fails', async () => {
-        const commands: CommandList = [
+        const commands: CommandSequence = [
             { name: 'nonexistent', args: [], argd: {} },
             { name: 'rev', args: [], argd: {} }
         ];
@@ -44,7 +44,7 @@ describe('Command Execution', () => {
     });
 
     it('should return empty output for empty command list', async () => {
-        const commands: CommandList = [];
+        const commands: CommandSequence = [];
 
         await testPipeline(commands, '');
     });

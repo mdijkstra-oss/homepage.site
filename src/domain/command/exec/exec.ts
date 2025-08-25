@@ -1,4 +1,4 @@
-import {CommandList, Command} from "@/domain/command/parse/parse";
+import {CommandSequence, Command} from "@/domain/command/parse/parse";
 import * as Commands from '../commands'
 
 export type ExecResult = {
@@ -12,16 +12,15 @@ export type ExecResult = {
 export type ExecStream = AsyncIterable<ExecResult>;
 
 export type ExecutingCommand = {
-    commands: CommandList,
+    sequence: CommandSequence,
     stdout: ExecStream,
 }
-
 
 export interface Executor {
     (command: Command, stream: ExecStream): ExecStream;
 }
 
-export function toPipeline(commands: CommandList): ExecStream {
+export function toPipeline(commands: CommandSequence): ExecStream {
     let input: ExecStream | undefined;
 
     for (const cmd of commands) {

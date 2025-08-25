@@ -1,7 +1,7 @@
-import {parseCommand, parseArgs} from './parse';
+import {commandStringToCommandSequence, parseArgs} from './parse';
 
 function checkCommand(input: string, expected: any) {
-  const result = parseCommand(input);
+  const result = commandStringToCommandSequence(input);
   expect(result).toEqual(expected);
 }
 

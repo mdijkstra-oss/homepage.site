@@ -24,3 +24,12 @@ export function reverse(str: string): string {
 export function printJSON(obj: any) {
     console.log(JSON.stringify(obj, null, 2));
 }
+
+// Use in sharable-urls, so a bit shorter, and stripping invalid path characters (eg =)
+export function shortB64Encode(str: string): string {
+    return btoa(str).replace(/=/g, "");
+}
+
+export function shortB64Decode(str: string): string {
+    return atob(str.padEnd(str.length + (4 - str.length % 4) % 4, "="));
+}

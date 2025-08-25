@@ -9,7 +9,7 @@ interface TerminalEntryProps {
 }
 
 const Entry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
-    const { commands, stdout } = exec;
+    const { sequence, stdout } = exec;
     const result = useCommandExecution(stdout);
 
     if (!result) {
@@ -18,7 +18,7 @@ const Entry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
 
     return (
         <div className="terminal-command">
-            <div className="terminal-input">{commands.map((c) => c.name).join(":")}</div>
+            <div className="terminal-input">{sequence.map((c) => c.name).join(":")}</div>
             <div className="terminal-output terminal-stdout">
                 <Markdown>{result.payload}</Markdown>
             </div>

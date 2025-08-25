@@ -11,7 +11,7 @@ export enum ControlOperator {
     Pipe = "|",
 }
 
-export type CommandList = (Command)[];
+export type CommandSequence = (Command)[];
 
 type ArgsDictionary = {
     [key: string]: string | boolean;
@@ -25,8 +25,8 @@ function isControlOperator(item: Command | ControlOperator | string): item is Co
     return Object.values(ControlOperator).includes(item as ControlOperator);
 }
 
-export function parseCommand(cmd: string): CommandList {
-    return parseCommandBase(cmd).map((cmd) => {
+export function commandStringToCommandSequence(commandString: string): CommandSequence {
+    return parseCommandBase(commandString).map((cmd) => {
         if(isCommand(cmd)) {
             return { ...cmd, argd: parseArgs(cmd.args) };
         }
@@ -34,9 +34,9 @@ export function parseCommand(cmd: string): CommandList {
     })
 }
 
-function parseCommandBase(cmd: string): CommandList {
-    const result: CommandList = [];
-    const tokens = cmd.match(/(?:[^\s"']+|['"][^'"]*['"])+/g) || [];
+function parseCommandBase(commandString: string): CommandSequence {
+    const result: CommandSequence = [];
+    const tokens = commandString.match(/(?:[^\s"']+|['"][^'"]*['"])+/g) || [];
 
     let currentCommand: Maybe<Command> = null;
 
@@ -83,4 +83,19 @@ export function parseArgs(args: string[]): ArgsDictionary {
     }
 
     return result;
+}
+
+export function serialize(p: CommandSequence) {
+    return p.map((c) => JSON.stringify({
+        n: c.name,
+        a: c.args
+    }))
+}
+
+export function deserialize(str: string): CommandSequence {
+    return JSON.parse(str).map((c) => ({
+        name: c.n,
+        args: c.a,
+        argd: parseArgs(c.a)
+    }))
 }
