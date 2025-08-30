@@ -3,7 +3,7 @@ import {serialize, deserialize, CommandSequence, commandStringToCommandSequence}
 import {shortB64Decode, shortB64Encode, trimChars} from "@/utils/string";
 
 const defaultRoutes = {
-    home: ["fetch", "fetch | uppercase"]
+    "/": ["fetch", "fetch | uppercase"]
 }
 
 export function mapCommandSequencesToRoute(list: CommandSequence[]): string {
@@ -12,8 +12,7 @@ export function mapCommandSequencesToRoute(list: CommandSequence[]): string {
 }
 
 export function mapRouteToCommandSequences(route: string): CommandSequence[] {
-    const path = trimChars(route, ["/"]);
-    const defaultRoute = resolveDefaultRoute(path);
+    const defaultRoute = resolveDefaultRoute(route);
 
     if (defaultRoute) {
         return defaultRoute.map(commandStringToCommandSequence);
@@ -32,5 +31,7 @@ export function mapRouteToCommandSequences(route: string): CommandSequence[] {
 }
 
 function resolveDefaultRoute(path: string): string[] | undefined {
-    return defaultRoutes[path.toLowerCase()];
+    const sanitized = trimChars(path, ["/"]).toLowerCase();
+    const defaults = defaultRoutes[`/${sanitized}`];
+    if(defaults) return ["clear", ...defaults];
 }

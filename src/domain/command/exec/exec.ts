@@ -1,5 +1,8 @@
 import {CommandSequence, Command} from "@/domain/command/parse/parse";
-import * as Commands from '../commands'
+
+import {CommandHandler} from "@/domain/command/types";
+
+import {availableCommands, isValidCommandName} from '../commands'
 
 export type ExecResult = {
     payload: string,
@@ -24,17 +27,17 @@ export function toPipeline(commands: CommandSequence): ExecStream {
     let input: ExecStream | undefined;
 
     for (const cmd of commands) {
-        const executor = executorForName(cmd.name);
-        input = executor(cmd, input);
+        const handler = handlerForName(cmd.name);
+        input = handler.executor(cmd, input);
     }
 
     return input ?? (async function* () {})();
 }
 
-function executorForName(name: string): Executor {
-    const command = Commands[name.toLowerCase()];
-    if (!command) {
-        throw new Error(`command not found: ${name}`);
+function handlerForName(name: string): CommandHandler {
+    if (!isValidCommandName(name)) {
+        throw new Error(`invalid command name: ${name}`);
     }
-    return command;
+
+    return availableCommands[name];
 }

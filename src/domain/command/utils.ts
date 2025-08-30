@@ -29,3 +29,7 @@ export function errorResult(error: string | Error): ExecResult {
         }
     }
 }
+
+
+export const nopExecutor = <T>(command: Command, stdin?: AsyncIterable<T>): AsyncIterable<T> =>
+    stdin ?? (async function* () {})();

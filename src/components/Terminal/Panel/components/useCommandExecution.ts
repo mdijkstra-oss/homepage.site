@@ -1,6 +1,6 @@
 import {useEffect, useState} from "preact/hooks";
 import {ExecResult, ExecStream} from "@/domain/command/exec/exec";
-import {errorResult} from "@/domain/command/commands/utils";
+import {errorResult} from "@/domain/command/utils";
 
 export function useCommandExecution(stdout: ExecStream): ExecResult {
     const [execResult, setExecResult] = useState<ExecResult | undefined>();
