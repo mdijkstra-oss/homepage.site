@@ -1,0 +1,41 @@
+@import "../../../variables.module.css";
+
+.nav {
+    padding-top: 14px
+}
+
+/** todo: make entire icon blue too **/
+.nav a:hover {
+    color: var(--prompt-blue)
+}
+
+.nav ul {
+    list-style: none;
+    float: right;
+    display: inline-block;
+}
+
+.nav li {
+    display: inline-block;
+    float: left;
+    line-height: 24px;
+    vertical-align: middle;
+    font-weight: 600;
+    font-size: 12px;
+    margin-right: 20px;
+    margin-top: 6px;
+}
+
+.nav li img, .nav li svg {
+    margin-bottom: -7px;
+}
+
+.logo > img {
+    display: block;
+    width: 130px;
+    float: left;
+}
+
+.logo:hover {
+
+}

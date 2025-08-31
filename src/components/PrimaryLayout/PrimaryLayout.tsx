@@ -9,6 +9,8 @@ import { ContentFeed } from "./ContentFeed";
 import { Prompt } from "@/components/PrimaryLayout/Prompt";
 import {mapCommandSequencesToRoute, mapRouteToCommandSequences} from "./routing";
 
+import style from './layout.module.css'
+
 export const PrimaryLayout = () => {
     const [executingCommands, dispatch] = useArrayReducer<ExecutingCommand>()
     const {route, navigate} = useRouter()
@@ -31,12 +33,19 @@ export const PrimaryLayout = () => {
             <header>
                 <Navigation />
             </header>
-            <main>
-                <ContentFeed commands={executingCommands}/>
-            </main>
-            <footer>
-                <Prompt onSubmit={onCommandSubmit} />
-            </footer>
+            <div class={style.outerContainer}>
+                <aside>
+                    Asideness
+                </aside>
+                <div class={style.contentContainer}>
+                    <main className={style.container}>
+                        <ContentFeed commands={executingCommands}/>
+                    </main>
+                    <footer>
+                        <Prompt onSubmit={onCommandSubmit}/>
+                    </footer>
+                </div>
+            </div>
         </>
     );
 }

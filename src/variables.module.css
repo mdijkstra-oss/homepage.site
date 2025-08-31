@@ -1,0 +1,20 @@
+:root {
+    --background-dark: #0C0C0C;
+    --border-prompt: #3B3B3B;
+    --lighter-dark: #161616;
+    --prompt-blue: #89C6E3;
+    --text-light: #FAFDFF;
+    --background-lines-dark: #272727;
+
+    --max-content-width: 1200px;
+    --content-left-offset: 240px
+}
+
+:export {
+    backgroundDark: var(--background-dark);
+    borderPrompt: var(--border-prompt);
+    lighterDark: var(--lighter-dark);
+    promptBlue: var(--prompt-blue);
+    textLight: var(--text-light);
+    backgroundLinesDark: var(--background-lines-dark);
+}

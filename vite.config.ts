@@ -18,4 +18,9 @@ export default defineConfig({
 		environment: 'jsdom',
 		include: ['src/**/*.{test,spec}.{ts,tsx}', 'src/**/spec.*.{ts,tsx}'],
 	},
+	css: {
+		modules: {
+			localsConvention: 'camelCase'
+		}
+	}
 });
