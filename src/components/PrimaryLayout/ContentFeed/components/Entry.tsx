@@ -4,6 +4,10 @@ import Markdown from "react-markdown";
 import {useCommandExecution} from "./useCommandExecution";
 import { ExecutingCommand } from "@/domain/command/exec/exec";
 
+import style from './style.module.css'
+import layoutStyle from '@/components/PrimaryLayout/layout.module.css'
+import {classnames} from "@/utils/css";
+
 interface TerminalEntryProps {
     exec: ExecutingCommand;
 }
@@ -17,12 +21,13 @@ const Entry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
     }
 
     return (
-        <div className="terminal-command">
-            <div className="terminal-input">{sequence.map((c) => c.name).join(":")}</div>
-            <div className="terminal-output terminal-stdout">
+        <>
+            <div class={classnames(layoutStyle.contentBox, layoutStyle.primary, style.prompt)}>{sequence.map((c) => c.name).join(":")}</div>
+
+            <div class={classnames(layoutStyle.contentBox, style.result)}>
                 <Markdown>{result.payload}</Markdown>
             </div>
-        </div>
+        </>
     );
 };
 

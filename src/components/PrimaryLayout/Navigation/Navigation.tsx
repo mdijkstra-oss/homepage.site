@@ -1,11 +1,11 @@
-import {FunctionalComponent, JSX} from 'preact';
+import {FunctionalComponent} from 'preact';
 
-import logo from '../../../assets/logo.png'
-import linkedin from '../../../assets/linkedin.svg'
+import logo from '@/assets/logo.png'
+import linkedin from '@/assets/linkedin.svg'
 import { SiCodeberg } from "@icons-pack/react-simple-icons";
 import style from './style.module.css'
 import { classnames } from '@/utils/css';
-import layoutStyle from './../layout.module.css'
+import layoutStyle from '@/components/PrimaryLayout/layout.module.css'
 
 export const Navigation: FunctionalComponent = () => {
     // @ts-ignore

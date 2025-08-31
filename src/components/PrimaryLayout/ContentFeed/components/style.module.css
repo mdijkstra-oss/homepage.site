@@ -1,0 +1,10 @@
+.prompt {
+    float: right;
+    display: block;
+}
+
+.result {
+    max-width: calc(100% - 90px);
+    clear: both;
+    display: block;
+}
