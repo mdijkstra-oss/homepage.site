@@ -2,14 +2,15 @@ import {FunctionalComponent} from 'preact';
 
 import logo from '@/assets/logo.png'
 import linkedin from '@/assets/linkedin.svg'
-import { SiCodeberg } from "@icons-pack/react-simple-icons";
+import { siCodeberg } from "simple-icons";
 import style from './style.module.css'
 import { classnames } from '@/utils/css';
 import layoutStyle from '@/components/PrimaryLayout/layout.module.css'
+import colors from "@/variables.module.css"
 
 export const Navigation: FunctionalComponent = () => {
-    // @ts-ignore
-    const codeberg = <SiCodeberg color="#ffffff" size={24} />
+
+    const codeberg = <div style={{ display: "inline-block", width: "24px", height: "24px", color: colors.textLight, fill: "currentColor" }}dangerouslySetInnerHTML={{ __html: siCodeberg.svg }} />
 
     return (
         <nav className={classnames(layoutStyle.container, style.nav)}>

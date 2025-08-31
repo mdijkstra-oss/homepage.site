@@ -7,6 +7,7 @@ import { ExecutingCommand } from "@/domain/command/exec/exec";
 import style from './style.module.css'
 import layoutStyle from '@/components/PrimaryLayout/layout.module.css'
 import {classnames} from "@/utils/css";
+import {Tag} from "@/components/Tag";
 
 interface TerminalEntryProps {
     exec: ExecutingCommand;
@@ -26,6 +27,8 @@ const Entry: FunctionalComponent<TerminalEntryProps> = ({ exec }) => {
 
             <div class={classnames(layoutStyle.contentBox, style.result)}>
                 <Markdown>{result.payload}</Markdown>
+
+                {result.meta?.tags && result.meta.tags.map((tag) => <Tag name={tag} />)}
             </div>
         </>
     );

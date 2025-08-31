@@ -28,6 +28,10 @@
     font-weight: 300;
 }
 
+.content-box p {
+    margin-bottom: 16px;
+}
+
 .primary {
     border: none;
     background: var(--prompt-blue);
