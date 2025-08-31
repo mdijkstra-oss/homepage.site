@@ -6,7 +6,7 @@ interface TerminalProps {
     commands: ExecutingCommand[];
 }
 
-const Panel: FunctionalComponent<TerminalProps> = ({ commands = [] }) => {
+export const ContentFeed: FunctionalComponent<TerminalProps> = ({ commands = [] }) => {
     return (
         <div class="terminal">
             {commands.map((command, index) => (
@@ -15,5 +15,3 @@ const Panel: FunctionalComponent<TerminalProps> = ({ commands = [] }) => {
         </div>
     );
 };
-
-export default Panel;

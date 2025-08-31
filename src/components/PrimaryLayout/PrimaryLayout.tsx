@@ -1,15 +1,15 @@
 import {useArrayReducer} from "@/hooks/useArrayReducer";
 import {ExecutingCommand, toPipeline} from "@/domain/command/exec/exec";
-import {useEffect, useState} from "preact/hooks";
+import {useEffect} from "preact/hooks";
 import {useRouter} from "@/hooks/useRouter";
 import {commandStringToCommandSequence} from "@/domain/command/parse/parse";
 import {createAction} from "@/hooks/reducer";
-import Tabs from "@/components/Terminal/Tabs";
-import Panel from "@/components/Terminal/Panel";
-import Prompt from "@/components/Terminal/Prompt";
+import { Navigation } from "@/components/PrimaryLayout/Navigation";
+import { ContentFeed } from "./ContentFeed";
+import { Prompt } from "@/components/PrimaryLayout/Prompt";
 import {mapCommandSequencesToRoute, mapRouteToCommandSequences} from "./routing";
 
-export const Terminal = () => {
+export const PrimaryLayout = () => {
     const [executingCommands, dispatch] = useArrayReducer<ExecutingCommand>()
     const {route, navigate} = useRouter()
 
@@ -29,10 +29,10 @@ export const Terminal = () => {
     return (
         <>
             <header>
-                <Tabs/>
+                <Navigation />
             </header>
             <main>
-                <Panel commands={executingCommands}/>
+                <ContentFeed commands={executingCommands}/>
             </main>
             <footer>
                 <Prompt onSubmit={onCommandSubmit} />

@@ -1,16 +1,11 @@
 import { render } from 'preact';
-import {useState} from "preact/hooks";
 
-import {Terminal} from "@/components/Terminal/Terminal";
+import { PrimaryLayout } from "@/components/PrimaryLayout";
 
 import './style.css';
 
-type AppTheme = 'light' | 'dark';
-
 const App = () => {
-	const [theme, setTheme] = useState<AppTheme>('light');
-
-	return <Terminal />
+	return <PrimaryLayout />
 };
 
 render(<App />, document.getElementById('app'));

@@ -5,7 +5,7 @@ interface PromptProps {
     onSubmit: (input: string) => void;
 }
 
-const Prompt: FunctionComponent<PromptProps> = ({onSubmit}) => {
+export const Prompt: FunctionComponent<PromptProps> = ({onSubmit}) => {
 
     function onChange(e: Event) {
         const input = e.target as HTMLInputElement;
@@ -21,5 +21,3 @@ const Prompt: FunctionComponent<PromptProps> = ({onSubmit}) => {
         </>
     );
 };
-
-export default Prompt
