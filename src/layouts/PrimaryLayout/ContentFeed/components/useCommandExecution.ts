@@ -1,4 +1,4 @@
-import {useEffect, useState} from "preact/hooks";
+import {useEffect, useState} from "react";
 import {ExecResult, ExecStream} from "@/domain/command/exec/exec";
 import {errorResult} from "@/domain/command/utils";
 

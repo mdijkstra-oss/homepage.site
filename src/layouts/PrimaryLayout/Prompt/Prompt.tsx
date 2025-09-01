@@ -1,11 +1,10 @@
-import {FunctionComponent} from 'preact';
 import './style.css'
 
 interface PromptProps {
     onSubmit: (input: string) => void;
 }
 
-export const Prompt: FunctionComponent<PromptProps> = ({onSubmit}) => {
+export const Prompt = ({onSubmit}: PromptProps) => {
 
     function onChange(e: Event) {
         const input = e.target as HTMLInputElement;
@@ -17,7 +16,7 @@ export const Prompt: FunctionComponent<PromptProps> = ({onSubmit}) => {
     
     return (
         <>
-            <input type="text" onKeyPress={onChange} class="prompt-input"/>
+            <input type="text" onKeyPress={onChange} className="prompt-input"/>
         </>
     );
 };

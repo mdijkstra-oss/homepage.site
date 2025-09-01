@@ -1,12 +1,9 @@
-import { render } from 'preact';
-
-import { PrimaryLayout } from "@/components/PrimaryLayout";
-
+import { createRoot } from 'react-dom/client';
+import { PrimaryLayout } from "@/layouts/PrimaryLayout";
 import './style.css';
 
 const App = () => {
-	// Todo: CVLayout & GameLayout
-	return <PrimaryLayout />
+	return <PrimaryLayout />;
 };
 
-render(<App />, document.getElementById('app'));
+createRoot(document.getElementById('app')!).render(<App />);

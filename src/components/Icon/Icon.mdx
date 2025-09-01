@@ -1,0 +1,15 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as IconStories from './Icon.stories';
+
+<Meta of={IconStories} />
+
+# Icon
+
+Use the `Icon` component to render SVG icons with dynamic tinting. The `name` prop selects the icon, and `tint` applies a color using `currentColor` mechanics.
+
+## Controls
+
+- **name**: Pick from available icons.
+- **tint**: Set a custom color visually.
+
+<Canvas of={IconStories.Sample} />
