@@ -1,3 +1,23 @@
-.foo {
-    color: red;
+@import "../../variables.module.css";
+
+.tag {
+    color: var(--text-light);
+    padding: 0.4em 0.5em 0.2em 0.5em;
+    border-radius: 0.5em;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.tag .icon {
+    margin-right: 0.5em;
+}
+
+.tag .title {
+    position: relative;
+    top: -0.2em;
 }

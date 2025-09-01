@@ -1,4 +1,4 @@
-import { siNodedotjs, siTypescript } from "simple-icons";
+import {siAwsfargate, siKubernetes, SimpleIcon, siNodedotjs, siPhp, siTypescript} from "simple-icons";
 import Linkedin from "@/assets/linkedin.svg";
 import { CSSProperties } from "react";
 
@@ -7,17 +7,21 @@ import moduleStyle from "./style.module.css";
 type IconValue = {
     svgString: string;
     color: string;
+    title: string;
 }
 
 export const iconMapping: { [key: string]: IconValue } = {
     typescript: iconValueFromSI(siTypescript),
     node: iconValueFromSI(siNodedotjs),
-    linkedin: iconValueFromDataUrl(Linkedin, "#0A66C2"),
+    linkedin: iconValueFromDataUrl(Linkedin, "#0A66C2", "Linkedin"),
+    aws: iconValueFromSI(siAwsfargate),
+    kubernetes: iconValueFromSI(siKubernetes),
+    php: iconValueFromSI(siPhp)
 };
 
 export const availableIcons = Object.keys(iconMapping);
 
-type AvailableIcon = keyof typeof iconMapping;
+export type AvailableIcon = keyof typeof iconMapping;
 
 export interface IconProps {
     name: AvailableIcon;
@@ -51,16 +55,18 @@ function isThemeableSvg(dataUrl: string) {
 }
 
 
-function iconValueFromSI(si: { hex: string, svg: string }): IconValue {
+function iconValueFromSI(si: SimpleIcon): IconValue {
     return {
         svgString: si.svg,
         color: `#${si.hex}`,
+        title: si.title
     }
 }
 
-function iconValueFromDataUrl(dataUrl: string, color: string): IconValue {
+function iconValueFromDataUrl(dataUrl: string, color: string, title: string): IconValue {
     return {
         svgString: dataUrlToSvgString(dataUrl),
         color,
+        title,
     }
 }
