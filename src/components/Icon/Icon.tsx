@@ -4,15 +4,20 @@ import { CSSProperties } from "react";
 
 import moduleStyle from "./style.module.css";
 
-const mapping: { [key: string]: string } = {
-    typescript: siTypescript.svg,
-    node: siNodedotjs.svg,
-    linkedin: dataUrlToSvgString(Linkedin),
+type IconValue = {
+    svgString: string;
+    color: string;
+}
+
+export const iconMapping: { [key: string]: IconValue } = {
+    typescript: iconValueFromSI(siTypescript),
+    node: iconValueFromSI(siNodedotjs),
+    linkedin: iconValueFromDataUrl(Linkedin, "#0A66C2"),
 };
 
-export const availableIcons = Object.keys(mapping);
+export const availableIcons = Object.keys(iconMapping);
 
-type AvailableIcon = keyof typeof mapping;
+type AvailableIcon = keyof typeof iconMapping;
 
 export interface IconProps {
     name: AvailableIcon;
@@ -20,12 +25,12 @@ export interface IconProps {
     style?: CSSProperties
 }
 
-export const Icon = ({ name, tint = "black", style = {} }: IconProps)=>  {
-    const icon = mapping[name]
+export const Icon = ({ name, tint = null, style = {} }: IconProps)=>  {
+    const icon = iconMapping[name]
 
     return (
-        <span className={moduleStyle.icon} style={{ ...style, color: tint }}>
-            <div dangerouslySetInnerHTML={{ __html: icon }} />
+        <span className={moduleStyle.icon} style={{ ...style, color: tint || icon.color }}>
+            <div dangerouslySetInnerHTML={{ __html: icon.svgString }} />
         </span>
     );
 }
@@ -43,4 +48,19 @@ function isThemeableSvg(dataUrl: string) {
     const svgString = decodeURIComponent(dataUrl.replace('data:image/svg+xml,', ''));
     if (svgString.includes('fill="#') || svgString.includes('stroke="#')) return false;
     return true;
+}
+
+
+function iconValueFromSI(si: { hex: string, svg: string }): IconValue {
+    return {
+        svgString: si.svg,
+        color: `#${si.hex}`,
+    }
+}
+
+function iconValueFromDataUrl(dataUrl: string, color: string): IconValue {
+    return {
+        svgString: dataUrlToSvgString(dataUrl),
+        color,
+    }
 }
