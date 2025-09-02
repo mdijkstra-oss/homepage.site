@@ -1,23 +1,5 @@
 @import '../../variables.module.css';
 
-.tinted {
-    position: relative;
-    display: inline-block;
-}
-
-.tinted:hover::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: var(--prompt-blue);
-    mix-blend-mode: multiply;
-    pointer-events: none;
-}
-
-.outer-container {
-
-}
-
 .content-box {
     background: var(--lighter-dark);
     border: 1px solid var(--border-prompt);
@@ -51,13 +33,6 @@ main {
     overflow: auto;
 }
 
-header {
-    height: 66px;
-    background: var(--background-dark);
-    border-bottom: 1px solid var(--border-prompt);
-}
-
 footer {
     height: 112px;
 }
-

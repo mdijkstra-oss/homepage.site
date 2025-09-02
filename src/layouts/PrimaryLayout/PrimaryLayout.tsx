@@ -10,6 +10,13 @@ import { Prompt } from "@/layouts/PrimaryLayout/Prompt";
 import {mapCommandSequencesToRoute, mapRouteToCommandSequences} from "./routing";
 
 import style from './layout.module.css'
+import {ExternalLink} from "@/layouts/PrimaryLayout/Navigation/Navigation";
+
+
+export const defaultExternalLinks: ExternalLink[] = [
+    { tag: "codeberg", url: "https://codeberg.org/mdijkstra" },
+    { tag: "linkedin", url: "https://www.linkedin.com/in/matthijn-dijkstra-65527199/" },
+]
 
 export const PrimaryLayout = () => {
     const [executingCommands, dispatch] = useArrayReducer<ExecutingCommand>()
@@ -32,7 +39,7 @@ export const PrimaryLayout = () => {
     return (
         <>
             <header>
-                <Navigation />
+                <Navigation externalLinks={defaultExternalLinks} />
             </header>
             <div className={style.outerContainer}>
                 <aside>
@@ -42,9 +49,9 @@ export const PrimaryLayout = () => {
                     <main className={style.container}>
                         <ContentFeed commands={executingCommands}/>
                     </main>
-                    <footer>
-                        <Prompt onSubmit={onCommandSubmit}/>
-                    </footer>
+                    {/*<footer>*/}
+                    {/*    <Prompt onSubmit={onCommandSubmit}/>*/}
+                    {/*</footer>*/}
                 </div>
             </div>
         </>

@@ -2,23 +2,24 @@ import style from './style.module.css'
 import {AvailableIcon, Icon, iconMapping} from "@/components/Icon/Icon";
 
 import vars from '@/variables.module.css'
-import {usePress} from "react-aria";
 import {classnames} from "@/utils/css";
 
 export interface TagProps {
     name: AvailableIcon;
-    onPress?: (name: AvailableIcon) => void;
+    transparent?: boolean;
 }
 
-export const Tag = ({ name, onPress }: TagProps) => {
-
-    const role = onPress ? "button" : "span";
-
+export const Tag = ({ name, transparent = false }: TagProps) => {
     const icon = iconMapping[name]
-    let { pressProps } = usePress({ onPress: () => onPress(name) });
+
+    if(!icon) throw new Error(
+        `Icon ${name} not found in iconMapping`
+    )
+
+    const color = transparent ? "transparent" : icon.color;
 
     return (
-        <span role={role} { ...pressProps} className={classnames(style.tag, { [style.clickable]: onPress })} style={{ backgroundColor: icon.color }}>
+        <span className={classnames(style.tag, { [style.transparent]: transparent })} style={{ backgroundColor: color }}>
             <span className={style.icon}><Icon name={name} tint={vars.textLight} /></span> <span className={style.title}>{icon.title}</span>
         </span>
     )

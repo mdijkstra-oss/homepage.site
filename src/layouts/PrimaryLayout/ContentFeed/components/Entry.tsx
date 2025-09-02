@@ -27,7 +27,7 @@ const Entry = ({ exec }: TerminalEntryProps) => {
             <div className={classnames(layoutStyle.contentBox, style.result)}>
                 <Markdown>{result.payload}</Markdown>
 
-                {result.meta?.tags && result.meta.tags.map((tag) => <Tag name={tag} />)}
+                {result.meta?.tags && result.meta.tags.map((tag) => <Tag key={tag} name={tag} />)}
             </div>
         </>
     );

@@ -9,8 +9,8 @@
     align-items: center;
 }
 
-.clickable {
-    cursor: pointer;
+.tag&.transparent {
+    padding: 0;
 }
 
 .tag .icon {

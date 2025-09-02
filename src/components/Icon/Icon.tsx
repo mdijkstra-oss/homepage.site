@@ -1,4 +1,13 @@
-import {siAwsfargate, siKubernetes, SimpleIcon, siNodedotjs, siPhp, siTypescript} from "simple-icons";
+import {
+    siAwsfargate,
+    siCodeberg,
+    siDocker,
+    siKubernetes,
+    SimpleIcon,
+    siNodedotjs,
+    siPhp,
+    siTypescript
+} from "simple-icons";
 import Linkedin from "@/assets/linkedin.svg";
 import { CSSProperties } from "react";
 
@@ -16,7 +25,9 @@ export const iconMapping: { [key: string]: IconValue } = {
     linkedin: iconValueFromDataUrl(Linkedin, "#0A66C2", "Linkedin"),
     aws: iconValueFromSI(siAwsfargate),
     kubernetes: iconValueFromSI(siKubernetes),
-    php: iconValueFromSI(siPhp)
+    php: iconValueFromSI(siPhp),
+    codeberg: iconValueFromSI(siCodeberg),
+    docker: iconValueFromSI(siDocker),
 };
 
 export const availableIcons = Object.keys(iconMapping);

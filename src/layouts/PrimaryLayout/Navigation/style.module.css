@@ -1,41 +1,35 @@
 @import "../../../variables.module.css";
 
-.nav {
-    padding-top: 14px
+.bar {
+    background: var(--background-dark);
+    border-bottom: 1px solid var(--border-prompt);
 }
 
-/** todo: make entire icon blue too **/
-.nav a:hover {
-    color: var(--prompt-blue)
-}
-
-.nav ul {
+.bar ul {
+    height: 66px;
+    display: flex;
+    justify-content: space-between;
     list-style: none;
-    float: right;
-    display: inline-block;
+    padding: 0;
+    margin: 0;
 }
 
-.nav li {
-    display: inline-block;
-    float: left;
-    line-height: 24px;
-    vertical-align: middle;
-    font-weight: 600;
-    font-size: 12px;
-    margin-right: 20px;
-    margin-top: 6px;
+.logo {
+    height: 30px;
 }
 
-.nav li img, .nav li svg {
-    margin-bottom: -7px;
+.bar li:first-child {
+    margin-right: auto;
 }
 
-.logo > img {
-    display: block;
-    width: 130px;
-    float: left;
+.bar a {
+    text-decoration: none;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 1em;
 }
 
-.logo:hover {
-
+.bar a:hover {
+    background: linear-gradient(to bottom, var(--background-dark), var(--border-prompt));
 }

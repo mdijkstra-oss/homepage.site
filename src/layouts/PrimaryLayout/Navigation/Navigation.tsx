@@ -1,42 +1,53 @@
 import logo from '@/assets/logo.png'
-import linkedin from '@/assets/linkedin.svg'
-import { siCodeberg } from "simple-icons";
 import style from './style.module.css'
-import { classnames } from '@/utils/css';
-import layoutStyle from '@/layouts/PrimaryLayout/layout.module.css'
-import colors from "@/variables.module.css"
+import {AvailableIcon} from "@/components/Icon/Icon";
+import {classnames} from "@/utils/css";
+import {Tag} from "@/components/Tag";
+import { ReactNode } from "react";
 
-export const Navigation = () => {
+export type ExternalLink = {
+    tag: AvailableIcon;
+    url: string;
+}
 
-    const codeberg = <div style={{ display: "inline-block", width: "24px", height: "24px", color: colors.textLight, fill: "currentColor" }}dangerouslySetInnerHTML={{ __html: siCodeberg.svg }} />
+export interface NavigationProps {
+    externalLinks: ExternalLink[];
+}
 
+export const Navigation = ({ externalLinks }: NavigationProps) => {
     return (
-        <nav className={classnames(layoutStyle.container, style.nav)}>
-            <a className={classnames(style.logo, layoutStyle.tinted)} href="/"><img src={logo} alt="mdijkstra.dev logo" title="Home" /></a>
-
-            <ul>
+        <nav className={style.bar}>
+            <ul className={classnames(style.navContainer)}>
                 <li>
-
-                    <External href="https://codeberg.org/mdijkstra" image={codeberg} text="Codeberg" />
+                    <NavigationLink href="/" title="Go to home page">
+                        <img className={style.logo} src={logo} alt="mdijkstra.dev Logo" />
+                    </NavigationLink>
                 </li>
-                <li>
-                    <External href="https://www.linkedin.com/in/matthijn-dijkstra-65527199/" image={linkedin} text="Linkedin" />
-                </li>
+                {
+                    externalLinks.map(({ tag, url }) => (
+                        <li key={tag}>
+                            <NavigationLink href={url} target="_blank" title={`Open ${tag} profile`}>
+                                <Tag name={tag} transparent />
+                            </NavigationLink>
+                        </li>
+                    ))
+                }
             </ul>
         </nav>
     );
 };
 
-type ExternalProps = {
+type NavigationLinksProps = {
     href: string;
-    image: string | any;
-    text: string;
+    target?: string;
+    children: ReactNode;
+    title?: string;
 }
 
-const External = ({ href, image, text }: ExternalProps) => {
+const NavigationLink = ({ href, target = "_self", title, children }: NavigationLinksProps) => {
     return (
-        <a className={layoutStyle.tinted} href={href} title={text} target="_blank" rel="noopener noreferrer">
-            {typeof image === "string" ? <img src={image} alt={text} /> : image} {text}
+        <a href={href} target={target} title={title}>
+            {children}
         </a>
-    );
-};
+    )
+}
