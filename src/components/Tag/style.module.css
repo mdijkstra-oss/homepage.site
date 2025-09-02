@@ -21,3 +21,19 @@
     position: relative;
     top: -0.2em;
 }
+
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.list li {
+    margin-right: 1em;
+}
+
+.list li:last-child {
+    margin-right: 0;
+}

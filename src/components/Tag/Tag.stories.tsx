@@ -24,7 +24,7 @@ export default meta;
 
 type Story = StoryObj<TagProps>
 
-export const Sample: Story = {
+export const Individual: Story = {
     args: {
         name: "node",
     }

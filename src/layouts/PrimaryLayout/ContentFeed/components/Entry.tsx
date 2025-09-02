@@ -4,9 +4,8 @@ import {useCommandExecution} from "./useCommandExecution";
 import { ExecutingCommand } from "@/domain/command/exec/exec";
 
 import style from './style.module.css'
-import layoutStyle from '@/layouts/PrimaryLayout/layout.module.css'
-import {classnames} from "@/utils/css";
-import {Tag} from "@/components/Tag";
+import {ContentBox} from "@/components/ContentBox/ContentBox";
+import {TagList} from "@/components/Tag/List";
 
 interface TerminalEntryProps {
     exec: ExecutingCommand;
@@ -22,12 +21,18 @@ const Entry = ({ exec }: TerminalEntryProps) => {
 
     return (
         <>
-            <div className={classnames(layoutStyle.contentBox, layoutStyle.primary, style.prompt)}>{sequence.map((c) => c.name).join(":")}</div>
+            <div className={style.prompt}>
+                <ContentBox variant="secondary">
+                    {sequence.map((c) => c.name).join(":")}
+                </ContentBox>
+            </div>
 
-            <div className={classnames(layoutStyle.contentBox, style.result)}>
-                <Markdown>{result.payload}</Markdown>
 
-                {result.meta?.tags && result.meta.tags.map((tag) => <Tag key={tag} name={tag} />)}
+            <div className={style.result}>
+                <ContentBox variant="primary">
+                    <Markdown>{result.payload}</Markdown>
+                    { result.meta?.tags && <TagList tags={result.meta.tags} /> }
+                </ContentBox>
             </div>
         </>
     );

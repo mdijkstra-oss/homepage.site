@@ -5,7 +5,7 @@ import {
     siKubernetes,
     SimpleIcon,
     siNodedotjs,
-    siPhp,
+    siPhp, siReact,
     siTypescript
 } from "simple-icons";
 import Linkedin from "@/assets/linkedin.svg";
@@ -28,6 +28,7 @@ export const iconMapping: { [key: string]: IconValue } = {
     php: iconValueFromSI(siPhp),
     codeberg: iconValueFromSI(siCodeberg),
     docker: iconValueFromSI(siDocker),
+    react: iconValueFromSI(siReact),
 };
 
 export const availableIcons = Object.keys(iconMapping);

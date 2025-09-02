@@ -1,24 +1,5 @@
 @import '../../variables.module.css';
 
-.content-box {
-    background: var(--lighter-dark);
-    border: 1px solid var(--border-prompt);
-    border-radius: 11px;
-    margin-bottom: 40px;
-    padding: 12px 20px;
-    display: inline-block;
-    font-weight: 300;
-}
-
-.content-box p {
-    margin-bottom: 16px;
-}
-
-.primary {
-    border: none;
-    background: var(--prompt-blue);
-    font-weight: 600;
-}
 
 .container {
     max-width: var(--max-content-width);

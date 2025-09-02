@@ -1,3 +1,7 @@
+.prompt, .result {
+    margin-bottom: 40px;
+}
+
 .prompt {
     float: right;
     display: block;

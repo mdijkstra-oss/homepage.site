@@ -11,7 +11,7 @@ export default meta;
 
 type Story = StoryObj<NavigationProps>;
 
-export const Sample: Story = {
+export const Top: Story = {
     args: {
         externalLinks: defaultExternalLinks,
     },
