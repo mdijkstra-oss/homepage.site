@@ -1,8 +1,9 @@
 import style from './style.module.css'
-import {AvailableIcon, Icon, iconMapping} from "@/components/Icon/Icon";
+import {AvailableIcon, Icon} from "@/components/Icon/Icon";
 
 import vars from '@/variables.module.css'
 import {classnames} from "@/utils/css";
+import {iconMapping} from "@/components/Icon/icons";
 
 export interface TagProps {
     name: AvailableIcon;
