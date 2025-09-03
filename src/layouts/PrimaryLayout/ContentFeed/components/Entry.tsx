@@ -1,11 +1,12 @@
 import Markdown from "react-markdown";
 
 import {useCommandExecution} from "./useCommandExecution";
-import { ExecutingCommand } from "@/domain/command/exec/exec";
+import {ExecResult, ExecutingCommand} from "@/domain/command/exec/exec";
 
-import style from './style.module.css'
-import {ContentBox} from "@/components/ContentBox/ContentBox";
+import {ContentBoxProps} from "@/components/ContentBox/Box/ContentBox";
 import {TagList} from "@/components/Tag/List";
+import {ContentBoxFeed} from "@/components/ContentBox/Feed/Feed";
+import {CommandSequence} from "@/domain/command/parse/parse";
 
 interface TerminalEntryProps {
     exec: ExecutingCommand;
@@ -19,23 +20,28 @@ const Entry = ({ exec }: TerminalEntryProps) => {
         return null;
     }
 
-    return (
-        <>
-            <div className={style.prompt}>
-                <ContentBox variant="secondary">
-                    {sequence.map((c) => c.name).join(":")}
-                </ContentBox>
-            </div>
+    const feed = mapToFeed(sequence, result);
+    return <ContentBoxFeed feed={feed} />
+};
 
+function mapToFeed(sequence: CommandSequence, result: ExecResult): ContentBoxProps[] {
+    if (!result) { return [] }
 
-            <div className={style.result}>
-                <ContentBox variant="primary">
+    return [
+        {
+            variant: "secondary",
+            children: sequence.map((c) => c.name).join(":")
+        },
+        {
+            variant: "primary",
+            children: (
+                <>
                     <Markdown>{result.payload}</Markdown>
                     { result.meta?.tags && <TagList tags={result.meta.tags} /> }
-                </ContentBox>
-            </div>
-        </>
-    );
-};
+                </>
+            )
+        }
+    ]
+}
 
 export default Entry;

@@ -19,7 +19,7 @@ export default meta;
 
 type Story = StoryObj<ContentBoxProps>
 
-export const PrimaryBox: Story = {
+export const Box: Story = {
     args: {
         variant: "primary",
         children: "A box the likes the world has never seen before"

@@ -1,4 +1,4 @@
-@import "../../../variables.module.css";
+@import "../../../../variables.module.css";
 
 .bar {
     background: var(--background-dark);

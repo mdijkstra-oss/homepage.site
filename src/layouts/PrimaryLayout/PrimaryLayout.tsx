@@ -4,13 +4,13 @@ import {useEffect} from "react";
 import {useRouter} from "@/hooks/useRouter";
 import {commandStringToCommandSequence} from "@/domain/command/parse/parse";
 import {createAction} from "@/hooks/reducer";
-import { Navigation } from "@/layouts/PrimaryLayout/Navigation";
+import { Navigation } from "@/layouts/PrimaryLayout/Navigation/Top";
 import { ContentFeed } from "./ContentFeed";
 import { Prompt } from "@/layouts/PrimaryLayout/Prompt";
 import {mapCommandSequencesToRoute, mapRouteToCommandSequences} from "./routing";
 
 import style from './layout.module.css'
-import {ExternalLink} from "@/layouts/PrimaryLayout/Navigation/Navigation";
+import {ExternalLink} from "@/layouts/PrimaryLayout/Navigation/Top/Navigation";
 
 
 export const defaultExternalLinks: ExternalLink[] = [

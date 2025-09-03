@@ -1,14 +1,14 @@
-.prompt, .result {
+.entry {
     margin-bottom: 40px;
+    max-width: calc(100% - 90px);
 }
 
-.prompt {
+.secondary {
     float: right;
     display: block;
 }
 
-.result {
-    max-width: calc(100% - 90px);
+.primary {
     clear: both;
     display: block;
 }
