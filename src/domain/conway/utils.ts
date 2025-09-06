@@ -1,19 +1,34 @@
+export function padGrid<T>(grid: T[][], char: T, width: number = 1) {
+    const newLength = grid[0].length + 2 * width;
 
-export function xyFromIndex(index: number, width: number, height: number) {
-    const normalizedIndex = ((index % (width * height)) + (width * height)) % (width * height);
-    return {
-        x: normalizedIndex % width,
-        y: Math.floor(normalizedIndex / width)
-    };
+    const row = () => Array(newLength).fill(char);
+    const col = () => Array(width).fill(char);
+
+    return [
+        row(),
+        ...grid.map(row => [...col(), ...row, ...col()]),
+        row()
+    ]
 }
 
-export function indexFromXY(x: number, y: number, width: number, height: number) {
-    const wrappedX = ((x % width) + width) % width;
-    const wrappedY = ((y % height) + height) % height;
-    return wrappedY * width + wrappedX;
+export function map2D<T, U>(grid: T[][], fn: (cell: T, x: number, y: number, grid: T[][]) => U) {
+    return grid.map((row, y) => {
+        return row.map((cell, x) => fn(cell, x, y, grid));
+    });
 }
 
-export function cellAtPos<T>(oneDimensionalBoard: T[], width: number, height: number, x: number, y: number): T | undefined {
-    const idx = indexFromXY(x, y, width, height);
-    return oneDimensionalBoard[idx];
+export function cellAtPos<T>(grid: T[][], x: number, y: number): T | undefined {
+    const height = grid.length;
+    const width = grid[0].length;
+
+    return grid[wrapped(y, height)][wrapped(x, width)];
+}
+
+export function wrapped(n: number, length: number) {
+    return ((n % length) + length) % length;
+}
+
+// [height, width]
+export function size<T>(grid: T[][]): [number, number] {
+    return [grid.length, grid[0].length]
 }

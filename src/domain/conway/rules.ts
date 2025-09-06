@@ -1,27 +1,18 @@
-import {BoardState, Square} from "./board";
-import {cellAtPos, xyFromIndex} from "./utils";
+import {Board, Cell} from "./board";
+import {cellAtPos, map2D} from "./utils";
 
-export function tickBoard(board: BoardState): BoardState {
-    const boardStateTicker = (square: Square, index: number) => nextState(board, square, index);
-
-    return {
-        ...board,
-        squares: board.squares.map(boardStateTicker)
-    }
+export function tickBoard(board: Board): Board {
+    const boardStateTicker = (cell: Cell, x: number, y: number) => nextState(board, cell, x, y);
+    return map2D(board, boardStateTicker)
 }
 
-function nextState(board: BoardState, square: Square, index: number): Square {
-    const { x, y } = xyFromIndex(index, board.width, board.height);
+function nextState(board: Board, cell: Cell, x: number, y: number): Cell {
     const neighbours = countNeighbours(board, x, y);
-    const alive = willBeAlive(square, neighbours)
-
-    return {
-        ...square,
-        alive
-    }
+    const alive = willBeAlive(cell, neighbours)
+    return alive ? 1 : 0
 }
 
-function countNeighbours(board: BoardState, x: number, y: number, include: (square: Square) => boolean = (sq) => sq.alive): number {
+function countNeighbours(board: Board, x: number, y: number, filter: (square: Cell) => boolean = (cell) => !!cell): number {
     const offsets = [-1, 0, 1];
     let count = 0;
 
@@ -30,8 +21,8 @@ function countNeighbours(board: BoardState, x: number, y: number, include: (squa
             if (xOffset === 0 && yOffset === 0) continue;
             const newX = x + xOffset;
             const newY = y + yOffset;
-            const cell = cellAtPos(board.squares, board.width, board.height, newX, newY);
-            if (cell && include(cell)) {
+            const cell = cellAtPos(board, newX, newY);
+            if (cell && filter(cell)) {
                 count++;
             }
         }
@@ -40,10 +31,9 @@ function countNeighbours(board: BoardState, x: number, y: number, include: (squa
     return count;
 }
 
-
-function willBeAlive(square: Square, neighbours: number) {
+function willBeAlive(cell: Cell, neighbours: number): Boolean {
     if (neighbours === 3) return true;
-    if (neighbours === 2) return square.alive;
+    if (neighbours === 2) return !!cell;
     return false;
 }
 

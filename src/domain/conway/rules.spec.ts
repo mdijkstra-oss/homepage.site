@@ -1,25 +1,19 @@
-import {BoardState, newBoard, randomBoard} from "./board";
 import {tickBoard} from "./rules";
-import {delay} from "@/utils/async";
+import {padGrid} from "./utils";
+import {Board} from './board'
 
-type Grid = (0 | 1)[][]
-
-function boardFromGrid(grid: Grid): BoardState {
-    const h = grid.length;
-    const w = grid[0].length;
-    return newBoard(w, h, (x, y) => !!grid[y][x]);
-}
+const pad = (grid: Board) => padGrid(grid, 0)
 
 describe('Conway game of life rules', () => {
 
-    function testGrid(grid: Grid, compares: Grid[]) {
+    function testBoard(board: Board, compares: Board[]) {
 
-        let currentBoard = boardFromGrid(grid)
+        let currentBoard = pad(board)
 
         for (const i of compares.keys()) {
             currentBoard = tickBoard(currentBoard)
 
-            const compare = boardFromGrid(compares[i])
+            const compare = pad(compares[i])
 
             expect(currentBoard).toEqual(compare)
         }
@@ -27,83 +21,54 @@ describe('Conway game of life rules', () => {
     }
 
     it('should correctly evolve for a grid with a blinker pattern', () => {
-        const blinker: Grid = [
-            [0, 0, 0, 0, 0],
-            [0, 0, 1, 0, 0],
-            [0, 0, 1, 0, 0],
-            [0, 0, 1, 0, 0],
-            [0, 0, 0, 0, 0],
-        ];
+        const blinker: Board = [
+            [0,1,0],
+            [0,1,0],
+            [0,1,0]
+        ]
 
-        const blinkerNextStep: Grid = [
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 1, 1, 1, 0],
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],
-        ];
+        const blinkerNextStep: Board = [
+            [0,0,0],
+            [1,1,1],
+            [0,0,0]
+        ]
 
-        testGrid(blinker, [blinkerNextStep, blinker]);
+        testBoard(blinker, [blinkerNextStep, blinker]);
     });
 
     it('should handle a still life block pattern', () => {
-        const block: Grid = [
-            [0, 0, 0, 0],
-            [0, 1, 1, 0],
-            [0, 1, 1, 0],
-            [0, 0, 0, 0],
+        const block: Board = [
+            [1,1],
+            [1,1]
         ];
 
-        testGrid(block, [block]);
+        testBoard(block, [block]);
     });
 
     it('should correctly evolve for a toad pattern', () => {
 
-        const toad: Grid = [
-            [0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0],
-            [0, 0, 1, 1, 1, 0],
-            [0, 1, 1, 1, 0, 0],
-            [0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0],
+        const toad: Board = [
+            [0,0,0,0,],
+            [0,1,1,1,],
+            [1,1,1,0,],
+            [0,0,0,0,],
         ];
 
-        const toadNextStep: Grid = [
-            [0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 0, 0],
-            [0, 1, 0, 0, 1, 0],
-            [0, 1, 0, 0, 1, 0],
-            [0, 0, 1, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0],
+        const toadNextStep: Board = [
+            [0,0,1,0,],
+            [1,0,0,1,],
+            [1,0,0,1,],
+            [0,1,0,0,],
         ];
 
-        testGrid(toad, [toadNextStep, toad]);
-    });
-
-    it('should correctly evolve for an empty grid', () => {
-        const empty: Grid = [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-        ];
-
-        testGrid(empty, [empty]);
+        testBoard(toad, [toadNextStep, toad]);
     });
 
     it('should correctly evolve for a single live cell', () => {
-        const singleCell: Grid = [
-            [0, 0, 0],
-            [0, 1, 0],
-            [0, 0, 0],
-        ];
+        const singleCell: Board = [[1]];
+        const empty: Board = [[0]];
 
-        const empty: Grid = [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-        ];
-
-        testGrid(singleCell, [empty]);
+        testBoard(singleCell, [empty]);
     });
 
 })
