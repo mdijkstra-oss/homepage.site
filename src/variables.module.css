@@ -11,10 +11,10 @@
 }
 
 :export {
-    backgroundDark: var(--background-dark);
-    borderPrompt: var(--border-prompt);
-    lighterDark: var(--lighter-dark);
-    promptBlue: var(--prompt-blue);
-    textLight: var(--text-light);
-    backgroundLinesDark: var(--background-lines-dark);
+    backgroundDark: #0C0C0C;
+    borderPrompt: #3B3B3B;
+    lighterDark: #161616;
+    promptBlue: #89C6E3;
+    textLight: #FAFDFF;
+    backgroundLinesDark: #272727;
 }
