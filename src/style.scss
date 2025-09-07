@@ -1,5 +1,5 @@
 /**
-⚠️ Only global styles in this file, use thing.module.css for components etc
+⚠️ Only global styles in this file, use thing.module.scss for components etc
 
 light: 300
 regular: 400
@@ -7,7 +7,7 @@ medium: 500;
 semibold: 600;
  */
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap');
-@import './variables.module.css';
+@import './variables.module.scss';
 
 /**
    Only global styles in this file
@@ -21,6 +21,12 @@ semibold: 600;
 a {
 	/*text-decoration: none;*/
 	color: var(--text-light);
+}
+
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 body {

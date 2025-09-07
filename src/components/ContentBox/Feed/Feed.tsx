@@ -1,5 +1,5 @@
 import {ContentBox, ContentBoxProps, ContentBoxVariant} from "../Box/ContentBox"
-import style from './style.module.css'
+import style from './style.module.scss'
 import {classnames} from "@/utils/css";
 
 export interface ContentBoxFeedProps {

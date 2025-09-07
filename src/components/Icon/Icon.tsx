@@ -1,4 +1,4 @@
-import moduleStyle from "./style.module.css";
+import moduleStyle from "./style.module.scss";
 import {iconMapping} from "@/components/Icon/icons";
 
 export const availableIcons = Object.keys(iconMapping);

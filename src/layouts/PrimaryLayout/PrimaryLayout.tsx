@@ -1,6 +1,7 @@
 import { Navigation } from "@/layouts/PrimaryLayout/Navigation/Top";
 
-import style from './layout.module.css'
+import style from './layout.module.scss'
+
 import {ExternalLink} from "@/layouts/PrimaryLayout/Navigation/Top/Navigation";
 
 export const defaultExternalLinks: ExternalLink[] = [
@@ -13,21 +14,22 @@ export const defaultExternalLinks: ExternalLink[] = [
 export const PrimaryLayout = () => {
 
     return (
-        <>
+        <div id={style.root}>
             <header>
                 <Navigation externalLinks={defaultExternalLinks} />
             </header>
-            <div className={style.outerContainer}>
-                <aside>
-                    Asideness
-                </aside>
-                <div className={style.contentContainer}>
-                    <main className={style.container}>
-some content
-                    </main>
+            <main className={style.outerContainer}>
+                <nav>
+                    Some list
+                </nav>
 
-                </div>
-            </div>
-        </>
+                <section>
+                    Content
+                </section>
+            </main>
+            <footer>
+
+            </footer>
+        </div>
     );
 }

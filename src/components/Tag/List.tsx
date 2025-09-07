@@ -1,5 +1,5 @@
 import {AvailableIcon} from "@/components/Icon/Icon";
-import style from "@/components/Tag/style.module.css";
+import style from "@/components/Tag/style.module.scss";
 import {Tag} from "@/components/Tag/Tag";
 
 

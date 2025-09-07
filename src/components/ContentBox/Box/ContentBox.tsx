@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { classnames } from '@/utils/css';
-import styles from './style.module.css';
+import styles from './style.module.scss';
 
 export const contentBoxVariants = ['primary', 'secondary'] as const;
 export type ContentBoxVariant = typeof contentBoxVariants[number];
@@ -12,7 +12,9 @@ export interface ContentBoxProps {
 }
 
 export const ContentBox = ({ children, variant = 'primary' }: ContentBoxProps) => {
+    const Element = variant === 'secondary' ? 'div' : 'article';
+
     const className = classnames(styles.contentBox, styles[variant]);
 
-    return <div className={className}>{children}</div>;
+    return <Element className={className}>{children}</Element>;
 };

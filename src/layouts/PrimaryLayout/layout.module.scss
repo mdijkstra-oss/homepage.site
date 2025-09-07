@@ -1,0 +1,29 @@
+@import '../../variables.module.scss';
+
+.container {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: green;
+}
+
+header {
+    height: 66px;
+    flex-shrink: 0;
+}
+
+main {
+    flex: 1;
+    width: 100%;
+}
+
+footer {
+    height: 112px;
+    flex-shrink: 0;
+    background: red;
+}

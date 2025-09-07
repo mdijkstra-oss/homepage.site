@@ -1,7 +1,7 @@
-import style from './style.module.css'
+import style from './style.module.scss'
 import {AvailableIcon, Icon} from "@/components/Icon/Icon";
 
-import vars from '@/variables.module.css'
+import vars from '@/variables.module.scss'
 import {classnames} from "@/utils/css";
 import {iconMapping} from "@/components/Icon/icons";
 

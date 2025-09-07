@@ -1,4 +1,4 @@
-@import "../../variables.module.css";
+@import "../../variables.module.scss";
 
 .tag {
     color: var(--text-light);
@@ -9,7 +9,7 @@
     align-items: center;
 }
 
-.tag&.transparent {
+.tag.transparent {
     padding: 0;
 }
 
