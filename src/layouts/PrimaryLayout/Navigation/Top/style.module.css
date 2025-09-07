@@ -3,6 +3,7 @@
 .bar {
     background: var(--background-dark);
     border-bottom: 1px solid var(--border-prompt);
+    height: 66px;
 }
 
 .bar ul {

@@ -4,6 +4,7 @@ import {AvailableIcon} from "@/components/Icon/Icon";
 import {classnames} from "@/utils/css";
 import {Tag} from "@/components/Tag";
 import { ReactNode } from "react";
+import {GameOfLife} from "@/components/GameOfLife";
 
 export type ExternalLink = {
     tag: AvailableIcon;
