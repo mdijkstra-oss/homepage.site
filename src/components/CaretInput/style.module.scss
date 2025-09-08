@@ -1,0 +1,50 @@
+.container {
+  position: relative;
+  display: inline-flex;
+}
+
+.input {
+  caret-color: transparent;
+}
+
+.caretContainer {
+  position: absolute;
+  height: 100%;
+  width: auto;
+  display: flex;
+  align-items: center;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.mirror {
+  border: none;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: pre !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  display: inline-block;
+  visibility: hidden;
+}
+
+.defaultCaret {
+  height: 15px;
+  width: 5px;
+  background-color: red;
+  border-radius: 5%;
+  display: inline-block;
+
+
+  animation: caretFade 1.2s infinite ease-in-out;
+  opacity: 1; /* Ensures proper initial state */
+}
+
+@keyframes caretFade {
+  0%, 100%, 90%, 10% { opacity: 1; }
+  50% { opacity: 0; }
+}
