@@ -1,13 +1,17 @@
-@import '../../../variables.module.scss';
+@use '../../../variables.module.scss' as vars;
 
-.content-box {
-    background: var(--lighter-dark);
-    border: 1px solid var(--border-prompt);
+@mixin primary {
+    background: vars.$lighter-dark;
+    border: 1px solid vars.$border-prompt;
     border-radius: 11px;
     padding: 12px 20px;
     display: inline-block;
     font-weight: 300;
     position: relative;
+}
+
+.content-box {
+    @include primary
 }
 
 .content-box p {
@@ -16,6 +20,6 @@
 
 .secondary {
     border: none;
-    background: var(--prompt-blue);
+    background: vars.$prompt-blue;
     font-weight: 600;
 }

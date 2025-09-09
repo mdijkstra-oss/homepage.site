@@ -1,8 +1,8 @@
-@import "../../../../variables.module.scss";
+@use "../../../../variables.module.scss" as vars;
 
 .bar {
-    background: var(--background-dark);
-    border-bottom: 1px solid var(--border-prompt);
+    background: vars.$background-dark;
+    border-bottom: 1px solid vars.$border-prompt;
     height: 66px;
 }
 
@@ -32,5 +32,5 @@
 }
 
 .bar a:hover {
-    background: linear-gradient(to bottom, var(--background-dark), var(--border-prompt));
+    background: linear-gradient(to bottom, vars.$background-dark, vars.$border-prompt);
 }

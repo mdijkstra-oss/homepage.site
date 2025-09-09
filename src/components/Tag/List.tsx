@@ -1,7 +1,6 @@
 import {AvailableIcon} from "@/components/Icon/Icon";
-import style from "@/components/Tag/style.module.scss";
-import {Tag} from "@/components/Tag/Tag";
-
+import style from "./style.module.scss";
+import {Tag} from "./Tag";
 
 export interface TagListProps {
     tags: AvailableIcon[];
