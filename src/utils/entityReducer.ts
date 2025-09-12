@@ -1,3 +1,5 @@
+import {typedEntries} from "@/utils/set";
+
 export type FullAction<T> = {
     type: 'CREATE';
     payload: T;
@@ -12,7 +14,11 @@ export type EntityAction<T> =
     | FullAction<T>
     | PartialAction<T>
 
-export function entityReducer<T>(action: EntityAction<T>, current?: T): T | undefined {
+export function entityReducer<T>(
+    action: EntityAction<T>,
+    current?: T,
+    readonlyKeys?: readonly (keyof T)[]
+): T | undefined {
     switch (action.type) {
         case "CREATE":
             return { ...action.payload };
@@ -23,10 +29,10 @@ export function entityReducer<T>(action: EntityAction<T>, current?: T): T | unde
 
             const result = { ...current };
 
-            Object.entries(action.payload).forEach(([key, newValue]) => {
-                const currentValue = current[key as keyof T];
+            typedEntries(action.payload).forEach(([key, newValue]) => {
+                const currentValue = current[key];
 
-                if (isAppendable(currentValue) || currentValue === undefined) {
+                if (writeable(key, readonlyKeys) && isAppendable(currentValue) || currentValue === undefined) {
                     try {
                         (result as any)[key] = appendValues(currentValue, newValue);
                     } catch (error) {
@@ -43,6 +49,10 @@ export function entityReducer<T>(action: EntityAction<T>, current?: T): T | unde
 
 function isAppendable(value: unknown): value is string | unknown[] {
     return typeof value === 'string' || Array.isArray(value);
+}
+
+function writeable<T>(key: keyof T, readonlyKeys?: readonly (keyof T)[]) {
+    return readonlyKeys?.indexOf(key as keyof T) === -1;
 }
 
 function appendValues<T>(current: T | undefined, newValue: T): T {

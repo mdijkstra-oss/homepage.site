@@ -1,4 +1,4 @@
-import {EntityAction, entityReducer} from "@/utils/reducer/entityReducer";
+import {EntityAction, entityReducer} from "@/utils/entityReducer";
 import {Prompt, Reply} from "@/domain/content/prompt";
 
 type PromptAction = {
@@ -7,7 +7,8 @@ type PromptAction = {
 }
 
 type ReplyAction = EntityAction<Reply>
-type ContentAction = PromptAction | ReplyAction;
+
+export type ContentAction = PromptAction | ReplyAction;
 
 export function reduceContentUpdate(action: ContentAction, current: Prompt[]) {
     if(isPromptAction(action)) {
@@ -23,7 +24,7 @@ function replyReducer(action: ReplyAction, current: Prompt[]): Prompt[] {
     return current.map(prompt => {
         if (prompt.id === promptId) {
             const updatedReplies = new Map(prompt.replies);
-            updatedReplies.set(id, entityReducer(action, updatedReplies.get(id)));
+            updatedReplies.set(id, entityReducer(action, updatedReplies.get(id), ['id']));
             return {
                 ...prompt,
                 replies: updatedReplies
