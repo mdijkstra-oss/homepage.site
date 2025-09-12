@@ -9,6 +9,7 @@ export type ContentBoxVariant = typeof contentBoxVariants[number];
 export interface ContentBoxProps {
     children: ReactNode;
     variant?: ContentBoxVariant;
+    key?: string
 }
 
 export const ContentBox = ({ children, variant = 'primary' }: ContentBoxProps) => {

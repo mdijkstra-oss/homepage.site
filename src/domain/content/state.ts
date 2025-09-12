@@ -1,5 +1,6 @@
 import {EntityAction, entityReducer} from "@/utils/entityReducer";
 import {Prompt, Reply} from "@/domain/content/prompt";
+import {combineReducers} from "@/utils/reducer";
 
 type PromptAction = {
     type: 'ADD_PROMPT',
@@ -10,15 +11,14 @@ type ReplyAction = EntityAction<Reply>
 
 export type ContentAction = PromptAction | ReplyAction;
 
-export function reduceContentUpdate(action: ContentAction, current: Prompt[]) {
-    if(isPromptAction(action)) {
-        return promptReducer(action, current);
-    }
-
-    return replyReducer(action, current);
-}
+export const contentReducer = combineReducers(
+    promptReducer,
+    replyReducer,
+)
 
 function replyReducer(action: ReplyAction, current: Prompt[]): Prompt[] {
+    if (!isReplyAction(action)) return current;
+
     const { promptId, id } = action.payload;
 
     return current.map(prompt => {
@@ -34,14 +34,18 @@ function replyReducer(action: ReplyAction, current: Prompt[]): Prompt[] {
     });
 }
 
-function isPromptAction(action: ContentAction): action is PromptAction {
-    return action.type === 'ADD_PROMPT';
+function isReplyAction(action: ContentAction): action is ReplyAction {
+    return !isPromptAction(action);
 }
 
 function promptReducer(action: ContentAction, current: Prompt[]) {
+    if(!isPromptAction(action)) return current;
+
     if(action.type === 'ADD_PROMPT') {
         return [...current, action.payload]
     }
+}
 
-    throw new Error(`Unknown prompt action: ${action.type}`);
+function isPromptAction(action: ContentAction): action is PromptAction {
+    return action.type === 'ADD_PROMPT';
 }

@@ -1,0 +1,1 @@
+export { PromptFeed } from './PromptFeed';

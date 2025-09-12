@@ -1,6 +1,6 @@
 import {AvailableIcon} from "@/components/Icon/Icon";
 import {Identifiable, Identifier} from "@/utils/types";
-import { randomUUID } from "crypto"
+// import { randomUUID } from "crypto"
 
 export type Prompt = Identifiable & {
     message: string;
@@ -11,6 +11,7 @@ export type Reply = Identifiable & {
     promptId: Identifier;
     title: string;
     content: string;
+    completed: boolean,
     meta?: {
         tags?: AvailableIcon[];
         image?: string;
@@ -20,7 +21,7 @@ export type Reply = Identifiable & {
 }
 
 export function makePrompt(message: string, replies: Reply[] = [], id: string): Prompt {
-    if (!id) { id = randomUUID() }
+    // if (!id) { id = randomUUID() }
 
     return {
         id,

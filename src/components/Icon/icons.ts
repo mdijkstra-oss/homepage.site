@@ -8,7 +8,8 @@ import {
     siNodedotjs,
     siPhp,
     siReact,
-    siTypescript
+    siTypescript,
+    siJavascript
 } from "simple-icons";
 
 import Linkedin from "@/assets/linkedin.svg";
@@ -32,5 +33,6 @@ export const iconMapping: { [key: string]: IconValue } = {
     docker: iconValueFromSI(siDocker),
     react: iconValueFromSI(siReact),
     resume: iconValueFromDataUrl(Resume, "#FFF", "Resume"),
-    contact: iconValueFromDataUrl(Email, "#FFF", "Contact")
+    contact: iconValueFromDataUrl(Email, "#FFF", "Contact"),
+    javascript: iconValueFromSI(siJavascript)
 };

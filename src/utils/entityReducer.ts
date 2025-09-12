@@ -36,7 +36,7 @@ export function entityReducer<T>(
                     try {
                         (result as any)[key] = appendValues(currentValue, newValue);
                     } catch (error) {
-                        console.warn(`Append failed for key ${key}:`, error);
+                        console.warn(`Append failed for key ${String(key)}:`, error);
                     }
                 }
             });

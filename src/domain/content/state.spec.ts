@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import {ContentAction, reduceContentUpdate} from './state';
+import {ContentAction, contentReducer} from './state';
 import { makePrompt, Prompt } from './prompt';
 
 function testActions(actions: ContentAction[], expectedPrompts: Prompt[]): void {
   let state: Prompt[] = [];
 
   actions.forEach(action => {
-    state = reduceContentUpdate(action, state);
+    state = contentReducer(action, state);
   });
 
   const actualStateObj = comparableStateObj(state);
@@ -49,6 +49,7 @@ describe('reduceContentUpdate', () => {
           promptId: promptId1,
           title: 'Pizza',
           content: 'I love pizza!',
+          completed: false,
           meta: {
             date: new Date('2023-01-01')
           }
@@ -63,6 +64,7 @@ describe('reduceContentUpdate', () => {
           promptId: promptId2,
           title: 'Inception',
           content: 'Inception is my favorite movie.',
+          completed: false,
           meta: {
             date: new Date('2023-01-02')
           }
@@ -80,7 +82,6 @@ describe('reduceContentUpdate', () => {
       }
     ];
 
-    // Expected final state
     const expectedPrompts: Prompt[] = [
       {
         id: promptId1,
@@ -91,6 +92,7 @@ describe('reduceContentUpdate', () => {
             promptId: promptId1,
             title: 'Italian Pizza',
             content: 'I love pizza!',
+            completed: false,
             meta: {
               date: new Date('2023-01-01')
             }
@@ -106,6 +108,7 @@ describe('reduceContentUpdate', () => {
             promptId: promptId2,
             title: 'Inception',
             content: 'Inception is my favorite movie.',
+            completed: false,
             meta: {
               date: new Date('2023-01-02')
             }
@@ -114,7 +117,7 @@ describe('reduceContentUpdate', () => {
       }
     ];
 
-    // Test actions against expected state
     testActions(actions, expectedPrompts);
   });
+
 });
