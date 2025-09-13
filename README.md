@@ -1,5 +1,6 @@
 # `mdijkstra.dev`
-Personal website & portfolio. Building in progress. 
+
+Personal website & portfolio. Building in progress.
 
 ![under construction](./design/under_construction.gif)
 

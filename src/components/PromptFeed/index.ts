@@ -1,1 +1,1 @@
-export { PromptFeed } from './PromptFeed';
+export { PromptFeed } from './PromptFeed'

@@ -1,17 +1,17 @@
-$background-dark: #0C0C0C;
-$border-prompt: #3B3B3B;
+$background-dark: #0c0c0c;
+$border-prompt: #3b3b3b;
 $lighter-dark: #161616;
-$prompt-blue: #89C6E3;
-$text-light: #FAFDFF;
+$prompt-blue: #89c6e3;
+$text-light: #fafdff;
 $background-lines-dark: #272727;
 
 $max-content-width: 1200px;
 
 :export {
-    backgroundDark: $background-dark;
-    borderPrompt: $border-prompt;
-    lighterDark: $lighter-dark;
-    promptBlue: $prompt-blue;
-    textLight: $text-light;
-    backgroundLinesDark: $background-lines-dark;
+  backgroundDark: $background-dark;
+  borderPrompt: $border-prompt;
+  lighterDark: $lighter-dark;
+  promptBlue: $prompt-blue;
+  textLight: $text-light;
+  backgroundLinesDark: $background-lines-dark;
 }

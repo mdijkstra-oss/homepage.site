@@ -1,1 +1,1 @@
-export { ContentBoxFeed } from './Feed';
+export { ContentBoxFeed } from './Feed'

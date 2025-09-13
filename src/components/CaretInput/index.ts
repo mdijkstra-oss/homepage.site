@@ -1,1 +1,1 @@
-export { CaretInput } from './CaretInput';
+export { CaretInput } from './CaretInput'

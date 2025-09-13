@@ -1,25 +1,25 @@
 @use '../../../variables.module.scss' as vars;
 
 @mixin primary {
-    background: vars.$lighter-dark;
-    border: 1px solid vars.$border-prompt;
-    border-radius: 11px;
-    padding: 12px 20px;
-    display: inline-block;
-    font-weight: 300;
-    position: relative;
+  background: vars.$lighter-dark;
+  border: 1px solid vars.$border-prompt;
+  border-radius: 11px;
+  padding: 12px 20px;
+  display: inline-block;
+  font-weight: 300;
+  position: relative;
 }
 
 .content-box {
-    @include primary
+  @include primary;
 }
 
 .content-box p {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .secondary {
-    border: none;
-    background: vars.$prompt-blue;
-    font-weight: 600;
+  border: none;
+  background: vars.$prompt-blue;
+  font-weight: 600;
 }

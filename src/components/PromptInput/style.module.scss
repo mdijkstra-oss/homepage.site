@@ -1,57 +1,63 @@
-@use "../ContentBox/Box/style.module.scss" as box;
-@use "../../variables.module.scss" as vars;
+@use '../ContentBox/Box/style.module.scss' as box;
+@use '../../variables.module.scss' as vars;
 
 .container {
-    position: relative;
+  position: relative;
 }
 
 .input {
-    @include box.primary;
-    border-width: 2px;
-    color: vars.$text-light;
-    font-weight: 400;
-    font-size: 16px;
-    caret-color: transparent;
+  @include box.primary;
+  border-width: 2px;
+  color: vars.$text-light;
+  font-weight: 400;
+  font-size: 16px;
+  caret-color: transparent;
 }
 
 .input:focus {
-    outline: none;
-    border-color: vars.$prompt-blue;
+  outline: none;
+  border-color: vars.$prompt-blue;
 }
 
 .processing {
-
 }
 
 .caret {
-    position: absolute;
-    height: 26px;
-    width: 4px;
-    background: var(--prompt-blue);
-    border-radius: 0.5em;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    margin-left: 0;
-    animation: caretFade 1.2s infinite ease-in-out;
-    opacity: 1; /* Ensures proper initial state */
+  position: absolute;
+  height: 26px;
+  width: 4px;
+  background: var(--prompt-blue);
+  border-radius: 0.5em;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  margin-left: 0;
+  animation: caretFade 1.2s infinite ease-in-out;
+  opacity: 1; /* Ensures proper initial state */
 }
 
 @keyframes caretFade {
-    0%, 100%, 90%, 10% { opacity: 1; }
-    50% { opacity: 0; }
+  0%,
+  100%,
+  90%,
+  10% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .mirror {
-    border: none;
-    margin: 0;
-    padding: 0;
-    pointer-events: none;
-    overflow: hidden;
-    white-space: pre !important;
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    display: inline-block;
-    visibility: hidden;
+  border: none;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: pre !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  display: inline-block;
+  visibility: hidden;
 }

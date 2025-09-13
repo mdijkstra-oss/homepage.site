@@ -39,12 +39,18 @@
   border-radius: 5%;
   display: inline-block;
 
-
   animation: caretFade 1.2s infinite ease-in-out;
   opacity: 1; /* Ensures proper initial state */
 }
 
 @keyframes caretFade {
-  0%, 100%, 90%, 10% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100%,
+  90%,
+  10% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }

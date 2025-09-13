@@ -1,39 +1,39 @@
 @use '../../variables.module.scss' as vars;
 
 #root {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 
-    header {
-        height: 66px;
-        flex-shrink: 0;
-    }
+  header {
+    height: 66px;
+    flex-shrink: 0;
+  }
 
-    main {
-        flex: 1;
-        width: 100%;
-    }
+  main {
+    flex: 1;
+    width: 100%;
+  }
 
-    footer {
-        height: 112px;
-        flex-shrink: 0;
-    }
+  footer {
+    height: 112px;
+    flex-shrink: 0;
+  }
 }
 
 .container {
-    max-width: vars.$max-content-width;
-    margin: 2rem auto;
-    display: flex;
-    height: 100vh;
+  max-width: vars.$max-content-width;
+  margin: 2rem auto;
+  display: flex;
+  height: 100vh;
 
-    nav {
-        flex-shrink: 0;
-        margin-right: 2rem;
-    }
+  nav {
+    flex-shrink: 0;
+    margin-right: 2rem;
+  }
 
-    section {
-        flex: 1;
-        min-width: 0;
-    }
+  section {
+    flex: 1;
+    min-width: 0;
+  }
 }

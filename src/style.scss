@@ -15,32 +15,33 @@ semibold: 600;
  */
 
 * {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 a {
-	/*text-decoration: none;*/
-	color: vars.$text-light;
+  /*text-decoration: none;*/
+  color: vars.$text-light;
 }
 
-html, body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-	font-family: "IBM Plex Mono", monospace;
-	font-weight: 400;
-	font-style: normal;
-	font-size: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
 
-	margin: 0;
-	background-image:
-			linear-gradient(to right, vars.$background-dark 1px, transparent 1px),
-			linear-gradient(to bottom, vars.$background-lines-dark 1px, transparent 1px);
-	background-size: 20px 20px;
-	background-color: vars.$background-dark;
-	color: vars.$text-light;
+  margin: 0;
+  background-image:
+    linear-gradient(to right, vars.$background-dark 1px, transparent 1px),
+    linear-gradient(to bottom, vars.$background-lines-dark 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-color: vars.$background-dark;
+  color: vars.$text-light;
 }

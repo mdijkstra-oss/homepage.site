@@ -1,9 +1,9 @@
-import { createRoot } from 'react-dom/client';
-import { PrimaryLayout } from "@/layouts/PrimaryLayout";
-import './style.scss';
+import { createRoot } from 'react-dom/client'
+import { PrimaryLayout } from '@/layouts/PrimaryLayout'
+import './style.scss'
 
 const App = () => {
-	return <PrimaryLayout />;
-};
+  return <PrimaryLayout />
+}
 
-createRoot(document.getElementById('app')!).render(<App />);
+createRoot(document.getElementById('app')!).render(<App />)

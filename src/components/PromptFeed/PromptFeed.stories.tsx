@@ -1,7 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { PromptFeed, PromptFeedProps } from './PromptFeed';
-import { makePrompt } from '@/domain/content/prompt';
-import {samplePrompt} from "@/components/PromptFeed/sample";
+import type { Meta, StoryObj } from '@storybook/react'
+import { PromptFeed, PromptFeedProps } from './PromptFeed'
+import { samplePrompt } from '@/components/PromptFeed/sample'
 
 const meta: Meta<PromptFeedProps> = {
   title: 'Components/PromptFeed',
@@ -9,13 +8,13 @@ const meta: Meta<PromptFeedProps> = {
   parameters: {
     layout: 'centered',
   },
-};
+}
 
-export default meta;
-type Story = StoryObj<PromptFeedProps>;
+export default meta
+type Story = StoryObj<PromptFeedProps>
 
 export const Default: Story = {
   args: {
-    prompt: samplePrompt
+    prompt: samplePrompt,
   },
-};
+}
