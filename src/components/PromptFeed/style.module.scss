@@ -1,5 +1,6 @@
 .heading {
   margin-bottom: 0.5rem;
+  font-size: 1em;
 }
 
 .replyDate {
@@ -18,7 +19,8 @@
 }
 
 .image {
-  width: 300px;
-  object-fit: cover;
-  margin-left: 1rem;
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 1rem;
 }

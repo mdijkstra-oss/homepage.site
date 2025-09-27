@@ -12,10 +12,20 @@
 
 .content-box {
   @include primary;
-}
 
-.content-box p {
-  margin-bottom: 16px;
+  p {
+    margin-bottom: 16px;
+  }
+
+  a {
+    color: vars.$text-link;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
 }
 
 .secondary {

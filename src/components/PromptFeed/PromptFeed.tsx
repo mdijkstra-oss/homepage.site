@@ -41,7 +41,13 @@ const ReplyContent = ({ title, content, meta: { date, endDate, tags, image } }: 
     <div className={style.content}>
       {image && <img className={style.image} src={image} alt={title} />}
       <div className={style.text}>
-        <ReactMarkdown>{content}</ReactMarkdown>
+        <ReactMarkdown
+          components={{
+            a: ExternalLink,
+          }}
+        >
+          {content}
+        </ReactMarkdown>
       </div>
     </div>
     <div className={style.footer}>{tags && <TagList tags={tags} />}</div>
@@ -62,3 +68,9 @@ const Date = ({ date, endDate }: DateProps) => {
     </div>
   )
 }
+
+const ExternalLink = ({ href, children }) => (
+  <a href={href} rel="nofollow">
+    {children}
+  </a>
+)

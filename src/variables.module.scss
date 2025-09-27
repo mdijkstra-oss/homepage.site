@@ -1,11 +1,11 @@
 $background-dark: #0c0c0c;
 $border-prompt: #3b3b3b;
 $lighter-dark: #161616;
-$prompt-blue: #52C5E2;
+$prompt-blue: #32869c;
 $text-light: #fafdff;
 $background-lines-dark: #272727;
-
 $max-content-width: 1200px;
+$text-link: #52C5E2;
 
 :export {
   backgroundDark: $background-dark;
@@ -14,4 +14,5 @@ $max-content-width: 1200px;
   promptBlue: $prompt-blue;
   textLight: $text-light;
   backgroundLinesDark: $background-lines-dark;
+  textLink: $text-link;
 }

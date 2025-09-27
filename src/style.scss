@@ -36,6 +36,7 @@ body {
   font-weight: 400;
   font-style: normal;
   font-size: 14px;
+  line-height: 1.5;
 
   margin: 0;
   background-image:
@@ -44,4 +45,13 @@ body {
   background-size: 20px 20px;
   background-color: vars.$background-dark;
   color: vars.$text-light;
+}
+
+h1,h2,h3 {
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+
+strong {
+  font-weight: 600;
 }

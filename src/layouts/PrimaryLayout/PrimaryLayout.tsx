@@ -5,7 +5,6 @@ import style from './layout.module.scss'
 import { ExternalLink } from '@/layouts/PrimaryLayout/Navigation/Top/Navigation'
 import { ContentBox } from '@/components/ContentBox/Box'
 import { ActiveList } from '@/components/ActiveList'
-// import { PromptFeed } from '@/components/PromptFeed'
 import { useSocketReducer } from '@/layouts/PrimaryLayout/useSocketReducer'
 import { defaultReducer } from '@/domain/reducer'
 import { DefaultPromptInfo, PromptActionTypes } from '@/domain/prompt/prompt'
@@ -43,7 +42,7 @@ export const PrimaryLayout = () => {
   useEffect(() => {
     if (!connected || !defaultPrompts.length) return
 
-    dispatch({ type: PromptActionTypes.INFER, payload: defaultPrompts[1].prompt })
+    dispatch({ type: PromptActionTypes.INFER, payload: defaultPrompts[2].prompt })
   }, [defaultPrompts, dispatch, connected])
 
   return (
