@@ -5,8 +5,12 @@ import style from './layout.module.scss'
 import { ExternalLink } from '@/layouts/PrimaryLayout/Navigation/Top/Navigation'
 import { ContentBox } from '@/components/ContentBox/Box'
 import { ActiveList } from '@/components/ActiveList'
+// import { PromptFeed } from '@/components/PromptFeed'
+import { useSocketReducer } from '@/layouts/PrimaryLayout/useSocketReducer'
+import { defaultReducer } from '@/domain/reducer'
+import { DefaultPromptInfo, PromptActionTypes } from '@/domain/prompt/prompt'
+import { useEffect } from 'react'
 import { PromptFeed } from '@/components/PromptFeed'
-import { samplePrompt } from '@/components/PromptFeed/sample'
 
 export const defaultExternalLinks: ExternalLink[] = [
   { tag: 'codeberg', url: 'https://codeberg.org/mdijkstra' },
@@ -15,16 +19,33 @@ export const defaultExternalLinks: ExternalLink[] = [
   { tag: 'contact', url: 'mailto:<hello@mdijkstra.dev>' },
 ]
 
-const sampleListItems = [
-  { path: '/introduction', label: 'Introduction', active: true },
-  { path: '/experience', label: 'Experience', active: false },
-  { path: '/recommendations', label: 'Recommendations', active: false },
-  { path: '/open-source', label: 'Open Source', active: false },
-  { path: '/patents', label: 'Patents', active: false },
-  { path: '/education', label: 'Education', active: false },
-]
+const mapFromDefaultPrompt = (prompts: DefaultPromptInfo[]) => {
+  return prompts.map((prompt) => ({
+    path: `/${prompt.slug}`,
+    label: prompt.shortTitle,
+    active: false,
+  }))
+}
 
 export const PrimaryLayout = () => {
+  const { state, dispatch, connected } = useSocketReducer('ws://localhost:8080/ws', defaultReducer, {
+    defaultPrompts: [],
+    prompts: [],
+  })
+
+  const { defaultPrompts, prompts } = state
+
+  useEffect(() => {
+    if (!connected) return
+    dispatch({ type: PromptActionTypes.FETCH_DEFAULT_PROMPTS })
+  }, [connected, dispatch])
+
+  useEffect(() => {
+    if (!connected || !defaultPrompts.length) return
+
+    dispatch({ type: PromptActionTypes.INFER, payload: defaultPrompts[1].prompt })
+  }, [defaultPrompts, dispatch, connected])
+
   return (
     <div id={style.root}>
       <header>
@@ -33,12 +54,14 @@ export const PrimaryLayout = () => {
       <main className={style.container}>
         <nav>
           <ContentBox variant="secondary">
-            <ActiveList items={sampleListItems} />
+            <ActiveList items={mapFromDefaultPrompt(state.defaultPrompts)} />
           </ContentBox>
         </nav>
 
         <section>
-          <PromptFeed prompt={samplePrompt} />
+          {prompts.map((prompt) => (
+            <PromptFeed prompt={prompt} key={prompt.message} />
+          ))}
         </section>
       </main>
       <footer></footer>

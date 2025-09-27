@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { PromptFeed, PromptFeedProps } from './PromptFeed'
-import { samplePrompt } from '@/components/PromptFeed/sample'
 
 const meta: Meta<PromptFeedProps> = {
   title: 'Components/PromptFeed',
@@ -15,6 +14,6 @@ type Story = StoryObj<PromptFeedProps>
 
 export const Default: Story = {
   args: {
-    prompt: samplePrompt,
+    prompt: { message: 'Hi', replies: [] },
   },
 }

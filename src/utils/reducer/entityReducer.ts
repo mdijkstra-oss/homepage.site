@@ -1,12 +1,18 @@
 import { typedEntries } from '@/utils/set'
 
+export enum EntryAction {
+  CREATE = 'CREATE',
+  MERGE = 'MERGE',
+  APPEND = 'APPEND',
+}
+
 export type FullAction<T> = {
-  type: 'CREATE'
+  type: EntryAction.CREATE
   payload: T
 }
 
 export type PartialAction<T> = {
-  type: 'MERGE' | 'APPEND'
+  type: EntryAction.MERGE | EntryAction.APPEND
   payload: Partial<T>
 }
 
@@ -18,11 +24,11 @@ export function entityReducer<T>(
   readonlyKeys?: readonly (keyof T)[],
 ): T | undefined {
   switch (action.type) {
-    case 'CREATE':
+    case EntryAction.CREATE:
       return { ...action.payload }
-    case 'MERGE':
+    case EntryAction.MERGE:
       return current ? { ...current, ...action.payload } : undefined
-    case 'APPEND':
+    case EntryAction.APPEND:
       if (!current) return undefined
 
       const result = { ...current }

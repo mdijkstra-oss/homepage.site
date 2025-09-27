@@ -1,5 +1,5 @@
 import React from 'react'
-import { Prompt, Reply } from '@/domain/content/prompt'
+import { Prompt, Reply } from '@/domain/prompt/prompt'
 import { ContentBoxFeed, ContentFeed } from '@/components/ContentBox/Feed/Feed'
 import ReactMarkdown from 'react-markdown'
 
@@ -11,9 +11,7 @@ export interface PromptFeedProps {
 }
 
 export const PromptFeed = ({ prompt }: PromptFeedProps) => {
-  console.log(prompt)
   const feed = mapToFeed(prompt)
-  console.log(feed)
   return <ContentBoxFeed feed={feed} />
 }
 
@@ -51,8 +49,8 @@ const ReplyContent = ({ title, content, meta: { date, endDate, tags, image } }: 
 )
 
 interface DateProps {
-  date: Date
-  endDate: Date
+  date: string
+  endDate: string
 }
 
 const Date = ({ date, endDate }: DateProps) => {
@@ -60,7 +58,7 @@ const Date = ({ date, endDate }: DateProps) => {
 
   return (
     <div className={style.dates}>
-      <span>{date.toLocaleDateString()}</span> {endDate && <span> - {endDate.toLocaleDateString()}</span>}
+      <span>{date}</span> {endDate && <span> - {endDate}</span>}
     </div>
   )
 }

@@ -13,7 +13,10 @@ export interface TagProps {
 export const Tag = ({ name, transparent = false }: TagProps) => {
   const icon = iconMapping[name]
 
-  if (!icon) throw new Error(`Icon ${name} not found in iconMapping`)
+  if (!icon) {
+    console.warn(`Icon ${name} not found in iconMapping`)
+    return null
+  }
 
   const color = transparent ? 'transparent' : icon.color
 
