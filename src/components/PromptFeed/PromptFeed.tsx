@@ -2,7 +2,7 @@ import React from 'react'
 import { Prompt, Reply } from '@/domain/prompt/prompt'
 import { ContentBoxFeed, ContentFeed } from '@/components/ContentBox/Feed/Feed'
 import ReactMarkdown from 'react-markdown'
-
+import gfm from 'remark-gfm'
 import style from './style.module.scss'
 import { TagList } from '@/components/Tag/List'
 
@@ -35,13 +35,14 @@ function toReplyFeed(replies: Reply[]): ContentFeed {
 const ReplyContent = ({ title, content, meta: { date, endDate, tags, image } }: Reply) => (
   <>
     <div className={style.heading}>
-      <h2>{title}</h2>
+      <h1>{title}</h1>
       <Date date={date} endDate={endDate} />
     </div>
     <div className={style.content}>
       {image && <img className={style.image} src={image} alt={title} />}
       <div className={style.text}>
         <ReactMarkdown
+          remarkPlugins={[gfm]}
           components={{
             a: ExternalLink,
           }}

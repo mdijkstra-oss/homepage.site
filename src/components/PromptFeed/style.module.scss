@@ -1,17 +1,56 @@
 .heading {
   margin-bottom: 0.5rem;
   font-size: 1em;
-}
 
-.replyDate {
-  font-size: 0.8rem;
-  color: #666;
-  margin: 0.25rem 0;
+  h1 {
+    font-size: 1.2em;
+  }
 }
 
 .content {
   display: flex;
   gap: 1rem;
+
+  h1,h2,h3 {
+    font-size: 1.1em;
+    margin-bottom: 1em;
+  }
+
+  h2,h3 {
+    font-size: 1em;
+  }
+
+  ul {
+    margin-bottom: 0.8em;
+
+    li {
+      list-style-type: none;
+      margin-bottom: 0.2em;
+
+      &::before {
+        content: "✅";
+        margin-right: 0.5em;
+      }
+    }
+  }
+
+  ol {
+    li {
+      margin-left: 1.8em;
+    }
+  }
+
+  hr {
+    margin: 1em 0;
+    border: none;
+    border-top: 1px solid #ccc;
+    height: 1px;
+  }
+
+  sup {
+    margin-right: 0.2em;
+  }
+
 }
 
 .text {
@@ -23,4 +62,8 @@
   height: 200px;
   object-fit: contain;
   border-radius: 1rem;
+}
+
+.footer {
+  margin-bottom: 0.5em;
 }
