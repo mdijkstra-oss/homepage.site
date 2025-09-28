@@ -5,6 +5,9 @@ import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
 import style from './style.module.scss'
 import { TagList } from '@/components/Tag/List'
+import { usePrompt } from '@/layouts/PrimaryLayout/PromptContext'
+import { sample } from '@/utils/set'
+import { tagPrompts } from '@/components/Tag/tagPrompts'
 
 export interface PromptFeedProps {
   prompt: Prompt
@@ -32,28 +35,33 @@ function toReplyFeed(replies: Reply[]): ContentFeed {
   }))
 }
 
-const ReplyContent = ({ title, content, meta: { date, endDate, tags, image } }: Reply) => (
-  <>
-    <div className={style.heading}>
-      <h1>{title}</h1>
-      <Date date={date} endDate={endDate} />
-    </div>
-    <div className={style.content}>
-      {image && <img className={style.image} src={image} alt={title} />}
-      <div className={style.text}>
-        <ReactMarkdown
-          remarkPlugins={[gfm]}
-          components={{
-            a: ExternalLink,
-          }}
-        >
-          {content}
-        </ReactMarkdown>
+const ReplyContent = ({ title, content, meta: { date, endDate, tags, image } }: Reply) => {
+  const submitPrompt = usePrompt()
+  const onTagClick = (tag: string) => submitPrompt(sample(tagPrompts).replace('[tag]', tag))
+
+  return (
+    <>
+      <div className={style.heading}>
+        <h1>{title}</h1>
+        <Date date={date} endDate={endDate} />
       </div>
-    </div>
-    <div className={style.footer}>{tags && <TagList tags={tags} />}</div>
-  </>
-)
+      <div className={style.content}>
+        {image && <img className={style.image} src={image} alt={title} />}
+        <div className={style.text}>
+          <ReactMarkdown
+            remarkPlugins={[gfm]}
+            components={{
+              a: ExternalLink,
+            }}
+          >
+            {content}
+          </ReactMarkdown>
+        </div>
+      </div>
+      <div className={style.footer}>{tags && <TagList onclick={onTagClick} tags={tags} />}</div>
+    </>
+  )
+}
 
 interface DateProps {
   date: string

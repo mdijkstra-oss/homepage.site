@@ -26,3 +26,7 @@ export function getValueAtPath<T = unknown>(obj: object, path: PropertyKey): T |
     .split('.')
     .reduce((acc, key) => acc?.[key], obj) as T | undefined
 }
+
+export function sample<T>(prompts: T[]) {
+  return prompts[Math.floor(Math.random() * prompts.length)]
+}
