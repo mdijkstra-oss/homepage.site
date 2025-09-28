@@ -5,11 +5,12 @@ import style from './layout.module.scss'
 import { ExternalLink } from '@/layouts/PrimaryLayout/Navigation/Top/Navigation'
 import { ContentBox } from '@/components/ContentBox/Box'
 import { ActiveList } from '@/components/ActiveList'
-import { useSocketReducer } from '@/layouts/PrimaryLayout/useSocketReducer'
+import { useSocketReducer } from '@/hooks/useSocketReducer'
 import { defaultReducer } from '@/domain/reducer'
 import { DefaultPromptInfo, PromptActionTypes } from '@/domain/prompt/prompt'
 import { useEffect } from 'react'
 import { PromptFeed } from '@/components/PromptFeed'
+import { useRouter } from '@/hooks/useRouter'
 
 export const defaultExternalLinks: ExternalLink[] = [
   { tag: 'codeberg', url: 'https://codeberg.org/mdijkstra' },
@@ -18,15 +19,23 @@ export const defaultExternalLinks: ExternalLink[] = [
   { tag: 'contact', url: 'mailto:<hello@mdijkstra.dev>' },
 ]
 
-const mapFromDefaultPrompt = (prompts: DefaultPromptInfo[]) => {
+const mapFromDefaultPrompt = (prompts: DefaultPromptInfo[], path: string) => {
   return prompts.map((prompt) => ({
-    path: `/${prompt.slug}`,
+    path: slugToPath(prompt.slug),
     label: prompt.shortTitle,
-    active: false,
+    active: prompt.slug === activePrompt(path, prompts)?.slug,
   }))
 }
 
+const activePrompt = (path: string, prompts: DefaultPromptInfo[]): DefaultPromptInfo => {
+  return prompts.find((p) => slugToPath(p.slug) === path)
+}
+
+const slugToPath = (slug: string) => `/${slug}`
+
 export const PrimaryLayout = () => {
+  const { path, navigate } = useRouter()
+
   const { state, dispatch, connected } = useSocketReducer('ws://localhost:8080/ws', defaultReducer, {
     defaultPrompts: [],
     prompts: [],
@@ -34,16 +43,24 @@ export const PrimaryLayout = () => {
 
   const { defaultPrompts, prompts } = state
 
+  const loadCompleted = connected && defaultPrompts.length > 0
+
   useEffect(() => {
     if (!connected) return
     dispatch({ type: PromptActionTypes.FETCH_DEFAULT_PROMPTS })
   }, [connected, dispatch])
 
   useEffect(() => {
-    if (!connected || !defaultPrompts.length) return
+    if (!loadCompleted) return
 
-    dispatch({ type: PromptActionTypes.INFER, payload: defaultPrompts[2].prompt })
-  }, [defaultPrompts, dispatch, connected])
+    const promptForPath = activePrompt(path, defaultPrompts)
+    console.log({ promptForPath, path, defaultPrompts, loadCompleted })
+    if (!promptForPath) {
+      return navigate(defaultPrompts[0].slug)
+    }
+
+    dispatch({ type: PromptActionTypes.INFER, payload: promptForPath.prompt })
+  }, [path, loadCompleted, dispatch, defaultPrompts, navigate])
 
   return (
     <div id={style.root}>
@@ -53,7 +70,7 @@ export const PrimaryLayout = () => {
       <main className={style.container}>
         <nav>
           <ContentBox variant="secondary">
-            <ActiveList items={mapFromDefaultPrompt(state.defaultPrompts)} />
+            <ActiveList items={mapFromDefaultPrompt(state.defaultPrompts, path)} />
           </ContentBox>
         </nav>
 

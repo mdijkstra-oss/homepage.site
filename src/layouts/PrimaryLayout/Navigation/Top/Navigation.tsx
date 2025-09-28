@@ -25,7 +25,7 @@ export const Navigation = ({ externalLinks }: NavigationProps) => {
         </li>
         {externalLinks.map(({ tag, url }) => (
           <li key={tag}>
-            <NavigationLink href={url} target="_blank" title={`Open ${tag} profile`}>
+            <NavigationLink href={url} title={`Open ${tag} profile`}>
               <Tag name={tag} transparent />
             </NavigationLink>
           </li>
@@ -37,14 +37,14 @@ export const Navigation = ({ externalLinks }: NavigationProps) => {
 
 type NavigationLinksProps = {
   href: string
-  target?: string
   children: ReactNode
   title?: string
 }
 
-const NavigationLink = ({ href, target = '_self', title, children }: NavigationLinksProps) => {
+const NavigationLink = ({ href, title, children }: NavigationLinksProps) => {
+  const rel = href.startsWith('http') ? 'external nofollow' : ''
   return (
-    <a href={href} target={target} title={title}>
+    <a href={href} rel={rel} title={title}>
       {children}
     </a>
   )
