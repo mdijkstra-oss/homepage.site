@@ -1,18 +1,16 @@
-import { EntityAction, entityReducer, EntryAction } from '@/utils/reducer/entityReducer'
+import { EntityAction, EntryAction, updateMatchingIdentity } from '@/utils/reducer/entityReducer'
 import { InferringPromptAction, Prompt, PromptActionTypes, Reply } from '@/domain/prompt/prompt'
 
+type UpdatePromptAction = EntityAction<Prompt>
 type UpdateReplyAction = EntityAction<Reply>
-type UpdateInferenceAction = UpdateReplyAction | InferringPromptAction
+
+type UpdateInferenceAction = UpdatePromptAction | UpdateReplyAction | InferringPromptAction
 
 export function inferenceReducer(current: Prompt[], action: UpdateInferenceAction): Prompt[] {
   if (action.type === PromptActionTypes.INFERRING) {
     return [...current, action.payload]
   }
 
-  return updatePromptReplies(current, action)
-}
-
-function updatePromptReplies(current: Prompt[], action: UpdateReplyAction): Prompt[] {
   if (![EntryAction.MERGE, EntryAction.APPEND].includes(action.type)) {
     return current
   }
@@ -20,20 +18,14 @@ function updatePromptReplies(current: Prompt[], action: UpdateReplyAction): Prom
   const { id } = action.payload
 
   return current.map((prompt) => {
-    const targetReply = findReplyById(prompt.replies, id)
-    if (!targetReply) return prompt
-
-    return {
-      ...prompt,
-      replies: updateReplyById(prompt.replies, id, action),
+    const hasMatchingReply = prompt.replies.some((reply) => reply.id === id)
+    if (hasMatchingReply) {
+      return {
+        ...prompt,
+        replies: prompt.replies.map((reply) => updateMatchingIdentity(reply, action as UpdateReplyAction)),
+      }
     }
+
+    return updateMatchingIdentity(prompt, action as UpdatePromptAction)
   })
-}
-
-function findReplyById(replies: Reply[], id: string): Reply | undefined {
-  return replies.find((reply) => reply.id === id)
-}
-
-function updateReplyById(replies: Reply[], id: string, action: UpdateReplyAction): Reply[] {
-  return replies.map((reply) => (reply.id === id ? entityReducer(action, reply, ['id']) : reply))
 }

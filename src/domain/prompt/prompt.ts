@@ -1,13 +1,12 @@
 import { AvailableIcon } from '@/components/Icon/Icon'
-import { Identifiable, Identifier } from '@/utils/types'
+import { Identifiable } from '@/utils/types'
 
-export type Prompt = {
+export type Prompt = Identifiable & {
   message: string
   replies: Reply[]
 }
 
 export type Reply = Identifiable & {
-  promptId: Identifier
   title: string
   content: string
   completed: boolean

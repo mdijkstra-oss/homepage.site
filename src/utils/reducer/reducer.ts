@@ -34,3 +34,12 @@ export function plainPayloadReducer<T>(...types: Action<T>['type'][]) {
     return state
   }
 }
+
+export function debugReducer<T, A>(reducer: Reducer<T, A>) {
+  return (current: T, action: A) => {
+    console.debug('Action', action)
+    const state = reducer(current, action)
+    console.debug('State', state)
+    return state
+  }
+}

@@ -1,8 +1,10 @@
-import { combineDictionaryReducers } from '@/utils/reducer/reducer'
+import { combineDictionaryReducers, debugReducer } from '@/utils/reducer/reducer'
 import { inferenceReducer } from '@/domain/prompt/reducer/inferenceReducer'
 import { defaultPromptsReducer } from '@/domain/prompt/reducer/defaultPromptsReducer'
 
-export const defaultReducer = combineDictionaryReducers({
+const mainReducer = combineDictionaryReducers({
   defaultPrompts: defaultPromptsReducer,
   prompts: inferenceReducer,
 })
+
+export const defaultReducer = debugReducer(mainReducer)

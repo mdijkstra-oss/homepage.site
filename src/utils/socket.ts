@@ -14,7 +14,6 @@ export function createSocket<S, R>(
 
   ws.onmessage = (event) => {
     const message = JSON.parse(event.data)
-    console.log(message)
     onIncomingMessage(message)
   }
 

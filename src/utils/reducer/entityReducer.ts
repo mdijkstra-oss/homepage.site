@@ -1,4 +1,5 @@
-import { typedEntries } from '@/utils/set'
+import { typedEntries, wrapArray } from '@/utils/set'
+import { Identifiable } from '@/utils/types'
 
 export enum EntryAction {
   CREATE = 'CREATE',
@@ -51,6 +52,11 @@ export function entityReducer<T>(
   }
 }
 
+export function updateMatchingIdentity<T extends Identifiable>(entity: T, action: EntityAction<T>): T {
+  if (entity.id !== action.payload.id) return entity
+  return entityReducer(action, entity, ['id'])
+}
+
 function isAppendable(value: unknown): value is string | unknown[] {
   return typeof value === 'string' || Array.isArray(value)
 }
@@ -68,8 +74,8 @@ function appendValues<T>(current: T | undefined, newValue: T): T {
     return (current + newValue) as T
   }
 
-  if (Array.isArray(current) && Array.isArray(newValue)) {
-    return [...current, ...newValue] as T
+  if (Array.isArray(current)) {
+    return [...current, ...wrapArray(newValue)] as T
   }
 
   throw new Error(`Cannot append ${typeof newValue} to ${typeof current}`)
