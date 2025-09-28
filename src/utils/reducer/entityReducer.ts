@@ -1,4 +1,4 @@
-import { typedEntries, wrapArray } from '@/utils/set'
+import { getValueAtPath, setValueAtPath, typedEntries, wrapArray } from '@/utils/set'
 import { Identifiable } from '@/utils/types'
 
 export enum EntryAction {
@@ -7,19 +7,19 @@ export enum EntryAction {
   APPEND = 'APPEND',
 }
 
-export type FullAction<T> = {
+export type FullAction<T extends object> = {
   type: EntryAction.CREATE
   payload: T
 }
 
-export type PartialAction<T> = {
+export type PartialAction<T extends object> = {
   type: EntryAction.MERGE | EntryAction.APPEND
   payload: Partial<T>
 }
 
-export type EntityAction<T> = FullAction<T> | PartialAction<T>
+export type EntityAction<T extends object> = FullAction<T> | PartialAction<T>
 
-export function entityReducer<T>(
+export function entityReducer<T extends object>(
   action: EntityAction<T>,
   current?: T,
   readonlyKeys?: readonly (keyof T)[],
@@ -35,11 +35,11 @@ export function entityReducer<T>(
       const result = { ...current }
 
       typedEntries(action.payload).forEach(([key, newValue]) => {
-        const currentValue = current[key]
+        const currentValue = getValueAtPath(current, key)
 
         if ((writeable(key, readonlyKeys) && isAppendable(currentValue)) || currentValue === undefined) {
           try {
-            result[key] = appendValues(currentValue, newValue)
+            setValueAtPath(result, key, appendValues(currentValue, newValue))
           } catch (error) {
             console.warn(`Append failed for key ${String(key)}:`, error)
           }
