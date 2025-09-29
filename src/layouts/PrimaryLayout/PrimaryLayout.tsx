@@ -7,7 +7,7 @@ import { ContentBox } from '@/components/ContentBox/Box'
 import { ActiveList } from '@/components/ActiveList'
 import { useSocketReducer } from '@/hooks/useSocketReducer'
 import { defaultReducer } from '@/domain/reducer'
-import { DefaultPromptInfo, PromptActionTypes } from '@/domain/prompt/prompt'
+import { DefaultPromptInfo, Prompt, PromptActionTypes, Request } from '@/domain/prompt/prompt'
 import { useCallback, useEffect } from 'react'
 import { PromptFeed } from '@/components/PromptFeed'
 import { useRouter } from '@/hooks/useRouter'
@@ -33,10 +33,12 @@ const activePrompt = (path: string, prompts: DefaultPromptInfo[]): DefaultPrompt
 }
 
 const slugToPath = (slug: string) => `/${slug}`
+const promptsForNamespace = (prompts: Prompt[], namespace: string) => prompts.filter((p) => p.namespace === namespace)
 
 export const PrimaryLayout = () => {
   const { path, navigate } = useRouter()
 
+  // Todo: different based on env
   const { state, dispatch, connected } = useSocketReducer('ws://localhost:8080/ws', defaultReducer, {
     defaultPrompts: [],
     prompts: [],
@@ -48,10 +50,15 @@ export const PrimaryLayout = () => {
 
   const prompt = useCallback(
     (message: string) => {
-      dispatch({ type: PromptActionTypes.INFER, payload: message })
+      const request: Request = {
+        message: message,
+        namespace: path,
+      }
+
+      dispatch({ type: PromptActionTypes.INFER, payload: request })
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
     },
-    [dispatch],
+    [dispatch, path],
   )
 
   useEffect(() => {
@@ -63,12 +70,15 @@ export const PrimaryLayout = () => {
     if (!loadCompleted) return
 
     const promptForPath = activePrompt(path, defaultPrompts)
-    console.log({ promptForPath, path, defaultPrompts, loadCompleted })
+
     if (!promptForPath) {
       return navigate(defaultPrompts[0].slug)
     }
 
-    prompt(promptForPath.prompt)
+    // Only request initial prompt on first prompt
+    if (promptsForNamespace(prompts, path).length === 0) {
+      prompt(promptForPath.prompt)
+    }
   }, [path, loadCompleted, dispatch, defaultPrompts, navigate, prompt])
 
   return (
@@ -85,7 +95,7 @@ export const PrimaryLayout = () => {
           </nav>
 
           <section>
-            {prompts.map((prompt) => (
+            {promptsForNamespace(prompts, path).map((prompt) => (
               <PromptFeed prompt={prompt} key={prompt.id} />
             ))}
           </section>

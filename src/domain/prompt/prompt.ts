@@ -3,6 +3,7 @@ import { Identifiable } from '@/utils/types'
 
 export type Prompt = Identifiable & {
   message: string
+  namespace: string
   replies: Reply[]
 }
 
@@ -25,6 +26,11 @@ export type DefaultPromptInfo = {
   priority: number
 }
 
+export type Request = {
+  message: string
+  namespace: string
+}
+
 export enum PromptActionTypes {
   INFER = 'INFER_PROMPT',
   INFERRING = 'INFERRING_PROMPT',
@@ -34,7 +40,7 @@ export enum PromptActionTypes {
 
 export type InferPromptAction = {
   type: PromptActionTypes.INFER
-  payload: Prompt
+  payload: Request
 }
 
 export type InferringPromptAction = {
