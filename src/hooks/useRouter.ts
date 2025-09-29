@@ -20,5 +20,20 @@ export function useRouter(): Router {
     setPath(newPath)
   }, [])
 
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement).closest('a')
+      const href = anchor?.getAttribute('href')
+
+      if (href?.startsWith('/')) {
+        e.preventDefault()
+        navigate(href)
+      }
+    }
+
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [navigate])
+
   return { path, navigate }
 }
