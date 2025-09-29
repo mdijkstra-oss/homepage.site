@@ -30,6 +30,11 @@
   nav {
     flex-shrink: 0;
     margin-right: 2rem;
+
+    >div {
+      position: sticky;
+      top: 2rem;
+    }
   }
 
   section {

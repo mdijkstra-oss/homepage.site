@@ -34,6 +34,7 @@ const activePrompt = (path: string, prompts: DefaultPromptInfo[]): DefaultPrompt
 
 const slugToPath = (slug: string) => `/${slug}`
 const promptsForNamespace = (prompts: Prompt[], namespace: string) => prompts.filter((p) => p.namespace === namespace)
+const scrollToBottom = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
 
 export const PrimaryLayout = () => {
   const { path, navigate } = useRouter()
@@ -56,7 +57,7 @@ export const PrimaryLayout = () => {
       }
 
       dispatch({ type: PromptActionTypes.INFER, payload: request })
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+      scrollToBottom()
     },
     [dispatch, path],
   )
@@ -79,7 +80,7 @@ export const PrimaryLayout = () => {
     if (promptsForNamespace(prompts, path).length === 0) {
       prompt(promptForPath.prompt)
     }
-  }, [path, loadCompleted, dispatch, defaultPrompts, navigate, prompt])
+  }, [path, loadCompleted, dispatch, defaultPrompts, navigate, prompt, prompts])
 
   return (
     <PromptContext.Provider value={prompt}>
