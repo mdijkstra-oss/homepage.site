@@ -1,10 +1,14 @@
 .container {
   position: relative;
-  display: inline-flex;
+  box-sizing: border-box;
+  height: 100%;
 }
 
 .input {
   caret-color: transparent;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
 }
 
 .caretContainer {
@@ -40,7 +44,7 @@
   display: inline-block;
 
   animation: caretFade 1.2s infinite ease-in-out;
-  opacity: 1; /* Ensures proper initial state */
+  opacity: 1;
 }
 
 @keyframes caretFade {

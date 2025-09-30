@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { CaretInput, PromptProps } from './CaretInput'
+import { CaretInput, CaretInputProps } from './CaretInput'
 
-const meta: Meta<PromptProps> = {
+const meta: Meta<CaretInputProps> = {
   title: 'Components/CaretInput',
   component: CaretInput,
 }
 
 export default meta
 
-type Story = StoryObj<PromptProps>
+type Story = StoryObj<CaretInputProps>
 
 export const Default: Story = {
   args: {

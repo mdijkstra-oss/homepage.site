@@ -13,11 +13,19 @@
   main {
     flex: 1;
     width: 100%;
+    margin-bottom: calc(60px + 4rem);
   }
 
   footer {
-    height: 112px;
-    flex-shrink: 0;
+    height: 60px;
+    box-sizing: content-box;
+    bottom: 0;
+    position: fixed;
+    left: 0;
+    z-index: 1;
+    padding: 2rem;
+    width: calc(100% - 4rem);
+    border-top: 1px vars.$background-lines-dark solid;
   }
 }
 
@@ -41,4 +49,9 @@
     flex: 1;
     min-width: 0;
   }
+}
+
+.blurrer {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
 }

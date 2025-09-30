@@ -11,7 +11,13 @@ type InputEvent =
   | React.MouseEvent<HTMLInputElement>
   | React.KeyboardEvent<HTMLInputElement>
 
-type PromptProps = ComponentPropsWithoutRef<'input'>
+type InputComponentProps = ComponentPropsWithoutRef<'input'>
+
+export type CaretInputProps = {
+  // Only submits on enter button, clears content - use regular onChange etc for more control
+  onValueSubmit?: (value: string) => void
+  autofocus?: boolean
+} & InputComponentProps
 
 export const CaretInput = ({
   children,
@@ -21,17 +27,33 @@ export const CaretInput = ({
   onMouseDown,
   onMouseUp,
   className,
+  onValueSubmit,
+  autofocus,
   ...rest
-}: PromptProps) => {
+}: CaretInputProps) => {
   const caretContainerRef = useRef<HTMLSpanElement>(null)
   const mirrorRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const combinedHandler =
-    <E extends InputEvent>(originalHandler?: (event: E) => void, customHandler?: (event: E) => void) =>
+  useEffect(() => {
+    if (!autofocus) {
+      return
+    }
+
+    // Initial focus
+    inputRef.current?.focus()
+
+    // Refocus on tab return
+    const handleFocus = () => inputRef.current?.focus()
+    window.addEventListener('focus', handleFocus)
+
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [autofocus])
+
+  const combineHandlers =
+    <E extends InputEvent>(...handlers: Array<(event: E) => void>) =>
     (event: E): void => {
-      customHandler(event)
-      originalHandler(event)
+      handlers.forEach((handler) => handler?.(event))
     }
 
   const updateCaret = () =>
@@ -39,6 +61,17 @@ export const CaretInput = ({
 
   const toggleVisibility = (visible: boolean) => () =>
     (caretContainerRef.current.style.visibility = visible ? 'visible' : 'hidden')
+
+  const submitIfNeeded = (e: InputEvent) => {
+    if ((e as React.KeyboardEvent<HTMLInputElement>).key === 'Enter') {
+      const inputValue = inputRef.current?.value
+      if (onValueSubmit && inputValue) {
+        onValueSubmit(inputValue)
+        inputRef.current.value = '' // Clear the input content
+        updateCaret()
+      }
+    }
+  }
 
   useEffect(() => {
     mirrorTextStyles(inputRef.current, mirrorRef.current)
@@ -51,11 +84,12 @@ export const CaretInput = ({
         {...rest}
         className={classnames(style.input, className)}
         ref={inputRef}
-        onChange={combinedHandler(onChange, updateCaret)}
-        onFocus={combinedHandler(onFocus, updateCaret)}
-        onClick={combinedHandler(onClick, updateCaret)}
-        onMouseDown={combinedHandler(onMouseDown, toggleVisibility(false))}
-        onMouseUp={combinedHandler(onMouseUp, toggleVisibility(true))}
+        onChange={combineHandlers(onChange, updateCaret)}
+        onFocus={combineHandlers(onFocus, updateCaret)}
+        onClick={combineHandlers(onClick, updateCaret)}
+        onMouseDown={combineHandlers(onMouseDown, toggleVisibility(false))}
+        onMouseUp={combineHandlers(onMouseUp, toggleVisibility(true))}
+        onKeyDown={submitIfNeeded}
       />
       <span ref={caretContainerRef} className={style.caretContainer}>
         {children || <span className={style.defaultCaret} />}

@@ -12,6 +12,8 @@ import { useCallback, useEffect } from 'react'
 import { PromptFeed } from '@/components/PromptFeed'
 import { useRouter } from '@/hooks/useRouter'
 import PromptContext from '@/layouts/PrimaryLayout/PromptContext'
+import { sleep } from '@/utils/wait'
+import { PromptInput } from '@/components/PromptInput'
 
 export const defaultExternalLinks: ExternalLink[] = [
   { tag: 'codeberg', url: 'https://codeberg.org/mdijkstra' },
@@ -50,14 +52,18 @@ export const PrimaryLayout = () => {
   const loadCompleted = connected && defaultPrompts.length > 0
 
   const prompt = useCallback(
-    (message: string) => {
+    async (message: string, shouldScrollToBottom = true) => {
       const request: Request = {
         message: message,
         namespace: path,
       }
 
       dispatch({ type: PromptActionTypes.INFER, payload: request })
-      scrollToBottom()
+      if (shouldScrollToBottom) {
+        // Good enough for now....
+        await sleep()
+        scrollToBottom()
+      }
     },
     [dispatch, path],
   )
@@ -76,9 +82,9 @@ export const PrimaryLayout = () => {
       return navigate(defaultPrompts[0].slug)
     }
 
-    // Only request initial prompt on first prompt
+    // Only request initial prompt on first landing of page
     if (promptsForNamespace(prompts, path).length === 0) {
-      prompt(promptForPath.prompt)
+      prompt(promptForPath.prompt, false)
     }
   }, [path, loadCompleted, dispatch, defaultPrompts, navigate, prompt, prompts])
 
@@ -91,17 +97,20 @@ export const PrimaryLayout = () => {
         <main className={style.container}>
           <nav>
             <ContentBox variant="secondary">
-              <ActiveList items={mapFromDefaultPrompt(state.defaultPrompts, path)} />
+              <ActiveList items={mapFromDefaultPrompt(defaultPrompts, path)} />
             </ContentBox>
           </nav>
 
           <section>
-            {promptsForNamespace(prompts, path).map((prompt) => (
-              <PromptFeed prompt={prompt} key={prompt.id} />
+            {promptsForNamespace(prompts, path).map((current) => (
+              <PromptFeed prompt={current} key={current.id} />
             ))}
           </section>
         </main>
-        <footer></footer>
+
+        <footer className={style.blurrer}>
+          <PromptInput onSubmit={prompt} />
+        </footer>
       </div>
     </PromptContext.Provider>
   )
