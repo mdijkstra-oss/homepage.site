@@ -1,7 +1,7 @@
 @use '../../../../variables.module.scss' as vars;
 
 .bar {
-  background: vars.$background-dark;
+  background: vars.$main-background;
   border-bottom: 1px solid vars.$border-prompt;
   height: 66px;
 }
@@ -32,5 +32,5 @@
 }
 
 .bar a:hover {
-  background: linear-gradient(to bottom, vars.$background-dark, vars.$border-prompt);
+  background: linear-gradient(to bottom, vars.$main-background, vars.$border-prompt);
 }

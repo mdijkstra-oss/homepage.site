@@ -40,10 +40,10 @@ body {
 
   margin: 0;
   background-image:
-    linear-gradient(to right, vars.$background-lines-dark 1px, transparent 1px),
-    linear-gradient(to bottom, vars.$background-lines-dark 1px, transparent 1px);
+    linear-gradient(to right, vars.$background-grid-lines 1px, transparent 1px),
+    linear-gradient(to bottom, vars.$background-grid-lines 1px, transparent 1px);
   background-size: 20px 20px;
-  background-color: vars.$background-dark;
+  background-color: vars.$main-background;
   color: vars.$text-light;
   overflow-y: scroll;
 }

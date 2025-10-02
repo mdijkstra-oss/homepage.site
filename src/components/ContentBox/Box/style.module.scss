@@ -1,7 +1,7 @@
 @use '../../../variables.module.scss' as vars;
 
 @mixin primary {
-  background: vars.$lighter-dark;
+  background: vars.$primary-content-background;
   border: 1px solid vars.$border-prompt;
   border-radius: 11px;
   padding: 12px 20px;
@@ -30,5 +30,5 @@
 
 .secondary {
   border: none;
-  background: vars.$prompt-blue;
+  background: vars.$secondary-content-background;
 }
