@@ -35,9 +35,18 @@
   }
 
   ol {
-    li {
-      margin-left: 1.8em;
-    }
+    counter-reset: item;
+    list-style: none;
+    margin-bottom: 1em;
+  }
+
+  ol li::before {
+    counter-increment: item;
+    content: counter(item) ".";
+    display: inline-block;
+    width: 1.5em;
+    text-align: left;
+    margin-right: 0.5em;
   }
 
   hr {
