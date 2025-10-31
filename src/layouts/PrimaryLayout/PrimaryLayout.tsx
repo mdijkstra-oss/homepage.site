@@ -42,7 +42,7 @@ export const PrimaryLayout = () => {
   const { path, navigate } = useRouter()
 
   // Todo: different based on env
-  const { state, dispatch, connected } = useSocketReducer('ws://localhost:8080/ws', defaultReducer, {
+  const { state, dispatch, connected } = useSocketReducer(getWsUrl(), defaultReducer, {
     defaultPrompts: [],
     prompts: [],
   })
@@ -114,4 +114,14 @@ export const PrimaryLayout = () => {
       </div>
     </PromptContext.Provider>
   )
+}
+
+const getWsUrl = () => {
+  const backendUrl = import.meta.env.VITE_BACKEND_API
+  if (backendUrl) {
+    // ngrok: replace https with wss, no port needed
+    return backendUrl.replace('https://', 'wss://') + '/ws'
+  }
+  // local dev
+  return 'ws://localhost:8082/ws'
 }

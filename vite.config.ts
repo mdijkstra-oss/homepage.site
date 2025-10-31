@@ -23,4 +23,8 @@ export default defineConfig({
       localsConvention: 'camelCase',
     },
   },
+  server: {
+    port: 5174,
+    allowedHosts: ['.ngrok-free.app', '.ngrok.io'],
+  },
 })
