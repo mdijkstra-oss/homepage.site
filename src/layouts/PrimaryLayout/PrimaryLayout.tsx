@@ -12,7 +12,6 @@ import { useCallback, useEffect } from 'react'
 import { PromptFeed } from '@/components/PromptFeed'
 import { useRouter } from '@/hooks/useRouter'
 import PromptContext from '@/layouts/PrimaryLayout/PromptContext'
-import { sleep } from '@/utils/wait'
 import { PromptInput } from '@/components/PromptInput'
 
 export const defaultExternalLinks: ExternalLink[] = [
@@ -42,28 +41,32 @@ export const PrimaryLayout = () => {
   const { path, navigate } = useRouter()
 
   // Todo: different based on env
-  const { state, dispatch, connected } = useSocketReducer(getWsUrl(), defaultReducer, {
-    defaultPrompts: [],
-    prompts: [],
-  })
+  const { state, dispatch, connected } = useSocketReducer(
+    getWsUrl(),
+    defaultReducer,
+    {
+      defaultPrompts: [],
+      prompts: [],
+    },
+    useCallback((action: { type: string }) => {
+      if (action.type === 'APPEND') {
+        scrollToBottom()
+      }
+    }, []),
+  )
 
   const { defaultPrompts, prompts } = state
 
   const loadCompleted = connected && defaultPrompts.length > 0
 
   const prompt = useCallback(
-    async (message: string, shouldScrollToBottom = true) => {
+    async (message: string) => {
       const request: Request = {
         message: message,
         namespace: path,
       }
 
       dispatch({ type: PromptActionTypes.INFER, payload: request })
-      if (shouldScrollToBottom) {
-        // Good enough for now....
-        await sleep()
-        scrollToBottom()
-      }
     },
     [dispatch, path],
   )
@@ -84,7 +87,7 @@ export const PrimaryLayout = () => {
 
     // Only request initial prompt on first landing of page
     if (promptsForNamespace(prompts, path).length === 0) {
-      prompt(promptForPath.prompt, false)
+      prompt(promptForPath.prompt).catch(console.error)
     }
   }, [path, loadCompleted, dispatch, defaultPrompts, navigate, prompt, prompts])
 
