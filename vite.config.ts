@@ -25,6 +25,6 @@ export default defineConfig({
   },
   server: {
     port: 5174,
-    allowedHosts: ['.ngrok-free.app', '.ngrok.io'],
+    allowedHosts: ['.ngrok-free.app', '.ngrok.io', 'mdijkstra.dev', 'www.mdijkstra.dev'],
   },
 })
