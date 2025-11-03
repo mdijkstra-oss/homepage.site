@@ -8,7 +8,7 @@ import { ActiveList } from '@/components/ActiveList'
 import { useSocketReducer } from '@/hooks/useSocketReducer'
 import { defaultReducer } from '@/domain/reducer'
 import { DefaultPromptInfo, Prompt, PromptActionTypes, Request } from '@/domain/prompt/prompt'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { PromptFeed } from '@/components/PromptFeed'
 import { useRouter } from '@/hooks/useRouter'
 import PromptContext from '@/layouts/PrimaryLayout/PromptContext'
@@ -40,20 +40,18 @@ const scrollToBottom = () => window.scrollTo({ top: document.body.scrollHeight, 
 export const PrimaryLayout = () => {
   const { path, navigate } = useRouter()
 
+  const isFirstRenderForPage = useRef(true)
+  const isFirstMount = useRef(true)
+
+  useEffect(() => {
+    isFirstRenderForPage.current = true
+  }, [path])
+
   // Todo: different based on env
-  const { state, dispatch, connected } = useSocketReducer(
-    getWsUrl(),
-    defaultReducer,
-    {
-      defaultPrompts: [],
-      prompts: [],
-    },
-    useCallback((action: { type: string }) => {
-      if (action.type === 'APPEND') {
-        scrollToBottom()
-      }
-    }, []),
-  )
+  const { state, dispatch, connected } = useSocketReducer(getWsUrl(), defaultReducer, {
+    defaultPrompts: [],
+    prompts: [],
+  })
 
   const { defaultPrompts, prompts } = state
 
@@ -82,7 +80,7 @@ export const PrimaryLayout = () => {
     const promptForPath = activePrompt(path, defaultPrompts)
 
     if (!promptForPath) {
-      return navigate(defaultPrompts[0].slug)
+      return navigate(`/${defaultPrompts[0].slug}`)
     }
 
     // Only request initial prompt on first landing of page
@@ -90,6 +88,18 @@ export const PrimaryLayout = () => {
       prompt(promptForPath.prompt).catch(console.error)
     }
   }, [path, loadCompleted, dispatch, defaultPrompts, navigate, prompt, prompts])
+
+  useEffect(() => {
+    if (prompts.length === 0) return
+
+    if (isFirstRenderForPage.current) {
+      isFirstRenderForPage.current = false
+      isFirstMount.current = false
+      return
+    }
+
+    scrollToBottom()
+  }, [prompts])
 
   return (
     <PromptContext.Provider value={prompt}>

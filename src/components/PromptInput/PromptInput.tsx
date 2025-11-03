@@ -7,7 +7,7 @@ type PromptInputProps = {
 
 export function PromptInput({ onSubmit }: PromptInputProps) {
   return (
-    <CaretInput className={styles.input} onValueSubmit={onSubmit} placeholder="Enter prompt">
+    <CaretInput className={styles.input} onValueSubmit={onSubmit} placeholder="Enter prompt" autofocus>
       <span className={styles.caret} />
     </CaretInput>
   )

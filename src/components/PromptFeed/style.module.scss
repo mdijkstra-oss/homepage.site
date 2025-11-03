@@ -1,5 +1,5 @@
 .heading {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
   font-size: 1em;
 
   h1 {
@@ -9,7 +9,7 @@
 
 .content {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
 
   h1,h2,h3 {
     font-size: 1.1em;
@@ -32,21 +32,6 @@
         margin-right: 0.5em;
       }
     }
-  }
-
-  ol {
-    counter-reset: item;
-    list-style: none;
-    margin-bottom: 1em;
-  }
-
-  ol li::before {
-    counter-increment: item;
-    content: counter(item) ".";
-    display: inline-block;
-    width: 1.5em;
-    text-align: left;
-    margin-right: 0.5em;
   }
 
   hr {
