@@ -1,1 +1,0 @@
-export { ContentBoxFeed } from './Feed'

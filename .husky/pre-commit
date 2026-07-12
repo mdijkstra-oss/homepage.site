@@ -1,8 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-# Run tests first. If they fail, abort the commit.
-# npm run test
-
-# If tests pass, run linters/formatters on staged files.
-npx lint-staged
