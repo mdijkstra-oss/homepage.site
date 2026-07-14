@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SiteEngine } from './engine.js';
-import { BLOCKS, CFG } from './data.js';
+import { BLOCKS } from './data/prompts.js';
+import { CFG } from './data/theme.js';
 import { FG } from './components/ui.js';
 import Background from './components/Background.jsx';
 import Header from './components/Header.jsx';
 import Composer from './components/Composer.jsx';
 import { Block } from './components/cards.jsx';
-import { buildMessages } from './chat/messages.js';
+import { buildMessages } from './chat/history.js';
 import { streamChat } from './chat/client.js';
 
 export default function App() {
@@ -30,6 +31,13 @@ export default function App() {
   }, [live.length]);
 
   const onJump = (type) => engineRef.current && engineRef.current.jumpToType(type);
+
+  // Lets live bubbles hand their DOM node to the engine so they behave like the
+  // preloaded blocks (reveal, shine, konami/game fly-away). Stable identity.
+  const register = useMemo(() => ({
+    add: (el) => engineRef.current && engineRef.current.addBubble(el),
+    remove: (el) => engineRef.current && engineRef.current.removeBubble(el),
+  }), []);
 
   const send = useCallback(async (text) => {
     const q = text.trim();
@@ -70,7 +78,7 @@ export default function App() {
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 760, margin: '0 auto', padding: '86px 22px 168px', display: 'flex', flexDirection: 'column', gap: 26 }}>
         {BLOCKS.map((block, i) => <Block key={i} block={block} />)}
-        {live.map((m) => <Block key={m.id} block={{ type: m.role, text: m.text }} live />)}
+        {live.map((m) => <Block key={m.id} block={{ type: m.role, text: m.text }} live register={register} />)}
       </div>
 
       <Composer onJump={onJump} onSend={send} busy={busy} />

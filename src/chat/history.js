@@ -1,4 +1,4 @@
-import { BLOCKS } from '../data.js';
+import { BLOCKS } from '../data/prompts.js';
 import { blockToText } from './serialize.js';
 
 // The preloaded feed replayed as prior chat turns: scripted `user` blocks

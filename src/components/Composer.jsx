@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FG, MONO } from './ui.js';
-import { PROMPTS } from '../data.js';
+import { PILLS } from '../data/theme.js';
+
+const INPUT_MAX_H = 132; // ~6 lines before the textarea scrolls
 
 // The bottom chrome: "take a break" pill (engine-driven), chip rail and the
 // composer input. `onJump` scrolls to a card via the engine; `onSend` submits a
 // chat question; `busy` disables input while a reply streams.
 export default function Composer({ onJump, onSend, busy }) {
   const [value, setValue] = useState('');
+  const inputRef = useRef(null);
+
+  // Grow the textarea to fit its content, up to INPUT_MAX_H then scroll.
+  const autoGrow = (el) => {
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, INPUT_MAX_H) + 'px';
+  };
 
   const submit = (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     const q = value.trim();
     if (!q || busy) return;
     onSend?.(q);
     setValue('');
+    if (inputRef.current) inputRef.current.style.height = 'auto';
+  };
+
+  // Enter sends, Shift+Enter inserts a newline.
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submit();
+    }
   };
 
   return (
@@ -39,7 +58,7 @@ export default function Composer({ onJump, onSend, busy }) {
           WebkitMaskImage: 'linear-gradient(90deg, #000 0, #000 calc(100% - 22px), transparent 100%)',
           maskImage: 'linear-gradient(90deg, #000 0, #000 calc(100% - 22px), transparent 100%)',
         }}>
-          {PROMPTS.map((pill) => (
+          {PILLS.map((pill) => (
             <button key={pill.type} data-prompt-pill="" onClick={() => onJump(pill.type)} style={{
               flex: '0 0 auto', whiteSpace: 'nowrap', cursor: 'pointer', position: 'relative', overflow: 'hidden',
               display: 'inline-flex', alignItems: 'center', gap: 7, padding: '7px 14px', borderRadius: 999,
@@ -52,26 +71,30 @@ export default function Composer({ onJump, onSend, busy }) {
         </div>
 
         <form onSubmit={submit} style={{
-          display: 'flex', alignItems: 'center', gap: 10, padding: '15px 17px',
+          display: 'flex', alignItems: 'flex-end', gap: 10, padding: '15px 17px',
           background: 'linear-gradient(180deg, rgba(28,33,44,0.45), rgba(16,20,27,0.4))', border: '1px solid rgba(255,255,255,0.16)',
           borderRadius: 15, backdropFilter: 'blur(16px) saturate(1.4)', WebkitBackdropFilter: 'blur(16px) saturate(1.4)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0 4px rgba(120,160,230,0.045), 0 14px 34px rgba(0,0,0,0.4)',
         }}>
-          <input
+          <textarea
             autoFocus
+            ref={inputRef}
+            rows={1}
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => { setValue(e.target.value); autoGrow(e.target); }}
+            onKeyDown={onKeyDown}
             placeholder="Ask anything about Matthijn"
             disabled={busy}
             className="composer-input"
             style={{
-              flex: 1, minWidth: 0, background: 'transparent', border: 'none', outline: 'none',
-              color: '#eaf0ff', fontFamily: MONO, fontSize: 13.5,
+              flex: 1, minWidth: 0, background: 'transparent', border: 'none', outline: 'none', resize: 'none',
+              color: '#eaf0ff', fontFamily: MONO, fontSize: 13.5, lineHeight: 1.5,
+              maxHeight: INPUT_MAX_H, overflowY: 'auto', padding: 0, margin: 0, display: 'block',
             }}
           />
           <button type="submit" data-send="" disabled={busy || !value.trim()} style={{
             background: 'none', border: 'none', padding: 0, cursor: busy || !value.trim() ? 'default' : 'pointer',
-            color: '#6aa6c4', fontFamily: MONO, fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap',
+            color: '#6aa6c4', fontFamily: MONO, fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', lineHeight: '21px',
             opacity: busy || !value.trim() ? 0.45 : 1, transition: 'opacity .15s ease',
           }}>
             {busy ? '…' : '↵ send'}

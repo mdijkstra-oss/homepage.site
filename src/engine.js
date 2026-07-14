@@ -1,9 +1,10 @@
-import { BLOCKS, PROMPTS } from './data.js';
+import { BLOCKS } from './data/prompts.js';
+import { PILLS } from './data/theme.js';
 
 export class SiteEngine {
   constructor(cfg) {
     this.props = cfg || {};
-    this._prompts = PROMPTS;
+    this._pills = PILLS;
   }
 
   // ====== CONTENT — single ordered block list ======
@@ -159,7 +160,7 @@ export class SiteEngine {
     const rest = 'polygon(-40% 0%, -20% 0%, -40% 100%, -60% 100%)';
     const full = 'polygon(-40% 0%, 140% 0%, 120% 100%, -60% 100%)';
     root.querySelectorAll('[data-prompt-pill]').forEach((b, i) => {
-      const p = (this._prompts || [])[i];
+      const p = (this._pills || [])[i];
       if (!p || b.querySelector('[data-pill-fill]')) return;
       const ic = b.querySelector('[data-pill-icon]');
       if (ic) ic.style.color = p.iconColor;
@@ -191,30 +192,9 @@ export class SiteEngine {
   //  motion is identical whether the driver is the scrollbar or the tween.
   // ============================================================
   setupForeground(root) {
-    const now = this.now();
-    const mk = (el, chrome) => {
-      el.style.willChange = 'transform, opacity, filter';
-      if (!chrome) el.style.opacity = '0';
-      return {
-        el,
-        chrome: !!chrome,
-        // which side of the viewport centre the block sits on — the entry
-        // drifts in from that side (user bubbles right, cards left)
-        dir: (el.getBoundingClientRect().left + el.getBoundingClientRect().width / 2) >= (window.innerWidth || 1200) / 2 ? 1 : -1,
-        // chrome (header + input bar) is visible from the start — no scroll-in;
-        // it only participates in the konami fly-away.
-        entryStart: chrome ? now - 1e6 : null,
-        entryDone: !!chrome,
-        seed: {
-          x: Math.random() * 2 - 1,   // horizontal drift direction on fly-away
-          r: Math.random() * 2 - 1,   // rotation direction
-          delay: Math.random() * 0.22 // per-block stagger on fly-away
-        }
-      };
-    };
     this.fg = [
-      ...[...root.querySelectorAll('[data-bubble]')].map((el) => mk(el, false)),
-      ...[...root.querySelectorAll('[data-chrome]')].map((el) => mk(el, true)),
+      ...[...root.querySelectorAll('[data-bubble]')].map((el) => this._mkItem(el, false)),
+      ...[...root.querySelectorAll('[data-chrome]')].map((el) => this._mkItem(el, true)),
     ];
 
 
@@ -233,6 +213,39 @@ export class SiteEngine {
     this._raf = requestAnimationFrame(loop);
 
     this.installKonami();
+  }
+
+  // Build a foreground item for one element. Bubbles start hidden and reveal on
+  // scroll; chrome is visible from the start and only joins the fly-away.
+  _mkItem(el, chrome) {
+    const now = this.now();
+    el.style.willChange = 'transform, opacity, filter';
+    if (!chrome) el.style.opacity = '0';
+    return {
+      el,
+      chrome: !!chrome,
+      // which side of the viewport centre the block sits on — the entry
+      // drifts in from that side (user bubbles right, cards left)
+      dir: (el.getBoundingClientRect().left + el.getBoundingClientRect().width / 2) >= (window.innerWidth || 1200) / 2 ? 1 : -1,
+      entryStart: chrome ? now - 1e6 : null,
+      entryDone: !!chrome,
+      seed: {
+        x: Math.random() * 2 - 1,   // horizontal drift direction on fly-away
+        r: Math.random() * 2 - 1,   // rotation direction
+        delay: Math.random() * 0.22 // per-block stagger on fly-away
+      }
+    };
+  }
+
+  // Register a live-appended chat bubble so it reveals, shines and flies away
+  // exactly like the preloaded blocks. Idempotent.
+  addBubble(el) {
+    if (!el || !this.fg || this.fg.some((it) => it.el === el)) return;
+    this.fg.push(this._mkItem(el, false));
+  }
+
+  removeBubble(el) {
+    if (this.fg) this.fg = this.fg.filter((it) => it.el !== el);
   }
 
   tickFg(now) {

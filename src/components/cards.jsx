@@ -1,19 +1,42 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { FG, MONO, Card, Row, Badge, TechTag, WipeButton } from './ui.js';
 
-// `live` bubbles are appended after the engine has mounted, so they can't lean
-// on the scroll-reveal to fade them in: render them visible with a light fade.
+// Shown in an assistant bubble until the first token streams in. One is picked
+// at random per reply, so successive answers feel a little different.
+const THINKING = [
+  'Thinking', 'Pondering', 'Mulling it over', 'Reflecting', 'Considering',
+  'Gathering thoughts', 'Digging in', 'Working it out', 'Piecing it together', 'One sec',
+];
+const pickThinking = () => THINKING[Math.floor(Math.random() * THINKING.length)];
+
+// `live` bubbles are appended after the engine mounted. `register` hands their
+// DOM node to the engine (useLayoutEffect: before paint, so no flash) so they
+// reveal, shine and fly away exactly like the preloaded blocks. For live
+// bubbles the engine owns opacity/transform, so those are left out of the JSX
+// style (otherwise React would fight the engine on every stream re-render).
+function useEngineBubble(live, register) {
+  const ref = useRef(null);
+  useLayoutEffect(() => {
+    if (!live || !register) return;
+    const el = ref.current;
+    register.add(el);
+    return () => register.remove(el);
+  }, [live, register]);
+  return ref;
+}
+
 /* ---------- chat bubbles ---------- */
-export function UserBubble({ text, live }) {
+export function UserBubble({ text, live, register }) {
+  const ref = useEngineBubble(live, register);
   return (
     <Row end>
       <div
+        ref={ref}
         data-bubble="" data-shinecard=""
         style={{
-          position: 'relative', opacity: live ? 1 : 0, maxWidth: '64%',
-          animation: live ? 'msgIn .32s ease both' : undefined,
+          position: 'relative', maxWidth: '64%', opacity: live ? undefined : 0,
           background: 'linear-gradient(140deg, rgba(86,124,255,0.3), rgba(86,124,255,0.12)), linear-gradient(rgba(10,16,34,0.4), rgba(10,16,34,0.4))',
           border: '1px solid rgba(140,170,255,0.45)', borderRadius: '16px 16px 6px 16px',
           boxShadow: '0 8px 22px rgba(20,40,120,0.3)', padding: '13px 17px', color: '#eaf0ff', fontSize: 14, lineHeight: 1.55,
@@ -26,14 +49,17 @@ export function UserBubble({ text, live }) {
   );
 }
 
-export function AssistantBubble({ text, live }) {
+export function AssistantBubble({ text, live, register }) {
+  const ref = useEngineBubble(live, register);
+  const wordRef = useRef(null);
+  if (wordRef.current === null) wordRef.current = pickThinking();
   return (
     <Row>
       <div
+        ref={ref}
         data-bubble="" data-shinecard=""
         style={{
-          position: 'relative', opacity: live ? 1 : 0, maxWidth: '74%',
-          animation: live ? 'msgIn .32s ease both' : undefined,
+          position: 'relative', maxWidth: '74%', opacity: live ? undefined : 0,
           background: 'linear-gradient(140deg, rgba(255,255,255,0.085), rgba(255,255,255,0.03)), linear-gradient(rgba(12,14,19,0.5), rgba(12,14,19,0.5))',
           border: '1px solid rgba(255,255,255,0.12)', borderRadius: '16px 16px 16px 6px',
           boxShadow: '0 10px 30px rgba(0,0,0,0.35)', padding: '14px 17px', color: '#d2dae6', fontSize: 14, lineHeight: 1.62,
@@ -42,7 +68,7 @@ export function AssistantBubble({ text, live }) {
         <div data-shinefill="" style={{ position: 'absolute', inset: 0, borderRadius: '16px 16px 16px 6px', pointerEvents: 'none', backgroundImage: 'none' }} />
         {text
           ? <div className="md"><ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown></div>
-          : <span style={{ color: '#6aa6c4', fontFamily: MONO, animation: 'blink 1.1s steps(1) infinite' }}>▍</span>}
+          : <span style={{ color: '#8fa3bd', fontFamily: MONO, fontSize: 13, animation: 'blink 1.3s steps(1) infinite' }}>{wordRef.current}…</span>}
       </div>
     </Row>
   );
@@ -325,8 +351,8 @@ export function AlsoCard({ p }) {
 
 /* ---------- dispatcher ---------- */
 const MAP = {
-  user: (b, live) => <UserBubble text={b.text} live={live} />,
-  assistant: (b, live) => <AssistantBubble text={b.text} live={live} />,
+  user: (b, live, register) => <UserBubble text={b.text} live={live} register={register} />,
+  assistant: (b, live, register) => <AssistantBubble text={b.text} live={live} register={register} />,
   profile: (b) => <ProfileCard p={b.payload} />,
   role: (b) => <RoleCard p={b.payload} />,
   reviews: (b) => <ReviewsCard p={b.payload} />,
@@ -337,7 +363,7 @@ const MAP = {
   also: (b) => <AlsoCard p={b.payload} />,
 };
 
-export function Block({ block, live }) {
+export function Block({ block, live, register }) {
   const render = MAP[block.type];
-  return render ? render(block, live) : null;
+  return render ? render(block, live, register) : null;
 }
