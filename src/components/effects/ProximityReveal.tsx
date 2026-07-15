@@ -1,13 +1,14 @@
-import { cloneElement, useEffect, useRef, useState, type ReactElement, type RefObject } from 'react';
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { clamp } from '../../lib/clamp';
 import { smoothstep } from '../../lib/easing';
+import styles from './ProximityReveal.module.css';
 
 interface ProximityRevealProps {
   target: RefObject<HTMLElement | null>;
   near?: number;
   far?: number;
   disabled?: boolean;
-  children: ReactElement<{ disabled?: boolean; tabIndex?: number }>;
+  children: (interaction: { disabled: boolean; tabIndex: number | undefined }) => ReactNode;
 }
 
 export default function ProximityReveal({ target, near = 40, far = 150, disabled, children }: ProximityRevealProps) {
@@ -47,5 +48,5 @@ export default function ProximityReveal({ target, near = 40, far = 150, disabled
     return () => window.removeEventListener('pointermove', onMove);
   }, [target, near, far, disabled]);
 
-  return <div ref={wrapRef} style={{ transform: 'translateY(150%)', pointerEvents: 'none' }}>{cloneElement(children, { disabled: !canInteract, tabIndex: canInteract ? undefined : -1 })}</div>;
+  return <div ref={wrapRef} className={styles.wrapper}>{children({ disabled: !canInteract, tabIndex: canInteract ? undefined : -1 })}</div>;
 }

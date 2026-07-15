@@ -1,5 +1,5 @@
-import type { BlockType } from '../types/blocks';
-import type { BreakPillStatus, EngineHandle, GamePhase, GameStatus } from '../types/engine';
+import type { BlockType } from '../data/blocks';
+import type { BreakPillStatus, EngineHandle, GamePhase, GameStatus } from '../engine/types';
 import { readConfig, type EngineConfig, type EngineProps } from './config';
 import { clamp } from '../lib/clamp';
 import { createForeground } from './foreground/foreground';
@@ -11,6 +11,8 @@ import { PATTERNS } from './gol/patterns';
 import { isDirectionKey, nextPendingDir, nextSnakeInterval, spawnSnakeAt, stepSnake, type Dir, type SnakeCell } from './snake/snake';
 import { cutSnakeArrow, drawSnakeBody, countdownArrowAlpha, playArrowAlpha } from './snake/render';
 import { loadBestScore, saveBestScore } from './snake/score';
+import { selectNavigationIndex } from './navigation';
+import { createStatusChannel } from './status';
 
 const CELL = 30;
 const COUNTDOWN_STEPS = ['3', '2', '1', 'GO'] as const;
@@ -23,7 +25,6 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
   let raf = 0;
   let lastLoopAt = 0;
 
-  // ---- Game of Life background ----
   let golCanvas: HTMLCanvasElement | null = null;
   let golCtx: CanvasRenderingContext2D | null = null;
   let grid = new Uint8Array(0);
@@ -39,16 +40,14 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
   let staleRounds = 0;
   let aliveCount = 0;
   let golTimer: ReturnType<typeof setInterval> | null = null;
-  const fadeMs = Math.max(40, cfg.gol.golFade);
-  const waitMs = Math.max(0, cfg.gol.golWait);
+  const fadeMs = Math.max(40, cfg.gol.generationFadeMs);
+  const waitMs = Math.max(0, cfg.gol.generationWaitMs);
 
-  // ---- particle burst ----
   let burstCanvas: HTMLCanvasElement | null = null;
   let burstCtx: CanvasRenderingContext2D | null = null;
   let burstDims = { bw: 0, bh: 0 };
   const burstState = createBurstState();
 
-  // ---- snake minigame ----
   let game: GamePhase = null;
   let snake: SnakeCell[] = [];
   let dir: Dir = { dc: 1, dr: 0 };
@@ -56,22 +55,21 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
   let score = 0;
   let best = 0;
   let newBest = false;
-  let snakeInterval = cfg.snake.snakeBase;
+  let snakeInterval = cfg.snake.initialStepMs;
   let snakeAcc = 0;
   let playAt = 0;
   let countdownLabel: string | null = null;
   let countTimer: ReturnType<typeof setTimeout> | null = null;
   let snakeTimer: ReturnType<typeof setTimeout> | null = null;
 
-  let breakStatusListener: ((status: BreakPillStatus) => void) | null = null;
-  let gameStatusListener: ((status: GameStatus) => void) | null = null;
   const disposers: Array<() => void> = [];
+  const breakStatus = createStatusChannel(currentBreakStatus);
+  const gameStatus = createStatusChannel(currentGameStatus);
 
   function fireFlyAtCenter(preDelay = 0): void {
     foreground?.fireFly({ x: (window.innerWidth || 1200) / 2, y: (window.innerHeight || 800) / 2 }, preDelay);
   }
 
-  // ---- Game of Life ----
 
   function sizeGol(): void {
     if (!golCanvas || !golCtx) return;
@@ -148,12 +146,11 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     phase = 0;
     waitAcc = 0;
     golLast = performance.now();
-    golCanvas.style.opacity = String(cfg.gol.golOpacity);
+    golCanvas.style.opacity = String(cfg.gol.opacity);
     paintGol();
     golTimer = setInterval(animLife, 33);
   }
 
-  // ---- snake minigame ----
 
   function startGame(): void {
     if (!golDims.cols || !golDims.rows) return;
@@ -162,7 +159,7 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     dir = spawned.dir;
     pendingDir = spawned.dir;
     score = 0;
-    snakeInterval = cfg.snake.snakeBase;
+    snakeInterval = cfg.snake.initialStepMs;
     snakeAcc = 0;
     best = loadBestScore();
     startCountdown();
@@ -172,13 +169,13 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     game = 'countdown';
     snakeAcc = 0;
     if (golCanvas) golCanvas.style.opacity = '1';
-    notifyBreakStatus();
+    breakStatus.notify();
     let i = 0;
     const run = () => {
       if (game !== 'countdown') return;
       if (i >= COUNTDOWN_STEPS.length) { beginPlay(); return; }
       countdownLabel = COUNTDOWN_STEPS[i];
-      notifyGameStatus();
+      gameStatus.notify();
       i++;
       countTimer = setTimeout(run, countdownLabel === 'GO' ? 480 : 640);
     };
@@ -191,8 +188,8 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     snakeAcc = 0;
     playAt = performance.now();
     countdownLabel = null;
-    notifyBreakStatus();
-    notifyGameStatus();
+    breakStatus.notify();
+    gameStatus.notify();
   }
 
   function pauseGame(): void {
@@ -200,9 +197,9 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     if (countTimer) clearTimeout(countTimer);
     game = 'paused';
     countdownLabel = null;
-    if (golCanvas) golCanvas.style.opacity = String(cfg.gol.golOpacity);
-    notifyBreakStatus();
-    notifyGameStatus();
+    if (golCanvas) golCanvas.style.opacity = String(cfg.gol.opacity);
+    breakStatus.notify();
+    gameStatus.notify();
     fireFlyAtCenter();
   }
 
@@ -213,9 +210,9 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     if (snakeTimer) clearTimeout(snakeTimer);
     if (countTimer) clearTimeout(countTimer);
     countdownLabel = null;
-    if (golCanvas) golCanvas.style.opacity = String(cfg.gol.golOpacity);
-    notifyBreakStatus();
-    notifyGameStatus();
+    if (golCanvas) golCanvas.style.opacity = String(cfg.gol.opacity);
+    breakStatus.notify();
+    gameStatus.notify();
     paintGol();
     fireFlyAtCenter();
   }
@@ -229,8 +226,8 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
       best = score;
       saveBestScore(best);
     }
-    notifyBreakStatus();
-    notifyGameStatus();
+    breakStatus.notify();
+    gameStatus.notify();
   }
 
   function stepSnakeOnce(): void {
@@ -245,13 +242,13 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
       snakeInterval = nextSnakeInterval(cfg.snake, score);
       const head = snake[0];
       spawnBurst(burstState, (head.c + 0.5) * CELL, (head.r + 0.5) * CELL, {
-        sparks: cfg.snake.eatParticles,
-        stars: Math.round(cfg.snake.eatParticles * 0.25),
-        speed: cfg.snake.eatPower,
+        sparks: cfg.snake.pickupParticleCount,
+        stars: Math.round(cfg.snake.pickupParticleCount * 0.25),
+        speed: cfg.snake.pickupParticleSpeed,
         flash: false, shock: false, bloom: false,
       });
       paintGol();
-      notifyGameStatus();
+      gameStatus.notify();
     }
   }
 
@@ -290,7 +287,7 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
 
   function drawSnakeUnderlay(ctx: CanvasRenderingContext2D, now: number): void {
     if (game !== 'play' && game !== 'countdown') return;
-    drawSnakeBody(ctx, snake, CELL, cfg.snake.snakeGap);
+    drawSnakeBody(ctx, snake, CELL, cfg.snake.cellGapPx);
     if (game === 'countdown') {
       cutSnakeArrow(ctx, snake[0], dir, CELL, countdownArrowAlpha(now));
     } else if (game === 'play') {
@@ -299,7 +296,6 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     }
   }
 
-  // ---- break pill status (consumed by a React component, not DOM-driven) ----
 
   function currentBreakStatus(): BreakPillStatus {
     return { canShow: !game || game === 'paused', label: game === 'paused' ? 'Resume game' : 'Take a break' };
@@ -307,26 +303,6 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
 
   function currentGameStatus(): GameStatus {
     return { phase: game, score, best: Math.max(best, score), newBest, countdownLabel };
-  }
-
-  function notifyBreakStatus(): void {
-    breakStatusListener?.(currentBreakStatus());
-  }
-
-  function onBreakStatusChange(cb: (status: BreakPillStatus) => void): () => void {
-    breakStatusListener = cb;
-    cb(currentBreakStatus());
-    return () => { if (breakStatusListener === cb) breakStatusListener = null; };
-  }
-
-  function notifyGameStatus(): void {
-    gameStatusListener?.(currentGameStatus());
-  }
-
-  function onGameStatusChange(cb: (status: GameStatus) => void): () => void {
-    gameStatusListener = cb;
-    cb(currentGameStatus());
-    return () => { if (gameStatusListener === cb) gameStatusListener = null; };
   }
 
   function triggerBreakPill(origin: { x: number; y: number }): void {
@@ -354,7 +330,6 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     disposers.push(() => window.removeEventListener('keydown', gameKey));
   }
 
-  // ---- resize / lifecycle ----
 
   function onResize(): void {
     if (golCanvas) { sizeGol(); paintGol(); }
@@ -362,11 +337,7 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
   }
 
   function jumpToType(type: BlockType): void {
-    let n = 0;
-    for (let i = 0; i < blockOrder.length; i++) {
-      if (blockOrder[i] === type) { n = i; break; }
-    }
-    if (n > 0 && blockOrder[n - 1] === 'user') n--;
+    const n = selectNavigationIndex(blockOrder, type);
     const bubbles = root?.querySelectorAll<HTMLElement>('[data-bubble]');
     const target = bubbles?.[n];
     if (target) {
@@ -410,8 +381,8 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     jumpToType,
     addBubble: (el) => foreground?.addBubble(el),
     removeBubble: (el) => foreground?.removeBubble(el),
-    onBreakStatusChange,
-    onGameStatusChange,
+    onBreakStatusChange: breakStatus.subscribe,
+    onGameStatusChange: gameStatus.subscribe,
     triggerBreakPill,
     restartGame: startGame,
     quitGame,

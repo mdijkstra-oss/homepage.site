@@ -55,7 +55,7 @@ function applyFrame(el: HTMLElement, frame: EntryFrame): void {
 }
 
 export function createForeground(root: HTMLElement, cfg: ForegroundConfig): ForegroundHandle {
-  const flyDur = Math.max(300, cfg.flyDur);
+  const flyDurationMs = Math.max(300, cfg.flyDurationMs);
   const startNow = performance.now();
   let items: ForegroundItem[] = [
     ...[...root.querySelectorAll<HTMLElement>('[data-bubble]')].map((el) => makeItem(el, false, startNow)),
@@ -102,13 +102,13 @@ export function createForeground(root: HTMLElement, cfg: ForegroundConfig): Fore
   function tick(now: number): void {
     const vh = window.innerHeight || 800;
     if (flyState === 'out' || flyState === 'in') {
-      const t = clamp((now - flyStart) / flyDur, 0, 1);
+      const t = clamp((now - flyStart) / flyDurationMs, 0, 1);
       const e = smoothstep(t);
       flyP = flyState === 'out' ? e : 1 - e;
       if (t >= 1) flyState = flyP > 0.5 ? 'parked' : null;
     }
 
-    const startLine = vh * cfg.animStart;
+    const startLine = vh * cfg.revealViewportRatio;
     for (const it of items) {
       let entry = REST_FRAME;
       if (!it.chrome) {
@@ -123,7 +123,7 @@ export function createForeground(root: HTMLElement, cfg: ForegroundConfig): Fore
             continue;
           }
         }
-        const clockP = clamp((now - it.entryStart) / Math.max(60, cfg.animDur), 0, 1);
+        const clockP = clamp((now - it.entryStart) / Math.max(60, cfg.revealDurationMs), 0, 1);
         const topNow = it.el.getBoundingClientRect().top;
         const posP = clamp((startLine - topNow) / Math.max(1, startLine - vh * 0.3), 0, 1);
         it.entryP = computeEntryProgress(clockP, posP, it.entryP);

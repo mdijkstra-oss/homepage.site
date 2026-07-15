@@ -2,9 +2,9 @@ import { clamp } from '../../lib/clamp';
 import { resolvePattern, stampPattern, type Cell, type PatternName, type PatternTable } from './patterns';
 
 export interface GolConfig {
-  golOpacity: number;
-  golFade: number;
-  golWait: number;
+  opacity: number;
+  generationFadeMs: number;
+  generationWaitMs: number;
 }
 
 export interface GolDims {
@@ -13,6 +13,9 @@ export interface GolDims {
 }
 
 const SEED_NAMES: readonly PatternName[] = ['glider', 'blinker', 'toad', 'beacon', 'pulsar', 'penta', 'glider', 'blinker', 'toad'];
+const STALE_RESEED_ROUNDS = 2;
+const CROWDED_RESEED_RATIO = 0.4;
+const MAX_GENERATIONS_BEFORE_RESEED = 460;
 
 export function inField(x: number, y: number, dims: GolDims): boolean {
   return x >= 1 && x <= dims.cols - 2 && y >= 2 && y <= dims.rows - 4;
@@ -42,15 +45,13 @@ export function stepLife(grid: Uint8Array, dims: GolDims): { grid: Uint8Array; a
   return { grid: n, alive };
 }
 
-// Rounds of near-empty grids or overcrowding call for a fresh seed instead of
-// waiting for Conway's rules to recover on their own.
 export function nextStaleCount(alive: number, prevStale: number): number {
   return alive < 8 ? prevStale + 1 : 0;
 }
 
 export function shouldReseed(alive: number, dims: GolDims, staleRounds: number, gen: number): boolean {
-  const crowded = alive > dims.cols * dims.rows * 0.4;
-  return staleRounds > 2 || crowded || gen > 460;
+  const crowded = alive > dims.cols * dims.rows * CROWDED_RESEED_RATIO;
+  return staleRounds > STALE_RESEED_ROUNDS || crowded || gen > MAX_GENERATIONS_BEFORE_RESEED;
 }
 
 function placeRandomFiller(grid: Uint8Array, dims: GolDims, patterns: PatternTable, count: number, maxTries: number, rng: () => number): Uint8Array {

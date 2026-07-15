@@ -1,12 +1,11 @@
-import { useLayoutEffect, useRef, type CSSProperties } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import styles from './ChatBubble.module.css';
 import { Row } from '../primitives/Row';
-import { MONO } from '../primitives/theme';
 import { clearPointerSpotlight, paintPointerSpotlight } from '../effects/pointerSpotlight';
-import { BUBBLE_STYLES } from '../../chat/style';
-import type { BubbleRegister } from '../../types/engine';
-import type { ChatRole } from '../../types/blocks';
+import type { BubbleRegister } from '../../engine/types';
+import type { ChatRole } from '../../data/blocks';
 
 const THINKING = [
   'Thinking', 'Pondering', 'Mulling it over', 'Reflecting', 'Considering',
@@ -38,26 +37,22 @@ export default function ChatBubble({ role, text, live, register }: ChatBubblePro
   const fillRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<string | null>(null);
   if (wordRef.current === null) wordRef.current = pickThinking();
-  const s = BUBBLE_STYLES[role];
+  const bubbleClassName = `${styles.bubble} ${styles[role]}${live ? '' : ` ${styles.hidden}`}`;
 
   return (
-    <Row end={s.end}>
+    <Row alignment={role === 'user' ? 'end' : 'start'}>
       <div
         ref={ref}
         data-bubble=""
         onPointerMove={(event) => fillRef.current && paintPointerSpotlight(fillRef.current, event)}
         onPointerLeave={() => fillRef.current && clearPointerSpotlight(fillRef.current)}
-        style={{
-          position: 'relative', maxWidth: s.maxWidth, opacity: live ? undefined : 0,
-          background: s.background, border: s.border, borderRadius: s.borderRadius,
-          boxShadow: s.boxShadow, padding: s.padding, color: s.color, fontSize: 14, lineHeight: 1.6,
-        } as CSSProperties}
+        className={bubbleClassName}
       >
-        <div ref={fillRef} style={{ position: 'absolute', inset: 0, borderRadius: s.borderRadius, pointerEvents: 'none', backgroundImage: 'none' }} />
+        <div ref={fillRef} className={styles.spotlight} />
         {role === 'assistant'
           ? (text
-            ? <div className="md"><ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown></div>
-            : <span style={{ color: '#8fa3bd', fontFamily: MONO, fontSize: 13, animation: 'blink 1.3s steps(1) infinite' }}>{wordRef.current}…</span>)
+            ? <div className={styles.markdown}><ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown></div>
+            : <span className={styles.thinking}>{wordRef.current}…</span>)
           : text}
       </div>
     </Row>

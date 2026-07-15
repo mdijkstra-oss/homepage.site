@@ -2,19 +2,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createSiteEngine } from './engine';
 import { BLOCKS } from './data/prompts';
 import { CFG } from './data/theme';
-import { FG } from './components/primitives/theme';
+import { FG } from './styles/theme';
 import Background from './components/layout/Background';
 import Header from './components/layout/Header';
 import Composer from './components/chat/Composer';
-import { Block } from './components/feed/Cards';
+import { Block } from './components/feed/cards';
 import ChatBubble from './components/chat/ChatBubble';
 import { buildMessages } from './chat/history';
 import { streamChat } from './chat/client';
 import type { LiveTurn } from './chat/messages';
-import type { BlockType } from './types/blocks';
-import type { BreakPillStatus, EngineHandle, GameStatus } from './types/engine';
+import { selectBlockTypes, type BlockType } from './data/blocks';
+import type { BreakPillStatus, EngineHandle, GameStatus } from './engine/types';
 
-const BLOCK_ORDER: readonly BlockType[] = BLOCKS.map((b) => b.type);
+const BLOCK_ORDER = selectBlockTypes(BLOCKS);
 const DEFAULT_BREAK_STATUS: BreakPillStatus = { canShow: true, label: 'Take a break' };
 const DEFAULT_GAME_STATUS: GameStatus = { phase: null, score: 0, best: 0, newBest: false, countdownLabel: null };
 
@@ -37,10 +37,7 @@ export default function App() {
     return () => { unsubscribeBreakStatus(); unsubscribeGameStatus(); engine.destroy(); engineRef.current = null; };
   }, []);
 
-  // Nudge to the newest message when a turn is added (not on every stream tick).
-  useEffect(() => {
-    if (live.length) window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  }, [live.length]);
+  useScrollToNewestTurn(live.length);
 
   const onJump = (type: BlockType) => engineRef.current?.jumpToType(type);
 
@@ -111,4 +108,10 @@ export default function App() {
       />
     </div>
   );
+}
+
+function useScrollToNewestTurn(turnCount: number): void {
+  useEffect(() => {
+    if (turnCount) window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }, [turnCount]);
 }

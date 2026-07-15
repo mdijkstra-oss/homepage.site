@@ -17,13 +17,13 @@ function liveCells(grid: Uint8Array, cols: number): Array<[number, number]> {
 describe('inField', () => {
   const dims = { cols: 10, rows: 10 };
   it.each([
-    ['top-left corner of the inset', 1, 2, true],
-    ['bottom-right corner of the inset', 8, 6, true],
-    ['left edge excluded', 0, 5, false],
-    ['top edge excluded', 5, 1, false],
-    ['right edge excluded', 9, 5, false],
-    ['bottom edge excluded', 5, 7, false],
-  ] as const)('%s', (_label, x, y, expected) => {
+    { name: 'top-left corner of the inset', x: 1, y: 2, expected: true },
+    { name: 'bottom-right corner of the inset', x: 8, y: 6, expected: true },
+    { name: 'left edge excluded', x: 0, y: 5, expected: false },
+    { name: 'top edge excluded', x: 5, y: 1, expected: false },
+    { name: 'right edge excluded', x: 9, y: 5, expected: false },
+    { name: 'bottom edge excluded', x: 5, y: 7, expected: false },
+  ] as const)('$name', ({ x, y, expected }) => {
     expect(inField(x, y, dims)).toBe(expected);
   });
 });
@@ -55,7 +55,6 @@ describe('stepLife', () => {
 
   it('kills an overcrowded cell and starves an isolated one', () => {
     const dims = { cols: 10, rows: 10 };
-    // centre cell has 4 live neighbours -> dies; corner-ish cell has 0 -> stays dead
     const grid = makeGrid(10, 10, [[4, 4], [4, 5], [4, 3], [3, 4], [5, 4]]);
     const { grid: next } = stepLife(grid, dims);
     expect(next[4 * 10 + 4]).toBe(0);
@@ -63,7 +62,6 @@ describe('stepLife', () => {
 
   it('suppresses birth outside the inset field even with 3 neighbours', () => {
     const dims = { cols: 10, rows: 10 };
-    // (0,5) would be born (3 neighbours) but x=0 is outside inField's inset.
     const grid = makeGrid(10, 10, [[1, 4], [1, 5], [1, 6]]);
     const { grid: next } = stepLife(grid, dims);
     expect(next[5 * 10 + 0]).toBe(0);
@@ -91,10 +89,10 @@ describe('seedLife', () => {
 
 describe('nextStaleCount', () => {
   it.each([
-    [3, 0, 1],
-    [3, 4, 5],
-    [20, 5, 0],
-  ])('alive=%i, prevStale=%i -> %i', (alive, prevStale, expected) => {
+    { name: 'increments when alive count is low', alive: 3, prevStale: 0, expected: 1 },
+    { name: 'keeps accumulating stale rounds', alive: 3, prevStale: 4, expected: 5 },
+    { name: 'resets when alive count recovers', alive: 20, prevStale: 5, expected: 0 },
+  ])('$name', ({ alive, prevStale, expected }) => {
     expect(nextStaleCount(alive, prevStale)).toBe(expected);
   });
 });
@@ -102,12 +100,12 @@ describe('nextStaleCount', () => {
 describe('shouldReseed', () => {
   const dims = { cols: 20, rows: 20 };
   it.each([
-    ['too many stale rounds', 10, dims, 3, 10, true],
-    ['overcrowded', 200, dims, 0, 10, true],
-    ['generation ceiling hit', 10, dims, 0, 461, true],
-    ['healthy grid', 50, dims, 0, 10, false],
-  ] as const)('%s', (_label, alive, d, stale, gen, expected) => {
-    expect(shouldReseed(alive, d, stale, gen)).toBe(expected);
+    { name: 'too many stale rounds', alive: 10, dims, staleRounds: 3, generation: 10, expected: true },
+    { name: 'overcrowded', alive: 200, dims, staleRounds: 0, generation: 10, expected: true },
+    { name: 'generation ceiling hit', alive: 10, dims, staleRounds: 0, generation: 461, expected: true },
+    { name: 'healthy grid', alive: 50, dims, staleRounds: 0, generation: 10, expected: false },
+  ] as const)('$name', ({ alive, dims, staleRounds, generation, expected }) => {
+    expect(shouldReseed(alive, dims, staleRounds, generation)).toBe(expected);
   });
 });
 
@@ -137,11 +135,11 @@ describe('spawnGliders', () => {
 describe('computeColors', () => {
   it('gives a larger cluster a higher hue/lightness than an isolated cell', () => {
     const dims = { cols: 10, rows: 10 };
-    const grid = makeGrid(10, 10, [[2, 2], [3, 3], [3, 2], [2, 3], [8, 8]]); // 2x2 block + lone cell
+    const grid = makeGrid(10, 10, [[2, 2], [3, 3], [3, 2], [2, 3], [8, 8]]);
     const { hueBuf } = computeColors(grid, dims);
     const blockHue = hueBuf[2 * 10 + 2];
     const loneHue = hueBuf[8 * 10 + 8];
     expect(blockHue).toBeGreaterThan(loneHue);
-    expect(loneHue).toBe(222); // baseline hue for a cluster of size 1
+    expect(loneHue).toBe(222);
   });
 });

@@ -1,12 +1,12 @@
 import { clamp } from '../../lib/clamp';
 
 export interface SnakeConfig {
-  snakeBase: number;
-  snakeMin: number;
-  snakeRamp: number;
-  snakeGap: number;
-  eatParticles: number;
-  eatPower: number;
+  initialStepMs: number;
+  minimumStepMs: number;
+  stepReductionPerPointMs: number;
+  cellGapPx: number;
+  pickupParticleCount: number;
+  pickupParticleSpeed: number;
 }
 
 export interface SnakeCell {
@@ -71,5 +71,5 @@ export function cellAt(x: number, y: number, cellSize: number, cols: number, row
 }
 
 export function nextSnakeInterval(cfg: SnakeConfig, score: number): number {
-  return Math.max(cfg.snakeMin, cfg.snakeBase - score * cfg.snakeRamp);
+  return Math.max(cfg.minimumStepMs, cfg.initialStepMs - score * cfg.stepReductionPerPointMs);
 }

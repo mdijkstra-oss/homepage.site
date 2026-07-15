@@ -8,16 +8,16 @@ import {
 
 describe('computeEntryProgress', () => {
   it.each([
-    [0.2, 0.5, 0, 0.5],
-    [0.9, 0.1, 0, 0.9],
-    [0.3, 0.2, 0.7, 0.7], // never rewinds below what was already reached
-  ])('max(%i, %i, %i) -> %i', (clockP, posP, priorP, expected) => {
-    expect(computeEntryProgress(clockP, posP, priorP)).toBe(expected);
+    { name: 'position progress can reveal ahead of time', clockProgress: 0.2, positionProgress: 0.5, previousProgress: 0, expected: 0.5 },
+    { name: 'clock progress can carry reveal forward', clockProgress: 0.9, positionProgress: 0.1, previousProgress: 0, expected: 0.9 },
+    { name: 'previous progress keeps reveal monotonic', clockProgress: 0.3, positionProgress: 0.2, previousProgress: 0.7, expected: 0.7 },
+  ])('$name', ({ clockProgress, positionProgress, previousProgress, expected }) => {
+    expect(computeEntryProgress(clockProgress, positionProgress, previousProgress)).toBe(expected);
   });
 });
 
 describe('computeEntryFrame', () => {
-  const fullCfg = { animStart: 0.74, animDur: 700, animRise: 34, animDrift: 22, animTilt: 14, animScale: 0.94, animBlur: 3, flyDur: 1050 };
+  const fullCfg = { revealViewportRatio: 0.74, revealDurationMs: 700, revealRisePx: 34, revealDriftPx: 22, revealTiltDeg: 14, revealInitialScale: 0.94, revealBlurPx: 3, flyDurationMs: 1050 };
 
   it('at p=0 returns the fully-offset starting frame', () => {
     const frame = computeEntryFrame(0, fullCfg, 1);

@@ -1,23 +1,20 @@
+import styles from './PillRail.module.css';
 import Pill from './Pill';
-import { PILLS } from '../../data/theme';
-import type { BlockType } from '../../types/blocks';
+import { PROMPT_PILLS } from '../theme/palette';
+import type { BlockType } from '../../data/blocks';
 
 export default function PillRail({ onJump }: { onJump: (type: BlockType) => void }) {
   return (
-    <div className="chiprail" style={{
-      display: 'flex', gap: 8, alignItems: 'center', overflowX: 'auto', padding: '3px 1px 1px',
-      WebkitMaskImage: 'linear-gradient(90deg, #000 0, #000 calc(100% - 22px), transparent 100%)',
-      maskImage: 'linear-gradient(90deg, #000 0, #000 calc(100% - 22px), transparent 100%)',
-    }}>
-      {PILLS.map((pill) => (
+    <div className={styles.rail}>
+      {PROMPT_PILLS.map((pill) => (
         <Pill
           key={pill.type}
-          icon={pill.icon}
+          icon={pill.palette.icon}
           label={pill.label}
-          iconColor={pill.iconColor}
-          hoverBg={pill.hoverBg}
-          hoverColor={pill.hoverColor}
-          hoverBorder={pill.hoverBorder}
+          iconColor={pill.palette.color}
+          hoverBg={pill.palette.background}
+          hoverColor={pill.palette.color}
+          hoverBorder={pill.palette.border}
           onClick={() => onJump(pill.type)}
         />
       ))}

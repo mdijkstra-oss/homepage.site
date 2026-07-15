@@ -1,8 +1,3 @@
-// The content model: one discriminated union for every block the feed can hold.
-// `user`/`assistant` are chat bubbles (carry `text`); every other type is a
-// content card (carries a typed `payload`). The union is what makes the card
-// dispatcher exhaustive — a new type is a compile error until it's handled.
-
 export interface ProfilePayload {
   initials: string;
   name: string;
@@ -132,8 +127,10 @@ export type Block =
 
 export type BlockType = Block['type'];
 
-// The block types that can appear as a live chat bubble.
 export type ChatRole = 'user' | 'assistant';
 
-// Every block except the two chat-bubble types — what the card dispatcher handles.
 export type CardBlock = Exclude<Block, { type: ChatRole }>;
+
+export function selectBlockTypes(blocks: readonly Block[]): readonly BlockType[] {
+  return blocks.map((block) => block.type);
+}

@@ -1,4 +1,4 @@
-import type { BlockType } from './blocks';
+import type { BlockType } from '../data/blocks';
 
 export interface BubbleRegister {
   add: (el: HTMLElement | null) => void;
@@ -20,7 +20,6 @@ export interface GameStatus {
   countdownLabel: string | null;
 }
 
-// The public surface App.tsx drives — everything else is engine-private.
 export interface EngineHandle {
   mount: (root: HTMLElement) => void;
   destroy: () => void;

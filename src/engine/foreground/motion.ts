@@ -2,14 +2,14 @@ import { clamp } from '../../lib/clamp';
 import { smootherstep } from '../../lib/easing';
 
 export interface ForegroundConfig {
-  animStart: number;
-  animDur: number;
-  animRise: number;
-  animDrift: number;
-  animTilt: number;
-  animScale: number;
-  animBlur: number;
-  flyDur: number;
+  revealViewportRatio: number;
+  revealDurationMs: number;
+  revealRisePx: number;
+  revealDriftPx: number;
+  revealTiltDeg: number;
+  revealInitialScale: number;
+  revealBlurPx: number;
+  flyDurationMs: number;
 }
 
 export interface EntryFrame {
@@ -31,27 +31,24 @@ export interface FlyVector {
   delay: number;
 }
 
-// Forward-only latch: progress never rewinds once it has advanced.
-export function computeEntryProgress(clockP: number, posP: number, priorP: number): number {
-  return Math.max(clockP, posP, priorP);
+export function computeEntryProgress(clockProgress: number, positionProgress: number, previousProgress: number): number {
+  return Math.max(clockProgress, positionProgress, previousProgress);
 }
 
 export function computeEntryFrame(p: number, cfg: ForegroundConfig, dir: 1 | -1): EntryFrame {
   const e = smootherstep(p);
   return {
-    x: (1 - e) * cfg.animDrift * dir,
-    y: (1 - e) * cfg.animRise,
-    scale: cfg.animScale + e * (1 - cfg.animScale),
-    blur: (1 - e) * cfg.animBlur,
+    x: (1 - e) * cfg.revealDriftPx * dir,
+    y: (1 - e) * cfg.revealRisePx,
+    scale: cfg.revealInitialScale + e * (1 - cfg.revealInitialScale),
+    blur: (1 - e) * cfg.revealBlurPx,
     brightness: 0.75 + e * 0.25,
-    rotX: (1 - e) * -cfg.animTilt,
-    rotZ: (1 - e) * cfg.animTilt * 0.1 * dir,
+    rotX: (1 - e) * -cfg.revealTiltDeg,
+    rotZ: (1 - e) * cfg.revealTiltDeg * 0.1 * dir,
     opacity: clamp(p * 3, 0, 1),
   };
 }
 
-// Per-item radial launch vector, captured once at trigger time from the
-// item's position relative to the blast origin.
 export function computeFlyVector(
   elCenter: { x: number; y: number },
   origin: { x: number; y: number },

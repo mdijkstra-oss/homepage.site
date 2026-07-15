@@ -2,7 +2,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import Background from './Background';
-import type { GameStatus } from '../../types/engine';
+import type { GameStatus } from '../../engine/types';
 
 const idleStatus: GameStatus = { phase: null, score: 0, best: 0, newBest: false, countdownLabel: null };
 

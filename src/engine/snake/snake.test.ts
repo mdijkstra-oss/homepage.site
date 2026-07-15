@@ -5,10 +5,10 @@ const noFood = () => 0;
 
 describe('spawnSnakeAt', () => {
   it.each([
-    [40, 30],
-    [10, 10],
-    [8, 8],
-  ])('places a 5-segment snake facing right within a %ix%i grid', (cols, rows) => {
+    { name: 'wide playfield', cols: 40, rows: 30 },
+    { name: 'square playfield', cols: 10, rows: 10 },
+    { name: 'minimum comfortable playfield', cols: 8, rows: 8 },
+  ])('places a 5-segment snake facing right within $name', ({ cols, rows }) => {
     const { snake, dir } = spawnSnakeAt(cols, rows);
     expect(snake).toHaveLength(5);
     expect(dir).toEqual({ dc: 1, dr: 0 });
@@ -39,8 +39,7 @@ describe('stepSnake', () => {
     }
   });
 
-  it('dies on self-collision', () => {
-    // head moving down lands on a body segment that survives the tail-drop.
+  it('dies when the next head position overlaps its body', () => {
     const loop: SnakeCell[] = [{ c: 5, r: 5 }, { c: 5, r: 6 }, { c: 6, r: 6 }, { c: 6, r: 5 }];
     const result = stepSnake(loop, { dc: 0, dr: 1 }, cols, rows, noFood);
     expect(result).toEqual({ kind: 'died' });
@@ -57,32 +56,32 @@ describe('stepSnake', () => {
 describe('nextPendingDir', () => {
   const right = { dc: 1, dr: 0 };
   it.each([
-    ['rejects the exact reversal', 'arrowleft', right, null],
-    ['accepts a perpendicular turn', 'arrowup', right, { dc: 0, dr: -1 }],
-    ['accepts continuing the same direction', 'arrowright', right, { dc: 1, dr: 0 }],
-    ['ignores unrelated keys', 'escape', right, null],
-  ] as const)('%s', (_label, key, current, expected) => {
+    { name: 'rejects the exact reversal', key: 'arrowleft', current: right, expected: null },
+    { name: 'accepts a perpendicular turn', key: 'arrowup', current: right, expected: { dc: 0, dr: -1 } },
+    { name: 'accepts continuing the same direction', key: 'arrowright', current: right, expected: { dc: 1, dr: 0 } },
+    { name: 'ignores unrelated keys', key: 'escape', current: right, expected: null },
+  ] as const)('$name', ({ key, current, expected }) => {
     expect(nextPendingDir(key, current)).toEqual(expected);
   });
 });
 
 describe('cellAt', () => {
   it.each([
-    ['inside the grid', 45, 65, 30, 10, 10, { c: 1, r: 2 }],
-    ['clamps negative coordinates', -50, -50, 30, 10, 10, { c: 0, r: 0 }],
-    ['clamps past the far edge', 9999, 9999, 30, 10, 10, { c: 9, r: 9 }],
-  ] as const)('%s', (_label, x, y, size, cols, rows, expected) => {
+    { name: 'inside the grid', x: 45, y: 65, size: 30, cols: 10, rows: 10, expected: { c: 1, r: 2 } },
+    { name: 'clamps negative coordinates', x: -50, y: -50, size: 30, cols: 10, rows: 10, expected: { c: 0, r: 0 } },
+    { name: 'clamps past the far edge', x: 9999, y: 9999, size: 30, cols: 10, rows: 10, expected: { c: 9, r: 9 } },
+  ] as const)('$name', ({ x, y, size, cols, rows, expected }) => {
     expect(cellAt(x, y, size, cols, rows)).toEqual(expected);
   });
 });
 
 describe('nextSnakeInterval', () => {
-  const cfg = { snakeBase: 150, snakeMin: 60, snakeRamp: 3, snakeGap: 4, eatParticles: 40, eatPower: 0.7 };
+  const cfg = { initialStepMs: 150, minimumStepMs: 60, stepReductionPerPointMs: 3, cellGapPx: 4, pickupParticleCount: 40, pickupParticleSpeed: 0.7 };
   it.each([
-    [0, 150],
-    [10, 120],
-    [1000, 60], // clamped to snakeMin
-  ])('score %i -> interval %i', (score, expected) => {
+    { name: 'uses initial speed before scoring', score: 0, expected: 150 },
+    { name: 'subtracts configured reduction per point', score: 10, expected: 120 },
+    { name: 'stops at the configured minimum', score: 1000, expected: 60 },
+  ])('$name', ({ score, expected }) => {
     expect(nextSnakeInterval(cfg, score)).toBe(expected);
   });
 });

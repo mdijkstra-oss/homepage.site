@@ -2,6 +2,11 @@ import { clamp } from '../../lib/clamp';
 import type { Dir, SnakeCell } from './snake';
 
 let arrowPath: Path2D | null = null;
+const COUNTDOWN_ARROW_BASE_ALPHA = 0.85;
+const COUNTDOWN_ARROW_PULSE_ALPHA = 0.15;
+const COUNTDOWN_ARROW_PULSE_SPEED = 0.008;
+const PLAY_ARROW_FADE_MS = 280;
+
 function getArrowPath(): Path2D {
   return arrowPath ??= new Path2D('M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z');
 }
@@ -33,12 +38,11 @@ export function cutSnakeArrow(ctx: CanvasRenderingContext2D, head: SnakeCell, di
   ctx.restore();
 }
 
-// Pulses gently during the count-in, then fades out over the first 280ms of play.
 export function countdownArrowAlpha(now: number): number {
-  return 0.85 + 0.15 * Math.sin(now * 0.008);
+  return COUNTDOWN_ARROW_BASE_ALPHA + COUNTDOWN_ARROW_PULSE_ALPHA * Math.sin(now * COUNTDOWN_ARROW_PULSE_SPEED);
 }
 
 export function playArrowAlpha(elapsedMs: number): number | null {
-  const t = elapsedMs / 280;
+  const t = elapsedMs / PLAY_ARROW_FADE_MS;
   return t < 1 ? 1 - t : null;
 }

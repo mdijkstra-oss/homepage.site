@@ -1,4 +1,4 @@
-import type { ChatRole } from '../types/blocks';
+import type { ChatRole } from '../data/blocks';
 
 export interface ChatMessage {
   type: 'message';

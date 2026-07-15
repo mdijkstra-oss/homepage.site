@@ -1,9 +1,5 @@
-import type { Block } from '../types/blocks';
+import type { Block } from '../data/blocks';
 
-// ============================================================
-//  CONTENT — single ordered block list (source of truth for
-//  both the React render and the engine's jumpToType ordering)
-// ============================================================
 export const BLOCKS: Block[] = [
   { type: 'user', text: "Who is Matthijn, in a nutshell?" },
 

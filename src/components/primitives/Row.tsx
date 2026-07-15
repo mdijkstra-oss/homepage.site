@@ -1,5 +1,11 @@
 import type { ReactNode } from 'react';
+import styles from './Row.module.css';
 
-export function Row({ end, children }: { end?: boolean; children: ReactNode }) {
-  return <div style={{ display: 'flex', justifyContent: end ? 'flex-end' : 'flex-start' }}>{children}</div>;
+interface RowProps {
+  alignment?: 'start' | 'end';
+  children: ReactNode;
+}
+
+export function Row({ alignment = 'start', children }: RowProps) {
+  return <div className={alignment === 'start' ? styles.start : styles.end}>{children}</div>;
 }

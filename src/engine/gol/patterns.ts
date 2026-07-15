@@ -31,11 +31,10 @@ export function patternDims(cells: ReadonlyArray<Cell>): { w: number; h: number 
   return { w: mx + 1, h: my + 1 };
 }
 
-// Absolute grid coordinates for a pattern placed at (ox, oy), optionally mirrored.
 export function resolvePattern(
   cells: ReadonlyArray<Cell>, ox: number, oy: number, flipX: boolean, flipY: boolean,
 ): Cell[] {
-  return cells.map(([px, py]) => [ox + (flipX ? -px : px), oy + (flipY ? -py : py)] as const);
+  return cells.map(([px, py]) => transformPatternCell(px, py, ox, oy, flipX, flipY));
 }
 
 export function patternFits(
@@ -55,4 +54,8 @@ export function stampPattern(
     if (x >= 0 && x < cols && y >= 0 && y < rows) next[y * cols + x] = 1;
   }
   return next;
+}
+
+function transformPatternCell(px: number, py: number, ox: number, oy: number, flipX: boolean, flipY: boolean): Cell {
+  return [ox + (flipX ? -px : px), oy + (flipY ? -py : py)];
 }

@@ -1,4 +1,6 @@
-import { FG } from '../primitives/theme';
+import type { CSSProperties } from 'react';
+import styles from './WipeButton.module.css';
+import wipeStyles from '../primitives/Wipe.module.css';
 
 interface WipeButtonProps {
   href: string;
@@ -12,10 +14,16 @@ interface WipeButtonProps {
 }
 
 export function WipeButton({ href, label, target, rel, background = '#fff', color = '#0a0c14', fillBg = '#567cff', fillColor = '#fff' }: WipeButtonProps) {
+  const runtimeColors = {
+    '--wipe-background': background,
+    '--wipe-color': color,
+    '--wipe-fill-background': fillBg,
+    '--wipe-fill-color': fillColor,
+  } as CSSProperties;
   return (
-    <a href={href} target={target} rel={rel} className="wipe-btn" style={{ position: 'relative', overflow: 'hidden', display: 'inline-block', background, color, border: 'none', borderRadius: 12, padding: '10px 18px', fontFamily: FG, fontWeight: 700, fontSize: 13.5, cursor: 'pointer', textDecoration: 'none' }}>
-      <span style={{ display: 'block', whiteSpace: 'nowrap' }}>{label}</span>
-      <span className="wipe-fill" style={{ background: fillBg, color: fillColor, whiteSpace: 'nowrap', fontFamily: FG, fontWeight: 700, fontSize: 13.5 }}>{label}</span>
+    <a href={href} target={target} rel={rel} className={`${wipeStyles.wipe} ${styles.button}`} style={runtimeColors}>
+      <span className={styles.label}>{label}</span>
+      <span className={`${wipeStyles.fill} ${styles.fill}`}>{label}</span>
     </a>
   );
 }

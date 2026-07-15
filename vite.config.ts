@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// base: './' makes the built site work when opened from any static path
-// (e.g. GitHub Pages subfolders or just double-clicking dist/index.html).
+const RELATIVE_DEPLOYMENT_BASE = './';
+
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: RELATIVE_DEPLOYMENT_BASE,
 });

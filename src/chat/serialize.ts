@@ -1,18 +1,19 @@
-import type { Block } from '../types/blocks';
+import type { Block } from '../data/blocks';
+import { isRecord } from '../lib/json';
 
-function flatten(value: unknown, depth = 0): string {
+function flattenUnknownRecord(value: unknown): string {
   if (value == null) return '';
   if (typeof value === 'string' || typeof value === 'number') return String(value);
   if (Array.isArray(value)) {
     return value
-      .map(flatten)
+      .map(flattenUnknownRecord)
       .filter(Boolean)
       .join('\n');
   }
   if (isRecord(value)) {
     return Object.entries(value)
       .map(([k, v]) => {
-        const inner = flatten(v, depth + 1);
+        const inner = flattenUnknownRecord(v);
         if (!inner) return '';
         return inner.includes('\n') ? `${k}:\n${inner}` : `${k}: ${inner}`;
       })
@@ -25,10 +26,6 @@ function flatten(value: unknown, depth = 0): string {
 export function blockToConversationText(block: Block): string {
   const payload = 'payload' in block ? block.payload : undefined;
   const text = 'text' in block ? block.text : undefined;
-  const body = flatten(payload ?? text ?? '');
+  const body = flattenUnknownRecord(payload ?? text ?? '');
   return `[${block.type}]\n${body}`;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
 }
