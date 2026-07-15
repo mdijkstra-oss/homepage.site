@@ -27,6 +27,7 @@ const DEFAULTS: EngineConfig = {
   },
   gol: {
     opacity: 0.42,
+    scrollEndOpacity: 0.52,
     generationFadeMs: 560,
     generationWaitMs: 280,
   },

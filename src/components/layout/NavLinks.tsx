@@ -24,7 +24,7 @@ const NAV_ITEMS: readonly NavItem[] = [
     target: '_blank',
     rel: 'noopener',
   },
-  { label: 'Resume' },
+  { label: 'Resume', href: '/resume.pdf' },
   { label: 'Contact', href: "mailto:hire@mdijkstra.dev?subject=Let's%20build%20something" },
 ];
 

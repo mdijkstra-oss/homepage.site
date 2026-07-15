@@ -3,6 +3,7 @@ import { type Cell, type PatternName, type PatternTable, resolvePattern, stampPa
 
 export interface GolConfig {
   opacity: number;
+  scrollEndOpacity: number;
   generationFadeMs: number;
   generationWaitMs: number;
 }

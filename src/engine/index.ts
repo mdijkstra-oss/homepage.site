@@ -2,6 +2,7 @@ import type { BlockType } from '../data/blocks';
 import type { BreakPillStatus, EngineHandle, GamePhase, GameStatus } from '../engine/types';
 import { clamp } from '../lib/clamp';
 import { smoothstep } from '../lib/easing';
+import { selectScrollEasedValue } from '../lib/scrollFade';
 import { type EngineConfig, type EngineProps, readConfig } from './config';
 import { createForeground } from './foreground/foreground';
 import { createBurstState, sizeBurstCanvas, spawnBurst, tickBurst } from './fx/burst';
@@ -167,6 +168,24 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     paintGol();
   }
 
+  function shouldUseFullGolOpacity(): boolean {
+    return game !== null && game !== 'paused';
+  }
+
+  function selectGolOpacity(): number {
+    if (shouldUseFullGolOpacity()) return 1;
+    return selectScrollEasedValue(
+      window.scrollY,
+      document.documentElement.scrollHeight - window.innerHeight,
+      cfg.gol.opacity,
+      cfg.gol.scrollEndOpacity,
+    );
+  }
+
+  function syncGolOpacity(): void {
+    if (golCanvas) golCanvas.style.opacity = String(selectGolOpacity());
+  }
+
   function initGol(canvas: HTMLElement | null): void {
     if (!(canvas instanceof HTMLCanvasElement)) return;
     golCanvas = canvas;
@@ -178,7 +197,7 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     phase = 0;
     waitAcc = 0;
     golLast = performance.now();
-    golCanvas.style.opacity = String(cfg.gol.opacity);
+    syncGolOpacity();
     paintGol();
     golTimer = setInterval(animLife, 33);
   }
@@ -231,7 +250,7 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     if (countTimer) clearTimeout(countTimer);
     game = 'paused';
     countdownLabel = null;
-    if (golCanvas) golCanvas.style.opacity = String(cfg.gol.opacity);
+    syncGolOpacity();
     breakStatus.notify();
     gameStatus.notify();
     fireFlyAtCenter();
@@ -244,7 +263,7 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     if (snakeTimer) clearTimeout(snakeTimer);
     if (countTimer) clearTimeout(countTimer);
     countdownLabel = null;
-    if (golCanvas) golCanvas.style.opacity = String(cfg.gol.opacity);
+    syncGolOpacity();
     breakStatus.notify();
     gameStatus.notify();
     paintGol();
@@ -373,6 +392,7 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     if (golCanvas) {
       sizeGol();
       paintGol();
+      syncGolOpacity();
     }
     if (burstCanvas && burstCtx) burstDims = sizeBurstCanvas(burstCanvas, burstCtx);
   }
@@ -405,6 +425,8 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     initInteractive(rootEl);
     window.addEventListener('resize', onResize);
     disposers.push(() => window.removeEventListener('resize', onResize));
+    window.addEventListener('scroll', syncGolOpacity, { passive: true });
+    disposers.push(() => window.removeEventListener('scroll', syncGolOpacity));
     raf = requestAnimationFrame(loop);
   }
 

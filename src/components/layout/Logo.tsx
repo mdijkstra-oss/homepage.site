@@ -2,7 +2,7 @@ import styles from './Logo.module.css';
 
 export default function Logo() {
   return (
-    <div className={styles.logo}>
+    <a className={styles.logo} href="/">
       <span aria-hidden="true" className={styles.grid}>
         <span className={styles.off} />
         <span className={styles.cell1} />
@@ -15,6 +15,6 @@ export default function Logo() {
         <span className={styles.cell5} />
       </span>
       mdijkstra.dev
-    </div>
+    </a>
   );
 }

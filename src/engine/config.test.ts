@@ -6,12 +6,14 @@ describe('readConfig', () => {
     const cfg = readConfig();
     expect(cfg.foreground.revealDurationMs).toBe(700);
     expect(cfg.gol.opacity).toBe(0.42);
+    expect(cfg.gol.scrollEndOpacity).toBe(0.52);
     expect(cfg.snake.initialStepMs).toBe(150);
   });
 
   it('applies a partial override without touching sibling fields', () => {
     const cfg = readConfig({ gol: { opacity: 0.9 } });
     expect(cfg.gol.opacity).toBe(0.9);
+    expect(cfg.gol.scrollEndOpacity).toBe(0.52);
     expect(cfg.gol.generationFadeMs).toBe(560);
   });
 

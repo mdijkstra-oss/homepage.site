@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+import { selectScrollFadeOpacity } from '../../lib/scrollFade';
 import styles from './Background.module.css';
 
 export function GameCanvases() {
@@ -9,8 +11,35 @@ export function GameCanvases() {
   );
 }
 
-export function Aurora() {
-  return <div className={styles.aurora} />;
+export function DecorativeBackdrop() {
+  const backdropRef = useRef<HTMLDivElement>(null);
+
+  useEffect(function bindBackdropFade() {
+    function updateBackdropOpacity() {
+      const opacity = selectScrollFadeOpacity(
+        window.scrollY,
+        document.documentElement.scrollHeight - window.innerHeight,
+        DECORATIVE_MINIMUM_OPACITY,
+      );
+      if (backdropRef.current) backdropRef.current.style.opacity = String(opacity);
+    }
+
+    updateBackdropOpacity();
+    window.addEventListener('scroll', updateBackdropOpacity, { passive: true });
+    window.addEventListener('resize', updateBackdropOpacity);
+
+    return function unbindBackdropFade() {
+      window.removeEventListener('scroll', updateBackdropOpacity);
+      window.removeEventListener('resize', updateBackdropOpacity);
+    };
+  }, []);
+
+  return (
+    <div ref={backdropRef} className={styles.decorativeBackdrop}>
+      <div className={styles.lightBackground} />
+      <div className={styles.aurora} />
+    </div>
+  );
 }
 
 export function Grid() {
@@ -20,3 +49,5 @@ export function Grid() {
 export function Vignette() {
   return <div className={styles.vignette} />;
 }
+
+const DECORATIVE_MINIMUM_OPACITY = 0.18;

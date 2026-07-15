@@ -11,6 +11,7 @@ export const CFG = {
   },
   gol: {
     opacity: 0.44,
+    scrollEndOpacity: 0.54,
     generationFadeMs: 560,
     generationWaitMs: 280,
   },

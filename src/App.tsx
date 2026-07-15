@@ -95,7 +95,7 @@ export default function App() {
       style={{
         position: 'relative',
         minHeight: '100vh',
-        background: 'radial-gradient(125% 95% at 76% -6%, #15181e 0%, #0a0b0d 58%)',
+        background: '#0a0b0d',
         fontFamily: FG,
       }}
     >

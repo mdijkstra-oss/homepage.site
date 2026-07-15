@@ -1,6 +1,6 @@
-import { Aurora, GameCanvases, Grid, Vignette } from './BackgroundLayers';
-import { GameOverlay } from './GameOverlay';
 import type { GameStatus } from '../../engine/types';
+import { DecorativeBackdrop, GameCanvases, Grid, Vignette } from './BackgroundLayers';
+import { GameOverlay } from './GameOverlay';
 
 interface BackgroundProps {
   gameStatus: GameStatus;
@@ -11,9 +11,9 @@ interface BackgroundProps {
 export default function Background({ gameStatus, onRestartGame, onQuitGame }: BackgroundProps) {
   return (
     <>
+      <DecorativeBackdrop />
       <GameCanvases />
       <GameOverlay gameStatus={gameStatus} onRestartGame={onRestartGame} onQuitGame={onQuitGame} />
-      <Aurora />
       <Grid />
       <Vignette />
     </>
