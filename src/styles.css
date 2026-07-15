@@ -92,5 +92,6 @@ a { color: #9fb0c2; }
 .pill:hover { border-color: var(--pill-hover-border, rgba(255,255,255,0.16)); }
 
 /* hire button: swap the resting/available note for a stock one on hover */
+.note-b { transform: translateY(100%); opacity: 0; }
 .hire-wrap:hover .note-a { transform: translateY(-100%); opacity: 0; }
 .hire-wrap:hover .note-b { transform: translateY(0); opacity: 1; }

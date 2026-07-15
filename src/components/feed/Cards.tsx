@@ -47,7 +47,7 @@ export function ProfileCard({ p }: { p: ProfilePayload }) {
           <WipeButton href={mailto} label={p.cta} background="#fff" color="#0a0c14" fillBg="#567cff" fillColor="#fff" />
           <span style={{ position: 'relative', display: 'inline-block', height: 14, lineHeight: '14px', overflow: 'hidden', fontFamily: MONO, fontSize: 11 }}>
             <span className="note-a" style={{ display: 'block', color: '#6f7f95', transition: noteFlip }}>{p.note}</span>
-            <span className="note-b" style={{ display: 'block', position: 'absolute', top: 0, left: 0, whiteSpace: 'nowrap', color: '#8fb0ff', transform: 'translateY(100%)', opacity: 0, transition: noteFlip }}>1 of 1 available</span>
+            <span className="note-b" style={{ display: 'block', position: 'absolute', top: 0, left: 0, whiteSpace: 'nowrap', color: '#8fb0ff', transition: noteFlip }}>1 of 1 available</span>
           </span>
         </div>
       </Card>
