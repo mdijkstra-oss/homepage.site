@@ -2,7 +2,9 @@
 // LLM as prior conversation context. Generic on purpose: it walks whatever
 // shape a card payload has, so new card types need no changes here.
 
-function flatten(value, depth = 0) {
+import type { Block } from '../types/blocks';
+
+function flatten(value: unknown, depth = 0): string {
   if (value == null) return '';
   if (typeof value === 'string' || typeof value === 'number') return String(value);
   if (Array.isArray(value)) {
@@ -25,7 +27,9 @@ function flatten(value, depth = 0) {
 }
 
 // A single preloaded block -> the assistant-turn text that represents it.
-export function blockToText(block) {
-  const body = flatten(block.payload ?? block.text ?? '');
+export function blockToText(block: Block): string {
+  const payload = 'payload' in block ? block.payload : undefined;
+  const text = 'text' in block ? block.text : undefined;
+  const body = flatten(payload ?? text ?? '');
   return `[${block.type}]\n${body}`;
 }

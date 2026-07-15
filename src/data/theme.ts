@@ -1,28 +1,36 @@
+import type { PromptPill } from '../types/ui';
+
 // Animation / game tuning — the design's shipped tweak values. Passed to the
 // engine as authoritative defaults (edit here to re-tune the whole site).
 export const CFG = {
-  animStart: 0.74,   // reveal trigger line (× viewport height)
-  animDur: 550,      // reveal duration (ms)
-  animRise: 0,       // upward drift on reveal (px)
-  animDrift: 0,      // lateral drift on reveal (px)
-  animTilt: 0,       // depth tilt on reveal (deg)
-  animScale: 0.94,   // starting scale on reveal
-  animBlur: 3,       // starting blur on reveal (px)
-  flyDur: 1050,      // konami / break fly-away duration (ms)
-  eatParticles: 25,  // sparks per snake pickup
-  eatPower: 0.5,     // pickup spark speed
-  snakeBase: 150,    // snake step interval at start (ms)
-  snakeMin: 60,      // fastest snake step interval (ms)
-  snakeRamp: 2,      // ms shaved off the interval per point
-  snakeGap: 6,       // px gap between snake cell and grid cell
-  golOpacity: 0.44,  // Game-of-Life background opacity
-  golFade: 560,      // GoL cell fade duration (ms)
-  golWait: 280,      // GoL pause between generations (ms)
+  foreground: {
+    animStart: 0.74,  // reveal trigger line (× viewport height)
+    animDur: 550,     // reveal duration (ms)
+    animRise: 0,      // upward drift on reveal (px)
+    animDrift: 0,     // lateral drift on reveal (px)
+    animTilt: 0,      // depth tilt on reveal (deg)
+    animScale: 0.94,  // starting scale on reveal
+    animBlur: 3,      // starting blur on reveal (px)
+    flyDur: 1050,     // konami / break fly-away duration (ms)
+  },
+  gol: {
+    golOpacity: 0.44, // Game-of-Life background opacity
+    golFade: 560,     // GoL cell fade duration (ms)
+    golWait: 280,     // GoL pause between generations (ms)
+  },
+  snake: {
+    snakeBase: 150,    // snake step interval at start (ms)
+    snakeMin: 60,      // fastest snake step interval (ms)
+    snakeRamp: 2,      // ms shaved off the interval per point
+    snakeGap: 6,       // px gap between snake cell and grid cell
+    eatParticles: 25,  // sparks per snake pickup
+    eatPower: 0.5,     // pickup spark speed
+  },
 };
 
 // Chat pills — icon/colour mirrors the badge of the card each one scrolls to.
 // `type` is the block type jumpToType() lands on.
-export const PILLS = [
+export const PILLS: PromptPill[] = [
   { type: 'profile',   icon: "●", label: "Profile",    iconColor: "#7bf5b0", hoverBorder: "rgba(120,255,180,0.55)", hoverBg: "linear-gradient(180deg, rgba(30,74,54,0.95), rgba(19,52,38,0.92))", hoverColor: "#c4f7da" },
   { type: 'role',      icon: "✚", label: "Experience", iconColor: "#b48cff", hoverBorder: "rgba(190,150,255,0.55)", hoverBg: "linear-gradient(180deg, rgba(64,40,110,0.95), rgba(44,28,78,0.92))", hoverColor: "#e2d4ff" },
   { type: 'reviews',   icon: "★", label: "Reviews",    iconColor: "#78b4ff", hoverBorder: "rgba(120,180,255,0.55)", hoverBg: "linear-gradient(180deg, rgba(10,66,124,0.96), rgba(8,46,90,0.92))", hoverColor: "#cfe3ff" },

@@ -1,7 +1,8 @@
 /* ============================================================
-   Global resets, fonts, keyframes and the handful of :hover
-   states the engine doesn't drive imperatively.
-   (Shine, ink-wipe and pill hovers are handled in engine.js.)
+   Global resets, fonts, keyframes and :hover states.
+   Ink-wipe, pill and row-shine hovers are plain CSS/component
+   state now — only the GoL/Snake/particle engine still touches
+   the DOM imperatively.
    ============================================================ */
 * { box-sizing: border-box; }
 html, body { margin: 0; background: #0a0b0d; }
@@ -72,3 +73,24 @@ a { color: #9fb0c2; }
 /* hide scrollbar on the chip rail */
 .chiprail { scrollbar-width: none; }
 .chiprail::-webkit-scrollbar { display: none; }
+
+/* ink-wipe: a colored fill diagonally wipes in over a button on hover.
+   Per-instance color/label content lives in the fill's own children. */
+.wipe-btn { position: relative; overflow: hidden; }
+.wipe-fill {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  clip-path: polygon(-40% 0%, -20% 0%, -40% 100%, -60% 100%);
+  transition: clip-path .38s cubic-bezier(.4,0,.2,1);
+}
+.wipe-btn:hover .wipe-fill {
+  clip-path: polygon(-40% 0%, 140% 0%, 120% 100%, -60% 100%);
+}
+
+/* pill border color on hover, supplied per-pill via --pill-hover-border */
+.pill { transition: border-color .18s ease; }
+.pill:hover { border-color: var(--pill-hover-border, rgba(255,255,255,0.16)); }
+
+/* hire button: swap the resting/available note for a stock one on hover */
+.hire-wrap:hover .note-a { transform: translateY(-100%); opacity: 0; }
+.hire-wrap:hover .note-b { transform: translateY(0); opacity: 1; }

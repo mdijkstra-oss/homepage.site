@@ -1,84 +1,26 @@
-import React, { useLayoutEffect, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { FG, MONO, Card, Row, Badge, TechTag, WipeButton } from './ui.js';
-
-// Shown in an assistant bubble until the first token streams in. One is picked
-// at random per reply, so successive answers feel a little different.
-const THINKING = [
-  'Thinking', 'Pondering', 'Mulling it over', 'Reflecting', 'Considering',
-  'Gathering thoughts', 'Digging in', 'Working it out', 'Piecing it together', 'One sec',
-];
-const pickThinking = () => THINKING[Math.floor(Math.random() * THINKING.length)];
-
-// `live` bubbles are appended after the engine mounted. `register` hands their
-// DOM node to the engine (useLayoutEffect: before paint, so no flash) so they
-// reveal, shine and fly away exactly like the preloaded blocks. For live
-// bubbles the engine owns opacity/transform, so those are left out of the JSX
-// style (otherwise React would fight the engine on every stream re-render).
-function useEngineBubble(live, register) {
-  const ref = useRef(null);
-  useLayoutEffect(() => {
-    if (!live || !register) return;
-    const el = ref.current;
-    register.add(el);
-    return () => register.remove(el);
-  }, [live, register]);
-  return ref;
-}
-
-/* ---------- chat bubbles ---------- */
-export function UserBubble({ text, live, register }) {
-  const ref = useEngineBubble(live, register);
-  return (
-    <Row end>
-      <div
-        ref={ref}
-        data-bubble="" data-shinecard=""
-        style={{
-          position: 'relative', maxWidth: '64%', opacity: live ? undefined : 0,
-          background: 'linear-gradient(140deg, rgba(86,124,255,0.3), rgba(86,124,255,0.12)), linear-gradient(rgba(10,16,34,0.4), rgba(10,16,34,0.4))',
-          border: '1px solid rgba(140,170,255,0.45)', borderRadius: '16px 16px 6px 16px',
-          boxShadow: '0 8px 22px rgba(20,40,120,0.3)', padding: '13px 17px', color: '#eaf0ff', fontSize: 14, lineHeight: 1.55,
-        }}
-      >
-        <div data-shinefill="" style={{ position: 'absolute', inset: 0, borderRadius: '16px 16px 6px 16px', pointerEvents: 'none', backgroundImage: 'none' }} />
-        {text}
-      </div>
-    </Row>
-  );
-}
-
-export function AssistantBubble({ text, live, register }) {
-  const ref = useEngineBubble(live, register);
-  const wordRef = useRef(null);
-  if (wordRef.current === null) wordRef.current = pickThinking();
-  return (
-    <Row>
-      <div
-        ref={ref}
-        data-bubble="" data-shinecard=""
-        style={{
-          position: 'relative', maxWidth: '74%', opacity: live ? undefined : 0,
-          background: 'linear-gradient(140deg, rgba(255,255,255,0.085), rgba(255,255,255,0.03)), linear-gradient(rgba(12,14,19,0.5), rgba(12,14,19,0.5))',
-          border: '1px solid rgba(255,255,255,0.12)', borderRadius: '16px 16px 16px 6px',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.35)', padding: '14px 17px', color: '#d2dae6', fontSize: 14, lineHeight: 1.62,
-        }}
-      >
-        <div data-shinefill="" style={{ position: 'absolute', inset: 0, borderRadius: '16px 16px 16px 6px', pointerEvents: 'none', backgroundImage: 'none' }} />
-        {text
-          ? <div className="md"><ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown></div>
-          : <span style={{ color: '#8fa3bd', fontFamily: MONO, fontSize: 13, animation: 'blink 1.3s steps(1) infinite' }}>{wordRef.current}…</span>}
-      </div>
-    </Row>
-  );
-}
+import { Row } from '../primitives/Row';
+import { FG, MONO } from '../primitives/theme';
+import { shineOnLeave, shineOnMove } from '../effects/shine';
+import { assertNever } from '../../lib/assertNever';
+import { Badge } from './Badge';
+import { Card } from './Card';
+import { TechTag } from './TechTag';
+import { WipeButton } from './WipeButton';
+import type {
+  CardBlock,
+  ProfilePayload,
+  RolePayload,
+  ReviewsPayload,
+  ApproachPayload,
+  NotePayload,
+  EducationPayload,
+  ExperiencePayload,
+  AlsoPayload,
+} from '../../types/blocks';
 
 /* ---------- profile ---------- */
-export function ProfileCard({ p }) {
-  const mailto = () => {
-    window.location.href = `mailto:${p.email}?subject=${encodeURIComponent(p.emailSubject)}`;
-  };
+export function ProfileCard({ p }: { p: ProfilePayload }) {
+  const mailto = `mailto:${p.email}?subject=${encodeURIComponent(p.emailSubject)}`;
   const noteFlip = 'transform .38s cubic-bezier(.4,0,.2,1), opacity .3s ease';
   return (
     <Row>
@@ -101,21 +43,11 @@ export function ProfileCard({ p }) {
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 13, marginTop: 20, flexWrap: 'wrap' }}>
-          <button
-            data-hire-btn="" onClick={mailto}
-            style={{ cursor: 'pointer', position: 'relative', overflow: 'hidden', background: '#fff', color: '#0a0c14', border: 'none', borderRadius: 12, padding: '11px 20px', fontFamily: FG, fontWeight: 700, fontSize: 14 }}
-          >
-            <span style={{ display: 'block', whiteSpace: 'nowrap' }}>{p.cta}</span>
-            <span data-hire-fill="" style={{
-              position: 'absolute', inset: 0, background: '#567cff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', whiteSpace: 'nowrap', fontFamily: FG, fontWeight: 700, fontSize: 14,
-              clipPath: 'polygon(-40% 0%, -20% 0%, -40% 100%, -60% 100%)', transition: 'clip-path .38s cubic-bezier(.4,0,.2,1)', pointerEvents: 'none',
-            }}>{p.cta}</span>
-          </button>
-          <span data-hire-note="" style={{ position: 'relative', display: 'inline-block', height: 14, lineHeight: '14px', overflow: 'hidden', fontFamily: MONO, fontSize: 11 }}>
-            <span data-note-a="" style={{ display: 'block', color: '#6f7f95', transition: noteFlip }}>{p.note}</span>
-            <span data-note-b="" style={{ display: 'block', position: 'absolute', top: 0, left: 0, whiteSpace: 'nowrap', color: '#8fb0ff', transform: 'translateY(100%)', opacity: 0, transition: noteFlip }}>1 of 1 available</span>
+        <div className="hire-wrap" style={{ display: 'flex', alignItems: 'center', gap: 13, marginTop: 20, flexWrap: 'wrap' }}>
+          <WipeButton href={mailto} label={p.cta} background="#fff" color="#0a0c14" fillBg="#567cff" fillColor="#fff" />
+          <span style={{ position: 'relative', display: 'inline-block', height: 14, lineHeight: '14px', overflow: 'hidden', fontFamily: MONO, fontSize: 11 }}>
+            <span className="note-a" style={{ display: 'block', color: '#6f7f95', transition: noteFlip }}>{p.note}</span>
+            <span className="note-b" style={{ display: 'block', position: 'absolute', top: 0, left: 0, whiteSpace: 'nowrap', color: '#8fb0ff', transform: 'translateY(100%)', opacity: 0, transition: noteFlip }}>1 of 1 available</span>
           </span>
         </div>
       </Card>
@@ -124,7 +56,7 @@ export function ProfileCard({ p }) {
 }
 
 /* ---------- role ---------- */
-export function RoleCard({ p }) {
+export function RoleCard({ p }: { p: RolePayload }) {
   return (
     <Row>
       <Card shine style={{ padding: 28 }}>
@@ -141,7 +73,7 @@ export function RoleCard({ p }) {
         <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 13 }}>
           {p.paras.map((para, i) => (
             <p key={i} style={{ margin: 0, fontSize: 14, lineHeight: 1.68, color: '#c4cee0', textWrap: 'pretty' }}>
-              {para.url
+              {'url' in para
                 ? <>{para.pre}<a className="inlink-text" href={para.url} target="_blank" rel="noopener">{para.linkText}</a>{para.post}</>
                 : para.text}
             </p>
@@ -165,7 +97,12 @@ export function RoleCard({ p }) {
             {p.tech.map((t) => <TechTag key={t}>{t}</TechTag>)}
           </div>
         )}
-        {p.href && <WipeButton href={p.href} label={p.cta} note={p.ctaNote} />}
+        {p.href && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 13, marginTop: 20, flexWrap: 'wrap' }}>
+            <WipeButton href={p.href} label={p.cta ?? ''} target="_blank" rel="noopener" />
+            {p.ctaNote && <span style={{ fontFamily: MONO, fontSize: 11, color: '#6f7f95' }}>{p.ctaNote}</span>}
+          </div>
+        )}
         {p.footnotes && (
           <div style={{ marginTop: 18, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
             {p.footnotes.map((fn) => (
@@ -182,7 +119,7 @@ export function RoleCard({ p }) {
 }
 
 /* ---------- reviews ---------- */
-export function ReviewsCard({ p }) {
+export function ReviewsCard({ p }: { p: ReviewsPayload }) {
   return (
     <Row>
       <Card>
@@ -191,7 +128,7 @@ export function ReviewsCard({ p }) {
         <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.16em', color: '#8fa0b8', marginTop: 6 }}>{p.subtitle}</div>
         <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column' }}>
           {p.items.map((rv, i) => (
-            <div key={i} data-shinerow="" style={{ position: 'relative', padding: '16px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
+            <div key={i} onPointerMove={(e) => shineOnMove(e.currentTarget, e)} onPointerLeave={(e) => shineOnLeave(e.currentTarget)} style={{ position: 'relative', padding: '16px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <img src={rv.photo} alt={rv.name} style={{ width: 68, height: 68, flex: '0 0 auto', borderRadius: '50%', objectFit: 'cover' }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -219,7 +156,7 @@ export function ReviewsCard({ p }) {
 }
 
 /* ---------- approach ---------- */
-export function ApproachCard({ p }) {
+export function ApproachCard({ p }: { p: ApproachPayload }) {
   return (
     <Row>
       <Card>
@@ -228,7 +165,7 @@ export function ApproachCard({ p }) {
         <p style={{ margin: '10px 0 0', fontSize: 14.5, lineHeight: 1.66, color: '#c7d1df' }}>{p.intro}</p>
         <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column' }}>
           {p.items.map((ap) => (
-            <div key={ap.idx} data-shinerow="" style={{ position: 'relative', padding: '16px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
+            <div key={ap.idx} onPointerMove={(e) => shineOnMove(e.currentTarget, e)} onPointerLeave={(e) => shineOnLeave(e.currentTarget)} style={{ position: 'relative', padding: '16px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
                 <span style={{ fontFamily: MONO, fontSize: 11, color: '#ff9ecb', flex: '0 0 auto' }}>{ap.idx}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -245,7 +182,7 @@ export function ApproachCard({ p }) {
 }
 
 /* ---------- note ---------- */
-export function NoteCard({ p }) {
+export function NoteCard({ p }: { p: NotePayload }) {
   return (
     <Row>
       <Card shine style={{ padding: '28px 30px', background: 'linear-gradient(140deg, rgba(255,255,255,0.11), rgba(255,255,255,0.03)), linear-gradient(rgba(12,14,19,0.5), rgba(12,14,19,0.5))', border: '1px solid rgba(255,255,255,0.16)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), 0 18px 50px rgba(0,0,0,0.4)' }}>
@@ -273,7 +210,7 @@ export function NoteCard({ p }) {
 }
 
 /* ---------- education ---------- */
-export function EducationCard({ p }) {
+export function EducationCard({ p }: { p: EducationPayload }) {
   return (
     <Row>
       <Card>
@@ -282,7 +219,7 @@ export function EducationCard({ p }) {
         <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.16em', color: '#8fa0b8', marginTop: 6 }}>{p.subtitle}</div>
         <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column' }}>
           {p.items.map((row, i) => (
-            <div key={i} data-shinerow="" style={{ position: 'relative', display: 'flex', gap: 15, alignItems: 'center', padding: '14px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
+            <div key={i} onPointerMove={(e) => shineOnMove(e.currentTarget, e)} onPointerLeave={(e) => shineOnLeave(e.currentTarget)} style={{ position: 'relative', display: 'flex', gap: 15, alignItems: 'center', padding: '14px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
               {row.img
                 ? <a href={row.url} target="_blank" rel="noopener" style={{ flex: '0 0 auto', display: 'inline-flex', borderRadius: 11 }}>
                     <img src={row.img} alt={row.degree} style={{ width: 46, height: 46, flex: '0 0 auto', borderRadius: 11, objectFit: 'cover', border: '1px solid rgba(255,255,255,0.14)' }} />
@@ -302,7 +239,7 @@ export function EducationCard({ p }) {
 }
 
 /* ---------- experience (video) ---------- */
-export function ExperienceCard({ p }) {
+export function ExperienceCard({ p }: { p: ExperiencePayload }) {
   return (
     <Row>
       <Card shine>
@@ -326,7 +263,7 @@ export function ExperienceCard({ p }) {
 }
 
 /* ---------- also built ---------- */
-export function AlsoCard({ p }) {
+export function AlsoCard({ p }: { p: AlsoPayload }) {
   return (
     <Row>
       <Card>
@@ -335,7 +272,7 @@ export function AlsoCard({ p }) {
         <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.16em', color: '#8fa0b8', marginTop: 6 }}>{p.subtitle}</div>
         <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column' }}>
           {p.items.map((it, i) => (
-            <div key={i} data-shinerow="" style={{ position: 'relative', display: 'flex', alignItems: 'baseline', gap: 14, padding: '13px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
+            <div key={i} onPointerMove={(e) => shineOnMove(e.currentTarget, e)} onPointerLeave={(e) => shineOnLeave(e.currentTarget)} style={{ position: 'relative', display: 'flex', alignItems: 'baseline', gap: 14, padding: '13px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
               <span style={{ fontFamily: MONO, fontSize: 11, color: '#6f7f95', flex: '0 0 auto', width: 22 }}>{it.idx}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 15, fontWeight: 600, color: '#eef2f8' }}>{it.name} <span style={{ fontWeight: 400, color: '#9aa9bd' }}>· {it.desc}</span></div>
@@ -350,20 +287,16 @@ export function AlsoCard({ p }) {
 }
 
 /* ---------- dispatcher ---------- */
-const MAP = {
-  user: (b, live, register) => <UserBubble text={b.text} live={live} register={register} />,
-  assistant: (b, live, register) => <AssistantBubble text={b.text} live={live} register={register} />,
-  profile: (b) => <ProfileCard p={b.payload} />,
-  role: (b) => <RoleCard p={b.payload} />,
-  reviews: (b) => <ReviewsCard p={b.payload} />,
-  approach: (b) => <ApproachCard p={b.payload} />,
-  note: (b) => <NoteCard p={b.payload} />,
-  education: (b) => <EducationCard p={b.payload} />,
-  experience: (b) => <ExperienceCard p={b.payload} />,
-  also: (b) => <AlsoCard p={b.payload} />,
-};
-
-export function Block({ block, live, register }) {
-  const render = MAP[block.type];
-  return render ? render(block, live, register) : null;
+export function Block({ block }: { block: CardBlock }) {
+  switch (block.type) {
+    case 'profile':    return <ProfileCard p={block.payload} />;
+    case 'role':       return <RoleCard p={block.payload} />;
+    case 'reviews':    return <ReviewsCard p={block.payload} />;
+    case 'approach':   return <ApproachCard p={block.payload} />;
+    case 'note':       return <NoteCard p={block.payload} />;
+    case 'education':  return <EducationCard p={block.payload} />;
+    case 'experience': return <ExperienceCard p={block.payload} />;
+    case 'also':       return <AlsoCard p={block.payload} />;
+    default:           return assertNever(block);
+  }
 }

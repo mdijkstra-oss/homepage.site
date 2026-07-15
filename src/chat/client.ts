@@ -2,9 +2,11 @@
 // streams the reply. The backend emits Server-Sent Events; we care about text
 // deltas and the terminal completed/failed events.
 
+import type { Message, StreamHandlers } from '../types/chat';
+
 const AGENT_URL = import.meta.env.VITE_AGENT_URL || 'http://localhost:8081/cv';
 
-export async function streamChat(messages, { onDelta, signal } = {}) {
+export async function streamChat(messages: Message[], { onDelta, signal }: StreamHandlers = {}) {
   const res = await fetch(AGENT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

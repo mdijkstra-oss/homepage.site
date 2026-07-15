@@ -1,0 +1,1 @@
+/Users/matthijn/Documents/dev.nosync/hermes/CLAUDE.md

@@ -1,9 +1,10 @@
+import type { Block } from '../types/blocks';
+
 // ============================================================
 //  CONTENT — single ordered block list (source of truth for
 //  both the React render and the engine's jumpToType ordering)
-//  Each block: { type, text? , payload? }
 // ============================================================
-export const BLOCKS = [
+export const BLOCKS: Block[] = [
   { type: 'user', text: "Who is Matthijn, in a nutshell?" },
 
   { type: 'profile', payload: {
