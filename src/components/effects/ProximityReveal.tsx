@@ -10,8 +10,6 @@ interface ProximityRevealProps {
   children: ReactElement<{ disabled?: boolean; tabIndex?: number }>;
 }
 
-// Slides its children up from behind whatever they sit in front of as the
-// mouse nears `target`, easing toward the target proximity on each move.
 export default function ProximityReveal({ target, near = 40, far = 150, disabled, children }: ProximityRevealProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const smoothedRef = useRef(0);

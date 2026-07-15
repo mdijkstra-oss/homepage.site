@@ -38,7 +38,7 @@ export interface RolePayload {
   initials?: string;
   name: string;
   meta: string;
-  paras: RolePara[];
+  paragraphs: RolePara[];
   stats?: RoleStat[];
   tech?: string[];
   cta?: string;
@@ -78,7 +78,7 @@ export interface NotePayload {
   badge?: string;
   eyebrow: string;
   title: string;
-  paras: string[];
+  paragraphs: string[];
   loop?: string[];
 }
 

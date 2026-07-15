@@ -1,7 +1,7 @@
-import { useRef, useState, type FormEvent, type KeyboardEvent, type RefObject } from 'react';
+import { useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent, type RefObject } from 'react';
 import { MONO } from '../primitives/theme';
 
-const INPUT_MAX_H = 132; // ~6 lines before the textarea scrolls
+const INPUT_MAX_HEIGHT = 132;
 
 interface MessageInputProps {
   onSend: (text: string) => void;
@@ -13,11 +13,10 @@ export default function MessageInput({ onSend, busy, sendButtonRef }: MessageInp
   const [value, setValue] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Grow the textarea to fit its content, up to INPUT_MAX_H then scroll.
-  const autoGrow = (el: HTMLTextAreaElement | null) => {
+  const resizeInput = (el: HTMLTextAreaElement | null) => {
     if (!el) return;
     el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, INPUT_MAX_H) + 'px';
+    el.style.height = Math.min(el.scrollHeight, INPUT_MAX_HEIGHT) + 'px';
   };
 
   const submit = (e?: FormEvent) => {
@@ -29,8 +28,12 @@ export default function MessageInput({ onSend, busy, sendButtonRef }: MessageInp
     if (inputRef.current) inputRef.current.style.height = 'auto';
   };
 
-  // Enter sends, Shift+Enter inserts a newline.
-  const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(event.target.value);
+    resizeInput(event.target);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       submit();
@@ -49,15 +52,15 @@ export default function MessageInput({ onSend, busy, sendButtonRef }: MessageInp
         ref={inputRef}
         rows={1}
         value={value}
-        onChange={(e) => { setValue(e.target.value); autoGrow(e.target); }}
-        onKeyDown={onKeyDown}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
         placeholder="Ask anything about Matthijn"
         disabled={busy}
         className="composer-input"
         style={{
           flex: 1, minWidth: 0, background: 'transparent', border: 'none', outline: 'none', resize: 'none',
           color: '#eaf0ff', fontFamily: MONO, fontSize: 13.5, lineHeight: 1.5,
-          maxHeight: INPUT_MAX_H, overflowY: 'auto', padding: 0, margin: 0, display: 'block',
+          maxHeight: INPUT_MAX_HEIGHT, overflowY: 'auto', padding: 0, margin: 0, display: 'block',
         }}
       />
       <button ref={sendButtonRef} type="submit" disabled={busy || !value.trim()} style={{

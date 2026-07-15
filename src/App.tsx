@@ -10,7 +10,7 @@ import { Block } from './components/feed/Cards';
 import ChatBubble from './components/chat/ChatBubble';
 import { buildMessages } from './chat/history';
 import { streamChat } from './chat/client';
-import type { LiveTurn } from './types/chat';
+import type { LiveTurn } from './chat/messages';
 import type { BlockType } from './types/blocks';
 import type { BreakPillStatus, EngineHandle, GameStatus } from './types/engine';
 
@@ -51,8 +51,6 @@ export default function App() {
   const onRestartGame = useCallback(() => engineRef.current?.restartGame(), []);
   const onQuitGame = useCallback(() => engineRef.current?.quitGame(), []);
 
-  // Lets live bubbles hand their DOM node to the engine so they behave like the
-  // preloaded blocks (reveal, shine, konami/game fly-away). Stable identity.
   const register = useMemo(() => ({
     add: (el: HTMLElement | null) => engineRef.current?.addBubble(el),
     remove: (el: HTMLElement | null) => engineRef.current?.removeBubble(el),
@@ -71,8 +69,6 @@ export default function App() {
       { id: asstId, role: 'assistant', text: '' },
     ]);
 
-    // `live` (closure) holds the turns completed before this one — exactly the
-    // history to send alongside the preloaded feed and the new question.
     const messages = buildMessages(live, q);
     try {
       await streamChat(messages, {

@@ -1,5 +1,5 @@
 import { useRef, type CSSProperties, type PointerEvent, type ReactNode } from 'react';
-import { shineOnLeave, shineOnMove } from '../effects/shine';
+import { clearPointerSpotlight, paintPointerSpotlight } from '../effects/pointerSpotlight';
 
 export const cardBase: CSSProperties = {
   position: 'relative',
@@ -14,24 +14,31 @@ export const cardBase: CSSProperties = {
 };
 
 interface CardProps {
-  shine?: boolean;
   radius?: number;
   style?: CSSProperties;
   children: ReactNode;
 }
 
-export function Card({ shine, radius = 22, style, children }: CardProps) {
+export function Card({ radius = 22, style, children }: CardProps) {
+  return <CardFrame radius={radius} style={style}>{children}</CardFrame>;
+}
+
+export function InteractiveCard({ radius = 22, style, children }: CardProps) {
   const fillRef = useRef<HTMLDivElement>(null);
   const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (fillRef.current) shineOnMove(fillRef.current, e);
+    if (fillRef.current) paintPointerSpotlight(fillRef.current, e);
   };
   const handlePointerLeave = () => {
-    if (fillRef.current) shineOnLeave(fillRef.current);
+    if (fillRef.current) clearPointerSpotlight(fillRef.current);
   };
   return (
-    <div data-bubble="" style={{ ...cardBase, borderRadius: radius, ...style }} onPointerMove={shine ? handlePointerMove : undefined} onPointerLeave={shine ? handlePointerLeave : undefined}>
-      {shine && <div ref={fillRef} style={{ position: 'absolute', inset: 0, borderRadius: radius, pointerEvents: 'none', backgroundImage: 'none' }} />}
+    <CardFrame radius={radius} style={style} onPointerMove={handlePointerMove} onPointerLeave={handlePointerLeave}>
+      <div ref={fillRef} style={{ position: 'absolute', inset: 0, borderRadius: radius, pointerEvents: 'none', backgroundImage: 'none' }} />
       {children}
-    </div>
+    </CardFrame>
   );
+}
+
+function CardFrame({ radius, style, children, onPointerMove, onPointerLeave }: CardProps & { onPointerMove?: (event: PointerEvent<HTMLDivElement>) => void; onPointerLeave?: () => void }) {
+  return <div data-bubble="" style={{ ...cardBase, borderRadius: radius, ...style }} onPointerMove={onPointerMove} onPointerLeave={onPointerLeave}>{children}</div>;
 }

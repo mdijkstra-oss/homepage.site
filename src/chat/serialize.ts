@@ -1,7 +1,3 @@
-// Turn a content block's payload into readable text so it can be sent to the
-// LLM as prior conversation context. Generic on purpose: it walks whatever
-// shape a card payload has, so new card types need no changes here.
-
 import type { Block } from '../types/blocks';
 
 function flatten(value: unknown, depth = 0): string {
@@ -9,11 +5,11 @@ function flatten(value: unknown, depth = 0): string {
   if (typeof value === 'string' || typeof value === 'number') return String(value);
   if (Array.isArray(value)) {
     return value
-      .map((v) => flatten(v, depth))
+      .map(flatten)
       .filter(Boolean)
       .join('\n');
   }
-  if (typeof value === 'object') {
+  if (isRecord(value)) {
     return Object.entries(value)
       .map(([k, v]) => {
         const inner = flatten(v, depth + 1);
@@ -26,10 +22,13 @@ function flatten(value: unknown, depth = 0): string {
   return '';
 }
 
-// A single preloaded block -> the assistant-turn text that represents it.
-export function blockToText(block: Block): string {
+export function blockToConversationText(block: Block): string {
   const payload = 'payload' in block ? block.payload : undefined;
   const text = 'text' in block ? block.text : undefined;
   const body = flatten(payload ?? text ?? '');
   return `[${block.type}]\n${body}`;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }

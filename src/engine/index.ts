@@ -4,7 +4,6 @@ import { readConfig, type EngineConfig, type EngineProps } from './config';
 import { clamp } from '../lib/clamp';
 import { createForeground } from './foreground/foreground';
 import { smoothstep } from '../lib/easing';
-import { installKonami } from './konami';
 import { createBurstState, spawnBurst, sizeBurstCanvas, tickBurst } from './fx/burst';
 import { computeColors, nextStaleCount, seedLife, shouldReseed, spawnFillers, spawnGliders, stepLife, type GolDims } from './gol/life';
 import { paintLife, sizeLifeCanvas } from './gol/render';
@@ -391,7 +390,6 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     foreground = createForeground(rootEl, cfg.foreground);
     initGol(rootEl.querySelector('[data-gol]'));
     initInteractive(rootEl);
-    disposers.push(installKonami(() => foreground?.toggleFly()));
     window.addEventListener('resize', onResize);
     disposers.push(() => window.removeEventListener('resize', onResize));
     raf = requestAnimationFrame(loop);

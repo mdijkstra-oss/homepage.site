@@ -1,10 +1,10 @@
 import { Row } from '../primitives/Row';
 import { FG, MONO } from '../primitives/theme';
-import { shineOnLeave, shineOnMove } from '../effects/shine';
+import { clearPointerSpotlight, paintPointerSpotlight } from '../effects/pointerSpotlight';
 import { assertNever } from '../../lib/assertNever';
 import { Badge } from './Badge';
-import { Card } from './Card';
-import { TechTag } from './TechTag';
+import { Card, InteractiveCard } from './Card';
+import { Tag } from './TechTag';
 import { WipeButton } from './WipeButton';
 import type {
   CardBlock,
@@ -24,7 +24,7 @@ export function ProfileCard({ p }: { p: ProfilePayload }) {
   const noteFlip = 'transform .38s cubic-bezier(.4,0,.2,1), opacity .3s ease';
   return (
     <Row>
-      <Card shine>
+      <InteractiveCard>
         <Badge kind="profile">{p.badge}</Badge>
         <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start', flexWrap: 'wrap' }}>
           <div style={{
@@ -50,7 +50,7 @@ export function ProfileCard({ p }: { p: ProfilePayload }) {
             <span className="note-b" style={{ display: 'block', position: 'absolute', top: 0, left: 0, whiteSpace: 'nowrap', color: '#8fb0ff', transition: noteFlip }}>1 of 1 available</span>
           </span>
         </div>
-      </Card>
+      </InteractiveCard>
     </Row>
   );
 }
@@ -59,7 +59,7 @@ export function ProfileCard({ p }: { p: ProfilePayload }) {
 export function RoleCard({ p }: { p: RolePayload }) {
   return (
     <Row>
-      <Card shine style={{ padding: 28 }}>
+      <InteractiveCard style={{ padding: 28 }}>
         <Badge kind="role">{p.badge}</Badge>
         <div style={{ display: 'flex', gap: 18, alignItems: 'center' }}>
           {p.logo
@@ -71,7 +71,7 @@ export function RoleCard({ p }: { p: RolePayload }) {
           </div>
         </div>
         <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 13 }}>
-          {p.paras.map((para, i) => (
+          {p.paragraphs.map((para, i) => (
             <p key={i} style={{ margin: 0, fontSize: 14, lineHeight: 1.68, color: '#c4cee0', textWrap: 'pretty' }}>
               {'url' in para
                 ? <>{para.pre}<a className="inlink-text" href={para.url} target="_blank" rel="noopener">{para.linkText}</a>{para.post}</>
@@ -94,7 +94,7 @@ export function RoleCard({ p }: { p: RolePayload }) {
         )}
         {p.tech && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 18 }}>
-            {p.tech.map((t) => <TechTag key={t}>{t}</TechTag>)}
+            {p.tech.map((t) => <Tag key={t}>{t}</Tag>)}
           </div>
         )}
         {p.href && (
@@ -113,7 +113,7 @@ export function RoleCard({ p }: { p: RolePayload }) {
             ))}
           </div>
         )}
-      </Card>
+      </InteractiveCard>
     </Row>
   );
 }
@@ -128,7 +128,7 @@ export function ReviewsCard({ p }: { p: ReviewsPayload }) {
         <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.16em', color: '#8fa0b8', marginTop: 6 }}>{p.subtitle}</div>
         <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column' }}>
           {p.items.map((rv, i) => (
-            <div key={i} onPointerMove={(e) => shineOnMove(e.currentTarget, e)} onPointerLeave={(e) => shineOnLeave(e.currentTarget)} style={{ position: 'relative', padding: '16px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
+            <div key={i} onPointerMove={(event) => paintPointerSpotlight(event.currentTarget, event)} onPointerLeave={(event) => clearPointerSpotlight(event.currentTarget)} style={{ position: 'relative', padding: '16px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <img src={rv.photo} alt={rv.name} style={{ width: 68, height: 68, flex: '0 0 auto', borderRadius: '50%', objectFit: 'cover' }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -165,7 +165,7 @@ export function ApproachCard({ p }: { p: ApproachPayload }) {
         <p style={{ margin: '10px 0 0', fontSize: 14.5, lineHeight: 1.66, color: '#c7d1df' }}>{p.intro}</p>
         <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column' }}>
           {p.items.map((ap) => (
-            <div key={ap.idx} onPointerMove={(e) => shineOnMove(e.currentTarget, e)} onPointerLeave={(e) => shineOnLeave(e.currentTarget)} style={{ position: 'relative', padding: '16px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
+            <div key={ap.idx} onPointerMove={(event) => paintPointerSpotlight(event.currentTarget, event)} onPointerLeave={(event) => clearPointerSpotlight(event.currentTarget)} style={{ position: 'relative', padding: '16px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
                 <span style={{ fontFamily: MONO, fontSize: 11, color: '#ff9ecb', flex: '0 0 auto' }}>{ap.idx}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -185,12 +185,12 @@ export function ApproachCard({ p }: { p: ApproachPayload }) {
 export function NoteCard({ p }: { p: NotePayload }) {
   return (
     <Row>
-      <Card shine style={{ padding: '28px 30px', background: 'linear-gradient(140deg, rgba(255,255,255,0.11), rgba(255,255,255,0.03)), linear-gradient(rgba(12,14,19,0.5), rgba(12,14,19,0.5))', border: '1px solid rgba(255,255,255,0.16)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), 0 18px 50px rgba(0,0,0,0.4)' }}>
+      <InteractiveCard style={{ padding: '28px 30px', background: 'linear-gradient(140deg, rgba(255,255,255,0.11), rgba(255,255,255,0.03)), linear-gradient(rgba(12,14,19,0.5), rgba(12,14,19,0.5))', border: '1px solid rgba(255,255,255,0.16)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), 0 18px 50px rgba(0,0,0,0.4)' }}>
         {p.badge && <Badge kind="noteBlue">{p.badge}</Badge>}
         <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.18em', color: '#8fa0b8' }}>{p.eyebrow}</div>
         <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-.01em', color: '#f4f7fd', marginTop: 8 }}>{p.title}</div>
         <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {p.paras.map((para, i) => (
+          {p.paragraphs.map((para, i) => (
             <p key={i} style={{ margin: 0, fontSize: 14.5, lineHeight: 1.72, color: '#c4cee0', textWrap: 'pretty' }}>{para}</p>
           ))}
         </div>
@@ -204,7 +204,7 @@ export function NoteCard({ p }: { p: NotePayload }) {
             </div>
           </>
         )}
-      </Card>
+      </InteractiveCard>
     </Row>
   );
 }
@@ -219,7 +219,7 @@ export function EducationCard({ p }: { p: EducationPayload }) {
         <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.16em', color: '#8fa0b8', marginTop: 6 }}>{p.subtitle}</div>
         <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column' }}>
           {p.items.map((row, i) => (
-            <div key={i} onPointerMove={(e) => shineOnMove(e.currentTarget, e)} onPointerLeave={(e) => shineOnLeave(e.currentTarget)} style={{ position: 'relative', display: 'flex', gap: 15, alignItems: 'center', padding: '14px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
+            <div key={i} onPointerMove={(event) => paintPointerSpotlight(event.currentTarget, event)} onPointerLeave={(event) => clearPointerSpotlight(event.currentTarget)} style={{ position: 'relative', display: 'flex', gap: 15, alignItems: 'center', padding: '14px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
               {row.img
                 ? <a href={row.url} target="_blank" rel="noopener" style={{ flex: '0 0 auto', display: 'inline-flex', borderRadius: 11 }}>
                     <img src={row.img} alt={row.degree} style={{ width: 46, height: 46, flex: '0 0 auto', borderRadius: 11, objectFit: 'cover', border: '1px solid rgba(255,255,255,0.14)' }} />
@@ -242,7 +242,7 @@ export function EducationCard({ p }: { p: EducationPayload }) {
 export function ExperienceCard({ p }: { p: ExperiencePayload }) {
   return (
     <Row>
-      <Card shine>
+      <InteractiveCard>
         <Badge kind="experience">FREELANCE · PROJECT</Badge>
         <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', marginBottom: 18, borderRadius: 14, overflow: 'hidden', background: '#000', border: '1px solid rgba(255,255,255,0.1)' }}>
           <iframe src={p.video} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen title={p.name} />
@@ -254,10 +254,10 @@ export function ExperienceCard({ p }: { p: ExperiencePayload }) {
         <p style={{ margin: '11px 0 0', fontSize: 14, lineHeight: 1.62, color: '#c4cee0' }}>{p.blurb}</p>
         {p.tech && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
-            {p.tech.map((t) => <TechTag key={t}>{t}</TechTag>)}
+            {p.tech.map((t) => <Tag key={t}>{t}</Tag>)}
           </div>
         )}
-      </Card>
+      </InteractiveCard>
     </Row>
   );
 }
@@ -272,7 +272,7 @@ export function AlsoCard({ p }: { p: AlsoPayload }) {
         <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.16em', color: '#8fa0b8', marginTop: 6 }}>{p.subtitle}</div>
         <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column' }}>
           {p.items.map((it, i) => (
-            <div key={i} onPointerMove={(e) => shineOnMove(e.currentTarget, e)} onPointerLeave={(e) => shineOnLeave(e.currentTarget)} style={{ position: 'relative', display: 'flex', alignItems: 'baseline', gap: 14, padding: '13px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
+            <div key={i} onPointerMove={(event) => paintPointerSpotlight(event.currentTarget, event)} onPointerLeave={(event) => clearPointerSpotlight(event.currentTarget)} style={{ position: 'relative', display: 'flex', alignItems: 'baseline', gap: 14, padding: '13px 12px', margin: '0 -12px', borderRadius: 10, borderTop: '1px solid rgba(255,255,255,0.08)', transition: 'background-color .2s ease' }}>
               <span style={{ fontFamily: MONO, fontSize: 11, color: '#6f7f95', flex: '0 0 auto', width: 22 }}>{it.idx}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 15, fontWeight: 600, color: '#eef2f8' }}>{it.name} <span style={{ fontWeight: 400, color: '#9aa9bd' }}>· {it.desc}</span></div>

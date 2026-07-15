@@ -27,7 +27,7 @@ export const BLOCKS: Block[] = [
     initials: "",
     name: "PeerWell",
     meta: "2016–2022 · FIRST ENGINEER → ENGINEERING LEAD",
-    paras: [
+    paragraphs: [
       { text: "Joined PeerWell in 2016 as the first full-time engineer, building a digital therapeutics platform for surgical preparation and recovery. Healthcare software carries a higher bar. Patients rely on it for post-surgical guidance and clinicians build it into care pathways, so reliability and data accuracy matter more than in most consumer software." },
       { text: "Designed and built most of the initial platform, including the architecture the patent describes: the recommendation engine, the configurable scoring, and the patient data model behind it. As the team grew across the US and Europe, I took on more of the system's design and worked with the other engineering leads as it scaled. Also helped interview and vet engineers as we hired, which mattered for a team that was remote almost from the start." },
       { text: "Did the early machine learning work on the product, mainly the image and pose recognition system behind the movement assessment features, and kept improving those methods over time." },
@@ -55,7 +55,7 @@ export const BLOCKS: Block[] = [
     initials: "",
     name: "Bardavon Health Innovations",
     meta: "2022–2025 · LEAD ENGINEER, ACQUISITION INTEGRATION",
-    paras: [
+    paragraphs: [
       { text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. The platform moved onto Bardavon's infrastructure and its focus shifted from surgical patients to injured workers, launching in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches. My work spanned the codebase, the systems, and the team: merging engineering practices across two companies, documenting the architecture, and guiding Bardavon's engineers as they took ownership." },
       { text: "The premise that made PeerWell worth acquiring carried straight into its new use: give people recovering from injury the right information and guidance, and they get better faster at lower cost. Adapting the platform to deliver that for workers' compensation was the core of the work. That work wrapped in 2025. The measure of a good handover is that you can leave, and by then I could." },
     ],
@@ -97,7 +97,7 @@ export const BLOCKS: Block[] = [
     badge: "FREELANCE",
     eyebrow: "INDEPENDENT · 2007–2016",
     title: "Freelance",
-    paras: [
+    paragraphs: [
       "Spent close to nine years freelancing, alongside studying and later full-time work. Freelancing is mostly the same loop, repeated across very different clients: work out what someone actually needs from what they say they want, agree on what you'll deliver, and then build and ship it. Usually as the sole engineer, often working with designers and the client's own people. Doing that continuously for years is where I learned to work with clients rather than just for them.",
       "The work ran the full range. At one end, WordPress and marketing sites for local businesses, plus some design work. At the other, systems with real weight behind them: an online restaurant ordering and payments platform with orders printing straight to the counter, content pipelines chewing through large amounts of XML, and early 360° video for Mini's 50th anniversary that let people sit in the cars and walk through a museum.",
       "Across all of it, I owned the whole thing: the technical calls, the client relationship, and the unglamorous parts like scoping and quoting. That end-to-end ownership is what carried into being PeerWell's first engineer.",
@@ -126,7 +126,7 @@ export const BLOCKS: Block[] = [
   { type: 'note', payload: {
     eyebrow: "PHILOSOPHY",
     title: "Always moving",
-    paras: [
+    paragraphs: [
       "I've always thought software rewards curiosity. Languages evolve and frameworks come and go, and staying effective means adapting as the field moves. For me that's one of the best parts of the craft: every project is a chance to go deeper and work things out as they arrive.",
       "I started teaching myself to code long before it was a career, and the same instinct now shapes how I lead: go deep enough to genuinely understand a system, so the calls you make for a team are the right ones and the people around you learn from them.",
     ],
