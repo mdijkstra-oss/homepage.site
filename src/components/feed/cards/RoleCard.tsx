@@ -3,6 +3,7 @@ import { Row } from '../../primitives/Row';
 import { Badge } from '../Badge';
 import { InteractiveCard } from '../Card';
 import { WipeButton } from '../WipeButton';
+import layoutStyles from './CardLayout.module.css';
 import styles from './RoleCard.module.css';
 import { TagList } from './TagList';
 
@@ -55,7 +56,7 @@ export function RoleCard({ payload }: { payload: RolePayload }) {
         )}
         {payload.tech && <TagList tags={payload.tech} marginTop={18} />}
         {payload.href && (
-          <div className={styles.cta}>
+          <div className={layoutStyles.actionRow}>
             <WipeButton href={payload.href} label={payload.cta ?? ''} target="_blank" rel="noopener" />
             {payload.ctaNote && <span className={styles.ctaNote}>{payload.ctaNote}</span>}
           </div>

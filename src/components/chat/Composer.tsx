@@ -36,7 +36,6 @@ export default function Composer({ onJump, onSend, busy, breakLabel, breakCanSho
                 iconColor="#ffb45e"
                 hoverBg="linear-gradient(180deg, rgba(96,52,20,0.95), rgba(66,36,14,0.92))"
                 hoverColor="#ffd9ae"
-                hoverBorder="rgba(255,172,82,0.55)"
                 onClick={handleBreakClick}
               />
             )}

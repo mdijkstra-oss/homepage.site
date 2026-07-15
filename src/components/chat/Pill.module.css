@@ -9,7 +9,7 @@
   background: linear-gradient(180deg, rgba(40, 46, 60, 0.92), rgba(24, 29, 39, 0.92));
   color: #d6def0;
   cursor: pointer;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-display);
   font-size: 12.5px;
   font-weight: 600;
   white-space: nowrap;
@@ -23,7 +23,4 @@
   gap: 7px;
   background: var(--pill-hover-background);
   color: var(--pill-hover-color);
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 12.5px;
-  font-weight: 600;
 }

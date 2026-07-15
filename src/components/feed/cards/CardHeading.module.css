@@ -1,13 +1,13 @@
 .title {
-  color: #f4f7fd;
+  color: var(--color-text-heading);
   font-size: 21px;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 .subtitle {
   margin-top: 6px;
-  color: #8fa0b8;
-  font-family: "Space Mono", monospace;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.16em;
 }

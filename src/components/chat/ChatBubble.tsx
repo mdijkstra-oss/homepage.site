@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { ChatRole } from '../../data/blocks';
 import type { BubbleRegister } from '../../engine/types';
+import spotlightStyles from '../effects/PointerSpotlight.module.css';
 import { clearPointerSpotlight, paintPointerSpotlight } from '../effects/pointerSpotlight';
 import { Row } from '../primitives/Row';
 import styles from './ChatBubble.module.css';
@@ -55,7 +56,7 @@ export default function ChatBubble({ role, text, live, register }: ChatBubblePro
         onPointerLeave={() => fillRef.current && clearPointerSpotlight(fillRef.current)}
         className={bubbleClassName}
       >
-        <div ref={fillRef} className={styles.spotlight} />
+        <div ref={fillRef} className={spotlightStyles.spotlight} />
         {role === 'assistant' ? (
           text ? (
             <div className={styles.markdown}>

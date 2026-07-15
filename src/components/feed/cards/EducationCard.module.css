@@ -40,7 +40,7 @@
   min-width: 0;
 }
 .degree {
-  color: #eef2f8;
+  color: var(--color-text-strong);
   font-size: 15.5px;
   font-weight: 600;
 }
@@ -50,8 +50,8 @@
   font-size: 13px;
 }
 .year {
-  color: #8fa0b8;
-  font-family: "Space Mono", monospace;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
   font-size: 11px;
   white-space: nowrap;
 }

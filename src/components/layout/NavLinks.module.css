@@ -2,13 +2,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
 }
 .link {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
   padding: 6px 12px;
   border: 1px solid transparent;
   border-radius: 9px;
@@ -29,19 +28,4 @@
     0 0 16px rgba(140, 210, 240, 0.14),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   color: #9fd8f2;
-}
-.icon {
-  width: 14px;
-  height: 14px;
-  flex: 0 0 auto;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.8;
-  transition: opacity 0.18s ease;
-}
-.link:hover .icon {
-  opacity: 1;
 }

@@ -26,7 +26,7 @@
   outline: none;
   background: transparent;
   color: #eaf0ff;
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 13.5px;
   line-height: 1.5;
 }
@@ -42,7 +42,7 @@
   background: none;
   color: #6aa6c4;
   cursor: pointer;
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 700;
   line-height: 21px;

@@ -3,6 +3,7 @@ import { Row } from '../../primitives/Row';
 import { Badge } from '../Badge';
 import { InteractiveCard } from '../Card';
 import { WipeButton } from '../WipeButton';
+import layoutStyles from './CardLayout.module.css';
 import styles from './ProfileCard.module.css';
 
 export function ProfileCard({ payload }: { payload: ProfilePayload }) {
@@ -23,7 +24,7 @@ export function ProfileCard({ payload }: { payload: ProfilePayload }) {
             </div>
           </div>
         </div>
-        <div className={styles.hire}>
+        <div className={`${layoutStyles.actionRow} ${styles.hire}`}>
           <WipeButton
             href={mailto}
             label={payload.cta}

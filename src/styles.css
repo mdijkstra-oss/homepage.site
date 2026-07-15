@@ -1,3 +1,11 @@
+:root {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "Space Mono", monospace;
+  --color-text-heading: #f4f7fd;
+  --color-text-strong: #eef2f8;
+  --color-text-body: #c4cee0;
+  --color-text-muted: #8fa0b8;
+}
 * {
   box-sizing: border-box;
 }

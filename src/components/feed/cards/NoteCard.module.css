@@ -10,14 +10,14 @@
 }
 .eyebrow,
 .loopLabel {
-  color: #8fa0b8;
-  font-family: "Space Mono", monospace;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.18em;
 }
 .title {
   margin-top: 8px;
-  color: #f4f7fd;
+  color: var(--color-text-heading);
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -30,7 +30,7 @@
 }
 .paragraph {
   margin: 0;
-  color: #c4cee0;
+  color: var(--color-text-body);
   font-size: 14.5px;
   line-height: 1.72;
   text-wrap: pretty;
@@ -55,7 +55,7 @@
   border-radius: 999px;
   background: linear-gradient(180deg, rgba(120, 150, 255, 0.14), rgba(120, 150, 255, 0.05));
   color: #cdd8f2;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-display);
   font-size: 12.5px;
   font-weight: 600;
 }

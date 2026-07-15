@@ -1,10 +1,11 @@
+import type { ReviewsPayload } from '../../../data/blocks';
 import { Row } from '../../primitives/Row';
 import { Badge } from '../Badge';
 import { Card } from '../Card';
 import { CardHeading } from './CardHeading';
-import { SpotlightRow } from './SpotlightRow';
+import layoutStyles from './CardLayout.module.css';
 import styles from './ReviewsCard.module.css';
-import type { ReviewsPayload } from '../../../data/blocks';
+import { SpotlightRow } from './SpotlightRow';
 
 export function ReviewsCard({ payload }: { payload: ReviewsPayload }) {
   return (
@@ -12,7 +13,7 @@ export function ReviewsCard({ payload }: { payload: ReviewsPayload }) {
       <Card>
         <Badge kind="reviews">RECOMMENDATIONS</Badge>
         <CardHeading title={payload.title} subtitle={payload.subtitle} />
-        <div className={styles.list}>
+        <div className={layoutStyles.list}>
           {payload.items.map((review) => (
             <SpotlightRow key={review.name} className={styles.row}>
               <div className={styles.header}>

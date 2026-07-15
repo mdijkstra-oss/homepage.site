@@ -1,4 +1,5 @@
 import { type CSSProperties, type PointerEvent, type ReactNode, useRef } from 'react';
+import spotlightStyles from '../effects/PointerSpotlight.module.css';
 import { clearPointerSpotlight, paintPointerSpotlight } from '../effects/pointerSpotlight';
 import styles from './Card.module.css';
 
@@ -33,7 +34,7 @@ export function InteractiveCard({ radius = 22, style, children, className }: Car
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
-      <div ref={fillRef} className={styles.spotlight} />
+      <div ref={fillRef} className={spotlightStyles.spotlight} />
       {children}
     </CardFrame>
   );

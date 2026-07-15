@@ -2,14 +2,14 @@ import styles from './CardHeading.module.css';
 
 interface CardHeadingProps {
   title: string;
-  subtitle: string;
+  subtitle?: string;
 }
 
 export function CardHeading({ title, subtitle }: CardHeadingProps) {
   return (
     <>
       <div className={styles.title}>{title}</div>
-      <div className={styles.subtitle}>{subtitle}</div>
+      {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
     </>
   );
 }

@@ -7,14 +7,13 @@ describe('NavLinks', () => {
   afterEach(cleanup);
 
   it.each([
-    ['LinkedIn', 'linkedin', 'https://www.linkedin.com/in/matthijn-dijkstra-65527199/'],
-    ['Resume', 'resume', null],
-    ['Contact', 'contact', "mailto:hire@mdijkstra.dev?subject=Let's%20build%20something"],
-  ] as const)('renders the %s entry with its icon and destination', (label, icon, href) => {
+    ['LinkedIn', 'https://www.linkedin.com/in/matthijn-dijkstra-65527199/'],
+    ['Resume', null],
+    ['Contact', "mailto:hire@mdijkstra.dev?subject=Let's%20build%20something"],
+  ] as const)('renders the %s entry with its destination', (label, href) => {
     render(<NavLinks />);
-    const entry = screen.getByText(label).parentElement;
+    const entry = screen.getByText(label);
 
-    expect(entry?.querySelector(`[data-icon="${icon}"]`)).not.toBeNull();
-    expect(entry?.getAttribute('href')).toBe(href);
+    expect(entry.getAttribute('href')).toBe(href);
   });
 });

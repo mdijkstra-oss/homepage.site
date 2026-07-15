@@ -1,7 +1,7 @@
-import styles from './PillRail.module.css';
-import Pill from './Pill';
-import { PROMPT_PILLS } from '../theme/palette';
 import type { BlockType } from '../../data/blocks';
+import { PROMPT_PILLS } from '../theme/palette';
+import Pill from './Pill';
+import styles from './PillRail.module.css';
 
 export default function PillRail({ onJump }: { onJump: (type: BlockType) => void }) {
   return (
@@ -14,7 +14,6 @@ export default function PillRail({ onJump }: { onJump: (type: BlockType) => void
           iconColor={pill.palette.color}
           hoverBg={pill.palette.background}
           hoverColor={pill.palette.color}
-          hoverBorder={pill.palette.border}
           onClick={() => onJump(pill.type)}
         />
       ))}

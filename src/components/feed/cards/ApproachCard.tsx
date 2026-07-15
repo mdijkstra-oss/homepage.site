@@ -1,18 +1,20 @@
+import type { ApproachPayload } from '../../../data/blocks';
 import { Row } from '../../primitives/Row';
 import { Badge } from '../Badge';
 import { Card } from '../Card';
-import { SpotlightRow } from './SpotlightRow';
 import styles from './ApproachCard.module.css';
-import type { ApproachPayload } from '../../../data/blocks';
+import { CardHeading } from './CardHeading';
+import layoutStyles from './CardLayout.module.css';
+import { SpotlightRow } from './SpotlightRow';
 
 export function ApproachCard({ payload }: { payload: ApproachPayload }) {
   return (
     <Row>
       <Card>
         <Badge kind="approach">APPROACH</Badge>
-        <div className={styles.title}>{payload.title}</div>
+        <CardHeading title={payload.title} />
         <p className={styles.intro}>{payload.intro}</p>
-        <div className={styles.list}>
+        <div className={layoutStyles.list}>
           {payload.items.map((item) => (
             <SpotlightRow key={item.idx} className={styles.row}>
               <div className={styles.rowContent}>

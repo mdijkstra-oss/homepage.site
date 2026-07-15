@@ -7,7 +7,7 @@
   background: rgba(255, 255, 255, 0.055);
   color: #aebed4;
   cursor: default;
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 10.5px;
   transition:
     background-color 0.18s ease,

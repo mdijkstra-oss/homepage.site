@@ -8,28 +8,16 @@ export interface PillProps {
   iconColor?: string;
   hoverBg: string;
   hoverColor: string;
-  hoverBorder: string;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   tabIndex?: number;
 }
 
-export default function Pill({
-  icon,
-  label,
-  iconColor,
-  hoverBg,
-  hoverColor,
-  hoverBorder,
-  onClick,
-  disabled,
-  tabIndex,
-}: PillProps) {
+export default function Pill({ icon, label, iconColor, hoverBg, hoverColor, onClick, disabled, tabIndex }: PillProps) {
   const runtimeColors = {
     '--pill-icon-color': iconColor,
     '--pill-hover-background': hoverBg,
     '--pill-hover-color': hoverColor,
-    '--pill-hover-border': hoverBorder,
   } as CSSProperties;
   return (
     <button

@@ -33,7 +33,7 @@
   min-width: 0;
 }
 .name {
-  color: #f4f7fd;
+  color: var(--color-text-heading);
   font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -41,8 +41,8 @@
 .meta,
 .ctaNote {
   margin-top: 5px;
-  color: #8fa0b8;
-  font-family: "Space Mono", monospace;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
 }
@@ -54,7 +54,7 @@
 }
 .paragraph {
   margin: 0;
-  color: #c4cee0;
+  color: var(--color-text-body);
   font-size: 14px;
   line-height: 1.68;
   text-wrap: pretty;
@@ -102,7 +102,7 @@
   gap: 6px;
   margin-top: 4px;
   color: #98b8ae;
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.06em;
 }
@@ -113,13 +113,6 @@
 .statArrow {
   font-size: 12.5px;
   line-height: 1;
-}
-.cta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 13px;
-  margin-top: 20px;
 }
 .ctaNote {
   margin-top: 0;
@@ -136,7 +129,7 @@
 }
 .footnote {
   color: #93b8cf;
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 10.5px;
   line-height: 1.5;
   text-decoration: none;

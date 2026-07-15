@@ -4,6 +4,7 @@ import { Badge } from '../Badge';
 import { Card } from '../Card';
 import styles from './AlsoCard.module.css';
 import { CardHeading } from './CardHeading';
+import layoutStyles from './CardLayout.module.css';
 import { SpotlightRow } from './SpotlightRow';
 
 export function AlsoCard({ payload }: { payload: AlsoPayload }) {
@@ -12,7 +13,7 @@ export function AlsoCard({ payload }: { payload: AlsoPayload }) {
       <Card>
         <Badge kind="also">ALSO BUILT</Badge>
         <CardHeading title={payload.title} subtitle={payload.subtitle} />
-        <div className={styles.list}>
+        <div className={layoutStyles.list}>
           {payload.items.map((item) => (
             <SpotlightRow key={item.idx} className={styles.row}>
               <span className={styles.index}>{item.idx}</span>

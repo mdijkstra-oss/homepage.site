@@ -25,7 +25,7 @@
   min-width: 240px;
 }
 .name {
-  color: #f4f7fd;
+  color: var(--color-text-heading);
   font-size: 30px;
   font-weight: 700;
   line-height: 1.04;
@@ -33,14 +33,14 @@
 }
 .label {
   margin-top: 7px;
-  color: #8fa0b8;
-  font-family: "Space Mono", monospace;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
   font-size: 11.5px;
   letter-spacing: 0.18em;
 }
 .bio {
   margin: 16px 0 0;
-  color: #c4cee0;
+  color: var(--color-text-body);
   font-size: 14.5px;
   line-height: 1.62;
 }
@@ -49,8 +49,8 @@
   align-items: center;
   gap: 9px;
   margin-top: 16px;
-  color: #8fa0b8;
-  font-family: "Space Mono", monospace;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
   font-size: 11.5px;
 }
 .availabilityDot {
@@ -61,20 +61,13 @@
   background: #7bf5b0;
   opacity: 0.85;
 }
-.hire {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 13px;
-  margin-top: 20px;
-}
 .note {
   position: relative;
   display: inline-block;
   height: 14px;
   overflow: hidden;
   color: #6f7f95;
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   line-height: 14px;
 }
