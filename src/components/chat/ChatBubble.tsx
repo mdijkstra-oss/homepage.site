@@ -1,18 +1,25 @@
 import { useLayoutEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import styles from './ChatBubble.module.css';
-import { Row } from '../primitives/Row';
-import { clearPointerSpotlight, paintPointerSpotlight } from '../effects/pointerSpotlight';
-import type { BubbleRegister } from '../../engine/types';
 import type { ChatRole } from '../../data/blocks';
+import type { BubbleRegister } from '../../engine/types';
+import { clearPointerSpotlight, paintPointerSpotlight } from '../effects/pointerSpotlight';
+import { Row } from '../primitives/Row';
+import styles from './ChatBubble.module.css';
 
 const THINKING = [
-  'Thinking', 'Pondering', 'Mulling it over', 'Reflecting', 'Considering',
-  'Gathering thoughts', 'Digging in', 'Working it out', 'Piecing it together', 'One sec',
+  'Thinking',
+  'Pondering',
+  'Mulling it over',
+  'Reflecting',
+  'Considering',
+  'Gathering thoughts',
+  'Digging in',
+  'Working it out',
+  'Piecing it together',
+  'One sec',
 ];
 const pickThinking = () => THINKING[Math.floor(Math.random() * THINKING.length)];
-
 
 function useLiveBubbleRegistration(live?: boolean, register?: BubbleRegister) {
   const ref = useRef<HTMLDivElement>(null);
@@ -49,11 +56,17 @@ export default function ChatBubble({ role, text, live, register }: ChatBubblePro
         className={bubbleClassName}
       >
         <div ref={fillRef} className={styles.spotlight} />
-        {role === 'assistant'
-          ? (text
-            ? <div className={styles.markdown}><ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown></div>
-            : <span className={styles.thinking}>{wordRef.current}…</span>)
-          : text}
+        {role === 'assistant' ? (
+          text ? (
+            <div className={styles.markdown}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
+            </div>
+          ) : (
+            <span className={styles.thinking}>{wordRef.current}…</span>
+          )
+        ) : (
+          text
+        )}
       </div>
     </Row>
   );

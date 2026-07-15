@@ -8,11 +8,18 @@ const COUNTDOWN_ARROW_PULSE_SPEED = 0.008;
 const PLAY_ARROW_FADE_MS = 280;
 
 function getArrowPath(): Path2D {
-  return arrowPath ??= new Path2D('M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z');
+  if (!arrowPath) arrowPath = new Path2D('M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z');
+  return arrowPath;
 }
 
-export function drawSnakeBody(ctx: CanvasRenderingContext2D, snake: readonly SnakeCell[], cellSize: number, gap: number): void {
-  const inset = gap / 2, size = cellSize - gap;
+export function drawSnakeBody(
+  ctx: CanvasRenderingContext2D,
+  snake: readonly SnakeCell[],
+  cellSize: number,
+  gap: number,
+): void {
+  const inset = gap / 2,
+    size = cellSize - gap;
   ctx.globalAlpha = 0.6;
   ctx.fillStyle = '#ffffff';
   for (let i = snake.length - 1; i >= 0; i--) {
@@ -22,9 +29,16 @@ export function drawSnakeBody(ctx: CanvasRenderingContext2D, snake: readonly Sna
   ctx.globalAlpha = 1;
 }
 
-export function cutSnakeArrow(ctx: CanvasRenderingContext2D, head: SnakeCell, dir: Dir, cellSize: number, alpha: number): void {
+export function cutSnakeArrow(
+  ctx: CanvasRenderingContext2D,
+  head: SnakeCell,
+  dir: Dir,
+  cellSize: number,
+  alpha: number,
+): void {
   if (alpha <= 0.01) return;
-  const cx = head.c * cellSize + cellSize / 2, cy = head.r * cellSize + cellSize / 2;
+  const cx = head.c * cellSize + cellSize / 2,
+    cy = head.r * cellSize + cellSize / 2;
   const angle = Math.atan2(dir.dr, dir.dc) + Math.PI / 2;
   const scale = (cellSize * 0.58) / 24;
   ctx.save();

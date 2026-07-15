@@ -1,3 +1,201 @@
-.golCanvas { position: fixed; inset: 0; z-index: 0; opacity: .42; pointer-events: none; }.burstCanvas { position: fixed; inset: 0; z-index: 57; pointer-events: none; }.aurora { position: fixed; inset: -25%; z-index: 0; pointer-events: none; background: radial-gradient(38% 34% at 28% 22%, rgba(86,124,255,.22), transparent 60%), radial-gradient(34% 30% at 80% 80%, rgba(178,84,255,.15), transparent 60%); filter: blur(52px); animation: auroraDrift 20s ease-in-out infinite; }.grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(140,170,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(140,170,255,.045) 1px,transparent 1px); background-size: 30px 30px; -webkit-mask-image: radial-gradient(140% 120% at 50% 26%,#000 56%,transparent 100%); mask-image: radial-gradient(140% 120% at 50% 26%,#000 56%,transparent 100%); }.vignette { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(64% 70% at 50% 46%, rgba(8,9,13,.6), transparent 78%); }
-.hidden{visibility:hidden;opacity:0}.hud{position:fixed;top:72px;left:50%;z-index:58;pointer-events:none;transform:translateX(-50%);color:#bfe9cf;font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.18em;text-shadow:0 2px 14px rgba(0,0,0,.7);transition:opacity .25s ease;white-space:nowrap}.countdownOverlay,.gameOverOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}.countdownOverlay{z-index:59}.gameOverOverlay{z-index:60}.countdownLabel{color:#f4f7fd;font-family:'Space Grotesk',sans-serif;font-size:clamp(90px,16vw,190px);font-weight:700;letter-spacing:-.03em;text-shadow:0 10px 60px rgba(0,0,0,.75),0 0 46px rgba(120,160,255,.28);animation:countPop .58s cubic-bezier(.2,.9,.3,1)}.go{color:#7ff0c0}.gameOverCard{min-width:340px;padding:42px 52px 38px;pointer-events:auto;border:1px solid rgba(255,255,255,.14);border-radius:26px;background:linear-gradient(160deg,rgba(22,26,34,.94),rgba(12,15,20,.94));box-shadow:0 34px 90px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.16);text-align:center}.gameOverTitle,.scoreLabel,.shortcut,.newBest{color:#8fa0b8;font-family:'Space Mono',monospace}.gameOverTitle{font-size:12px;letter-spacing:.34em}.newBest{margin-top:12px;color:#7ff0c0;font-size:11px;letter-spacing:.22em}.scoreRow{display:flex;justify-content:center;gap:48px;margin-top:16px}.scoreValue{color:#f4f7fd;font-size:62px;font-weight:700;line-height:1;letter-spacing:-.02em}.bestValue{color:#9fb2cc}.scoreLabel{margin-top:9px;font-size:10.5px;letter-spacing:.2em}.buttons{display:flex;justify-content:center;gap:12px;margin-top:30px}.button{display:inline-flex;align-items:center;gap:9px;padding:12px 20px;border-radius:13px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:14px;transition:transform .18s ease,border-color .18s ease,background .18s ease}.restart{border:none;background:#fff;color:#0a0c14;font-weight:700}.quit{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#d6def0;font-weight:600}.shortcut{font-size:11px;opacity:.55}
-@keyframes auroraDrift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(5%,4%) scale(1.1)}100%{transform:translate(0,0) scale(1)}}@keyframes countPop{0%{transform:scale(1.55);opacity:0}22%{opacity:1}100%{transform:scale(1);opacity:.94}}
+.golCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.42;
+  pointer-events: none;
+}
+.burstCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 57;
+  pointer-events: none;
+}
+.aurora {
+  position: fixed;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 34% at 28% 22%, rgba(86, 124, 255, 0.22), transparent 60%),
+    radial-gradient(34% 30% at 80% 80%, rgba(178, 84, 255, 0.15), transparent 60%);
+  filter: blur(52px);
+  animation: auroraDrift 20s ease-in-out infinite;
+}
+.grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(140, 170, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(140, 170, 255, 0.045) 1px, transparent 1px);
+  background-size: 30px 30px;
+  -webkit-mask-image: radial-gradient(140% 120% at 50% 26%, #000 56%, transparent 100%);
+  mask-image: radial-gradient(140% 120% at 50% 26%, #000 56%, transparent 100%);
+}
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(64% 70% at 50% 46%, rgba(8, 9, 13, 0.6), transparent 78%);
+}
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+.hud {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  z-index: 58;
+  pointer-events: none;
+  transform: translateX(-50%);
+  color: #bfe9cf;
+  font-family: "Space Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+  transition: opacity 0.25s ease;
+  white-space: nowrap;
+}
+.countdownOverlay,
+.gameOverOverlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.countdownOverlay {
+  z-index: 59;
+}
+.gameOverOverlay {
+  z-index: 60;
+}
+.countdownLabel {
+  color: #f4f7fd;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(90px, 16vw, 190px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-shadow:
+    0 10px 60px rgba(0, 0, 0, 0.75),
+    0 0 46px rgba(120, 160, 255, 0.28);
+  animation: countPop 0.58s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.go {
+  color: #7ff0c0;
+}
+.gameOverCard {
+  min-width: 340px;
+  padding: 42px 52px 38px;
+  pointer-events: auto;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 26px;
+  background: linear-gradient(160deg, rgba(22, 26, 34, 0.94), rgba(12, 15, 20, 0.94));
+  box-shadow:
+    0 34px 90px rgba(0, 0, 0, 0.62),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  text-align: center;
+}
+.gameOverTitle,
+.scoreLabel,
+.shortcut,
+.newBest {
+  color: #8fa0b8;
+  font-family: "Space Mono", monospace;
+}
+.gameOverTitle {
+  font-size: 12px;
+  letter-spacing: 0.34em;
+}
+.newBest {
+  margin-top: 12px;
+  color: #7ff0c0;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+}
+.scoreRow {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-top: 16px;
+}
+.scoreValue {
+  color: #f4f7fd;
+  font-size: 62px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.bestValue {
+  color: #9fb2cc;
+}
+.scoreLabel {
+  margin-top: 9px;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+}
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 30px;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 20px;
+  border-radius: 13px;
+  cursor: pointer;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+.restart {
+  border: none;
+  background: #fff;
+  color: #0a0c14;
+  font-weight: 700;
+}
+.quit {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #d6def0;
+  font-weight: 600;
+}
+.shortcut {
+  font-size: 11px;
+  opacity: 0.55;
+}
+@keyframes auroraDrift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(5%, 4%) scale(1.1);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+@keyframes countPop {
+  0% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+  22% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.94;
+  }
+}

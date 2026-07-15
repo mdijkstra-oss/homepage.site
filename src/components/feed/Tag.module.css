@@ -1,1 +1,28 @@
-.tag { display: inline-flex; align-items: center; padding: 5px 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.055); color: #aebed4; font-family: 'Space Mono', monospace; font-size: 10.5px; }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
+  color: #aebed4;
+  cursor: default;
+  font-family: "Space Mono", monospace;
+  font-size: 10.5px;
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+.tag:hover {
+  background: rgba(8, 12, 20, 0.42);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag {
+    transition: background-color 0.18s ease;
+  }
+  .tag:hover {
+    transform: none;
+  }
+}

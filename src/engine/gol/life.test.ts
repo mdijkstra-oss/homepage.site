@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { computeColors, inField, nextStaleCount, seedLife, shouldReseed, spawnFillers, spawnGliders, stepLife } from './life';
+import {
+  computeColors,
+  inField,
+  nextStaleCount,
+  seedLife,
+  shouldReseed,
+  spawnFillers,
+  spawnGliders,
+  stepLife,
+} from './life';
 import { PATTERNS } from './patterns';
 
 function makeGrid(cols: number, rows: number, live: Array<[number, number]>): Uint8Array {
@@ -31,23 +40,55 @@ describe('inField', () => {
 describe('stepLife', () => {
   it('keeps a still life (2x2 block) unchanged', () => {
     const dims = { cols: 10, rows: 10 };
-    const grid = makeGrid(10, 10, [[4, 4], [5, 4], [4, 5], [5, 5]]);
+    const grid = makeGrid(10, 10, [
+      [4, 4],
+      [5, 4],
+      [4, 5],
+      [5, 5],
+    ]);
     const { grid: next } = stepLife(grid, dims);
-    expect(liveCells(next, 10).sort()).toEqual([[4, 4], [4, 5], [5, 4], [5, 5]].sort());
+    expect(liveCells(next, 10).sort()).toEqual(
+      [
+        [4, 4],
+        [4, 5],
+        [5, 4],
+        [5, 5],
+      ].sort(),
+    );
   });
 
   it('oscillates a blinker between horizontal and vertical', () => {
     const dims = { cols: 10, rows: 10 };
-    const horizontal = makeGrid(10, 10, [[3, 5], [4, 5], [5, 5]]);
+    const horizontal = makeGrid(10, 10, [
+      [3, 5],
+      [4, 5],
+      [5, 5],
+    ]);
     const step1 = stepLife(horizontal, dims);
-    expect(liveCells(step1.grid, 10).sort()).toEqual([[4, 4], [4, 5], [4, 6]].sort());
+    expect(liveCells(step1.grid, 10).sort()).toEqual(
+      [
+        [4, 4],
+        [4, 5],
+        [4, 6],
+      ].sort(),
+    );
     const step2 = stepLife(step1.grid, dims);
-    expect(liveCells(step2.grid, 10).sort()).toEqual([[3, 5], [4, 5], [5, 5]].sort());
+    expect(liveCells(step2.grid, 10).sort()).toEqual(
+      [
+        [3, 5],
+        [4, 5],
+        [5, 5],
+      ].sort(),
+    );
   });
 
   it('translates a glider by (1,1) after 4 steps', () => {
     const dims = { cols: 20, rows: 20 };
-    let grid = makeGrid(20, 20, PATTERNS.glider.map(([x, y]) => [x + 5, y + 5] as [number, number]));
+    let grid = makeGrid(
+      20,
+      20,
+      PATTERNS.glider.map(([x, y]) => [x + 5, y + 5] as [number, number]),
+    );
     for (let i = 0; i < 4; i++) grid = stepLife(grid, dims).grid;
     const expected = PATTERNS.glider.map(([x, y]) => [x + 6, y + 6] as [number, number]);
     expect(liveCells(grid, 20).sort()).toEqual(expected.sort());
@@ -55,14 +96,24 @@ describe('stepLife', () => {
 
   it('kills an overcrowded cell and starves an isolated one', () => {
     const dims = { cols: 10, rows: 10 };
-    const grid = makeGrid(10, 10, [[4, 4], [4, 5], [4, 3], [3, 4], [5, 4]]);
+    const grid = makeGrid(10, 10, [
+      [4, 4],
+      [4, 5],
+      [4, 3],
+      [3, 4],
+      [5, 4],
+    ]);
     const { grid: next } = stepLife(grid, dims);
     expect(next[4 * 10 + 4]).toBe(0);
   });
 
   it('suppresses birth outside the inset field even with 3 neighbours', () => {
     const dims = { cols: 10, rows: 10 };
-    const grid = makeGrid(10, 10, [[1, 4], [1, 5], [1, 6]]);
+    const grid = makeGrid(10, 10, [
+      [1, 4],
+      [1, 5],
+      [1, 6],
+    ]);
     const { grid: next } = stepLife(grid, dims);
     expect(next[5 * 10 + 0]).toBe(0);
   });
@@ -73,7 +124,10 @@ describe('seedLife', () => {
     const dims = { cols: 24, rows: 24 };
     const rngSeq = () => {
       let s = 1;
-      return () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+      return () => {
+        s = (s * 1103515245 + 12345) % 2147483648;
+        return s / 2147483648;
+      };
     };
     const gridA = seedLife(dims, PATTERNS, rngSeq());
     const gridB = seedLife(dims, PATTERNS, rngSeq());
@@ -135,7 +189,13 @@ describe('spawnGliders', () => {
 describe('computeColors', () => {
   it('gives a larger cluster a higher hue/lightness than an isolated cell', () => {
     const dims = { cols: 10, rows: 10 };
-    const grid = makeGrid(10, 10, [[2, 2], [3, 3], [3, 2], [2, 3], [8, 8]]);
+    const grid = makeGrid(10, 10, [
+      [2, 2],
+      [3, 3],
+      [3, 2],
+      [2, 3],
+      [8, 8],
+    ]);
     const { hueBuf } = computeColors(grid, dims);
     const blockHue = hueBuf[2 * 10 + 2];
     const loneHue = hueBuf[8 * 10 + 8];

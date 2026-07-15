@@ -5,10 +5,7 @@ function flattenUnknownRecord(value: unknown): string {
   if (value == null) return '';
   if (typeof value === 'string' || typeof value === 'number') return String(value);
   if (Array.isArray(value)) {
-    return value
-      .map(flattenUnknownRecord)
-      .filter(Boolean)
-      .join('\n');
+    return value.map(flattenUnknownRecord).filter(Boolean).join('\n');
   }
   if (isRecord(value)) {
     return Object.entries(value)

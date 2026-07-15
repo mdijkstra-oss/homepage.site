@@ -1,2 +1,89 @@
-@keyframes blink { 50% { opacity: .25; } }
-.bubble { position: relative; font-size: 14px; line-height: 1.6; }.hidden { opacity: 0; }.user { max-width: 64%; padding: 13px 17px; border: 1px solid rgba(140,170,255,.45); border-radius: 16px 16px 6px 16px; background: linear-gradient(140deg, rgba(86,124,255,.3), rgba(86,124,255,.12)), linear-gradient(rgba(10,16,34,.4), rgba(10,16,34,.4)); box-shadow: 0 8px 22px rgba(20,40,120,.3); color: #eaf0ff; }.assistant { max-width: 74%; padding: 14px 17px; border: 1px solid rgba(255,255,255,.12); border-radius: 16px 16px 16px 6px; background: linear-gradient(140deg, rgba(255,255,255,.085), rgba(255,255,255,.03)), linear-gradient(rgba(12,14,19,.5), rgba(12,14,19,.5)); box-shadow: 0 10px 30px rgba(0,0,0,.35); color: #d2dae6; }.spotlight { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background-image: none; }.thinking { color: #8fa3bd; font-family: 'Space Mono', monospace; font-size: 13px; animation: blink 1.3s steps(1) infinite; }.markdown > :first-child { margin-top: 0; }.markdown > :last-child { margin-bottom: 0; }.markdown h1, .markdown h2, .markdown h3 { margin: 4px 0 8px; color: #eef2f8; font-family: 'Space Grotesk', sans-serif; font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; }.markdown p { margin: 0 0 10px; }.markdown strong { color: #eef2f8; font-weight: 700; }.markdown a { color: #8fb6ff; }.markdown ul, .markdown ol { margin: 0 0 10px; padding-left: 20px; }.markdown li { margin: 2px 0; }.markdown code { padding: 1px 5px; border-radius: 5px; background: rgba(255,255,255,.08); font-family: 'Space Mono', monospace; font-size: 12.5px; }
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+.bubble {
+  position: relative;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.hidden {
+  opacity: 0;
+}
+.user {
+  max-width: 64%;
+  padding: 13px 17px;
+  border: 1px solid rgba(140, 170, 255, 0.45);
+  border-radius: 16px 16px 6px 16px;
+  background:
+    linear-gradient(140deg, rgba(86, 124, 255, 0.3), rgba(86, 124, 255, 0.12)),
+    linear-gradient(rgba(10, 16, 34, 0.4), rgba(10, 16, 34, 0.4));
+  box-shadow: 0 8px 22px rgba(20, 40, 120, 0.3);
+  color: #eaf0ff;
+}
+.assistant {
+  max-width: 74%;
+  padding: 14px 17px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px 16px 16px 6px;
+  background:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.03)),
+    linear-gradient(rgba(12, 14, 19, 0.5), rgba(12, 14, 19, 0.5));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  color: #d2dae6;
+}
+.spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: none;
+}
+.thinking {
+  color: #8fa3bd;
+  font-family: "Space Mono", monospace;
+  font-size: 13px;
+  animation: blink 1.3s steps(1) infinite;
+}
+.markdown > :first-child {
+  margin-top: 0;
+}
+.markdown > :last-child {
+  margin-bottom: 0;
+}
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  margin: 4px 0 8px;
+  color: #eef2f8;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 15.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.markdown p {
+  margin: 0 0 10px;
+}
+.markdown strong {
+  color: #eef2f8;
+  font-weight: 700;
+}
+.markdown a {
+  color: #8fb6ff;
+}
+.markdown ul,
+.markdown ol {
+  margin: 0 0 10px;
+  padding-left: 20px;
+}
+.markdown li {
+  margin: 2px 0;
+}
+.markdown code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  font-family: "Space Mono", monospace;
+  font-size: 12.5px;
+}

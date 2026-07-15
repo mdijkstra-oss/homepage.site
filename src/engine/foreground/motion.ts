@@ -31,7 +31,11 @@ export interface FlyVector {
   delay: number;
 }
 
-export function computeEntryProgress(clockProgress: number, positionProgress: number, previousProgress: number): number {
+export function computeEntryProgress(
+  clockProgress: number,
+  positionProgress: number,
+  previousProgress: number,
+): number {
   return Math.max(clockProgress, positionProgress, previousProgress);
 }
 
@@ -55,11 +59,14 @@ export function computeFlyVector(
   seed: { x: number; r: number },
   viewport: { w: number; h: number },
 ): FlyVector {
-  let dx = elCenter.x - origin.x, dy = elCenter.y - origin.y;
+  let dx = elCenter.x - origin.x,
+    dy = elCenter.y - origin.y;
   let len = Math.hypot(dx, dy);
   if (len < 1) {
     const angle = seed.x * Math.PI;
-    dx = Math.cos(angle); dy = Math.sin(angle); len = 1;
+    dx = Math.cos(angle);
+    dy = Math.sin(angle);
+    len = 1;
   }
   const diag = Math.hypot(viewport.w, viewport.h);
   return { dx: dx / len, dy: dy / len, dist: diag * 1.65, rot: seed.r * 18, delay: 0 };
@@ -67,7 +74,7 @@ export function computeFlyVector(
 
 export function computeFlyOffset(fp: number, fly: FlyVector, entry: EntryFrame): EntryFrame {
   const lp = clamp((fp - fly.delay) / (1 - fly.delay), 0, 1);
-  const a = 1 - Math.pow(1 - lp, 2.6);
+  const a = 1 - (1 - lp) ** 2.6;
   return {
     ...entry,
     x: entry.x + fly.dx * fly.dist * a,

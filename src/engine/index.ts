@@ -1,17 +1,34 @@
 import type { BlockType } from '../data/blocks';
 import type { BreakPillStatus, EngineHandle, GamePhase, GameStatus } from '../engine/types';
-import { readConfig, type EngineConfig, type EngineProps } from './config';
 import { clamp } from '../lib/clamp';
-import { createForeground } from './foreground/foreground';
 import { smoothstep } from '../lib/easing';
-import { createBurstState, spawnBurst, sizeBurstCanvas, tickBurst } from './fx/burst';
-import { computeColors, nextStaleCount, seedLife, shouldReseed, spawnFillers, spawnGliders, stepLife, type GolDims } from './gol/life';
-import { paintLife, sizeLifeCanvas } from './gol/render';
+import { type EngineConfig, type EngineProps, readConfig } from './config';
+import { createForeground } from './foreground/foreground';
+import { createBurstState, sizeBurstCanvas, spawnBurst, tickBurst } from './fx/burst';
+import {
+  computeColors,
+  type GolDims,
+  nextStaleCount,
+  seedLife,
+  shouldReseed,
+  spawnFillers,
+  spawnGliders,
+  stepLife,
+} from './gol/life';
 import { PATTERNS } from './gol/patterns';
-import { isDirectionKey, nextPendingDir, nextSnakeInterval, spawnSnakeAt, stepSnake, type Dir, type SnakeCell } from './snake/snake';
-import { cutSnakeArrow, drawSnakeBody, countdownArrowAlpha, playArrowAlpha } from './snake/render';
-import { loadBestScore, saveBestScore } from './snake/score';
+import { paintLife, sizeLifeCanvas } from './gol/render';
 import { selectNavigationIndex } from './navigation';
+import { countdownArrowAlpha, cutSnakeArrow, drawSnakeBody, playArrowAlpha } from './snake/render';
+import { loadBestScore, saveBestScore } from './snake/score';
+import {
+  type Dir,
+  isDirectionKey,
+  nextPendingDir,
+  nextSnakeInterval,
+  type SnakeCell,
+  spawnSnakeAt,
+  stepSnake,
+} from './snake/snake';
 import { createStatusChannel } from './status';
 
 const CELL = 30;
@@ -70,7 +87,6 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     foreground?.fireFly({ x: (window.innerWidth || 1200) / 2, y: (window.innerHeight || 800) / 2 }, preDelay);
   }
 
-
   function sizeGol(): void {
     if (!golCanvas || !golCtx) return;
     const sized = sizeLifeCanvas(golCanvas, golCtx, CELL);
@@ -87,13 +103,25 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
 
   function paintGol(): void {
     if (!golCtx) return;
-    paintLife(golCtx, grid, prevGrid, golDims, CELL, hueBuf, lightBuf, phase, golViewport, game === 'play' || game === 'countdown');
+    paintLife(
+      golCtx,
+      grid,
+      prevGrid,
+      golDims,
+      CELL,
+      hueBuf,
+      lightBuf,
+      phase,
+      golViewport,
+      game === 'play' || game === 'countdown',
+    );
   }
 
   function cellVisible(idx: number): number {
     if (!grid.length) return 0;
     const e = smoothstep(phase);
-    const cur = grid[idx] ? 1 : 0, prev = prevGrid[idx] ? 1 : 0;
+    const cur = grid[idx] ? 1 : 0,
+      prev = prevGrid[idx] ? 1 : 0;
     return prev + (cur - prev) * e;
   }
 
@@ -113,7 +141,8 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
       if (aliveCount < 26) grid = spawnGliders(grid, golDims, PATTERNS.glider, snake, 3);
     } else if (!game || game === 'paused') {
       const lowMark = Math.max(24, Math.round(golDims.cols * golDims.rows * 0.05));
-      if (aliveCount < lowMark) grid = spawnFillers(grid, golDims, PATTERNS, clamp(Math.round((lowMark - aliveCount) / 8), 3, 10));
+      if (aliveCount < lowMark)
+        grid = spawnFillers(grid, golDims, PATTERNS, clamp(Math.round((lowMark - aliveCount) / 8), 3, 10));
       else if (gen % 36 === 0) grid = spawnFillers(grid, golDims, PATTERNS, 2);
     }
     ({ hueBuf, lightBuf } = computeColors(grid, golDims));
@@ -130,7 +159,10 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
       phase = Math.min(1, phase + dt / fadeMs);
     } else {
       waitAcc += dt;
-      if (waitAcc >= waitMs) { waitAcc = 0; advanceGen(); }
+      if (waitAcc >= waitMs) {
+        waitAcc = 0;
+        advanceGen();
+      }
     }
     paintGol();
   }
@@ -150,7 +182,6 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     paintGol();
     golTimer = setInterval(animLife, 33);
   }
-
 
   function startGame(): void {
     if (!golDims.cols || !golDims.rows) return;
@@ -173,7 +204,10 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     let i = 0;
     const run = () => {
       if (game !== 'countdown') return;
-      if (i >= COUNTDOWN_STEPS.length) { beginPlay(); return; }
+      if (i >= COUNTDOWN_STEPS.length) {
+        beginPlay();
+        return;
+      }
       countdownLabel = COUNTDOWN_STEPS[i];
       gameStatus.notify();
       i++;
@@ -233,7 +267,10 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
   function stepSnakeOnce(): void {
     dir = pendingDir;
     const result = stepSnake(snake, dir, golDims.cols, golDims.rows, cellVisible);
-    if (result.kind === 'died') { snakeDie(); return; }
+    if (result.kind === 'died') {
+      snakeDie();
+      return;
+    }
     snake = result.snake;
     if (result.kind === 'ate') {
       grid[result.ateIndex] = 0;
@@ -245,7 +282,9 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
         sparks: cfg.snake.pickupParticleCount,
         stars: Math.round(cfg.snake.pickupParticleCount * 0.25),
         speed: cfg.snake.pickupParticleSpeed,
-        flash: false, shock: false, bloom: false,
+        flash: false,
+        shock: false,
+        bloom: false,
       });
       paintGol();
       gameStatus.notify();
@@ -276,7 +315,8 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     }
     if (key === 'escape') {
       e.preventDefault();
-      if (game === 'dead') quitGame(); else pauseGame();
+      if (game === 'dead') quitGame();
+      else pauseGame();
       return;
     }
     if ((key === ' ' || key === 'enter') && game === 'dead') {
@@ -295,7 +335,6 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
       if (alpha !== null) cutSnakeArrow(ctx, snake[0], dir, CELL, alpha);
     }
   }
-
 
   function currentBreakStatus(): BreakPillStatus {
     return { canShow: !game || game === 'paused', label: game === 'paused' ? 'Resume game' : 'Take a break' };
@@ -330,9 +369,11 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     disposers.push(() => window.removeEventListener('keydown', gameKey));
   }
 
-
   function onResize(): void {
-    if (golCanvas) { sizeGol(); paintGol(); }
+    if (golCanvas) {
+      sizeGol();
+      paintGol();
+    }
     if (burstCanvas && burstCtx) burstDims = sizeBurstCanvas(burstCanvas, burstCtx);
   }
 
@@ -352,7 +393,8 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     lastLoopAt = now;
     foreground?.tick(now);
     tickSnake(loopDelta);
-    if (burstCtx) tickBurst(burstCtx, burstState, now, burstDims, game === 'play' || game === 'countdown', drawSnakeUnderlay);
+    if (burstCtx)
+      tickBurst(burstCtx, burstState, now, burstDims, game === 'play' || game === 'countdown', drawSnakeUnderlay);
     raf = requestAnimationFrame(loop);
   }
 
@@ -371,7 +413,7 @@ export function createSiteEngine(props: EngineProps, blockOrder: readonly BlockT
     if (golTimer) clearInterval(golTimer);
     if (countTimer) clearTimeout(countTimer);
     if (snakeTimer) clearTimeout(snakeTimer);
-    disposers.forEach((dispose) => dispose());
+    for (const dispose of disposers) dispose();
     disposers.length = 0;
   }
 

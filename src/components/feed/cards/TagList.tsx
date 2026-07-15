@@ -9,7 +9,9 @@ interface TagListProps {
 export function TagList({ tags, marginTop }: TagListProps) {
   return (
     <div className={`${styles.list} ${marginTop === 16 ? styles.margin16 : styles.margin18}`}>
-      {tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+      {tags.map((tag) => (
+        <Tag key={tag}>{tag}</Tag>
+      ))}
     </div>
   );
 }

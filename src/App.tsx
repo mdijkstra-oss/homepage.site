@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createSiteEngine } from './engine';
-import { BLOCKS } from './data/prompts';
-import { CFG } from './data/theme';
-import { FG } from './styles/theme';
-import Background from './components/layout/Background';
-import Header from './components/layout/Header';
+import { streamChat } from './chat/client';
+import { buildMessages } from './chat/history';
+import type { LiveTurn } from './chat/messages';
+import ChatBubble from './components/chat/ChatBubble';
 import Composer from './components/chat/Composer';
 import { Block } from './components/feed/cards';
-import ChatBubble from './components/chat/ChatBubble';
-import { buildMessages } from './chat/history';
-import { streamChat } from './chat/client';
-import type { LiveTurn } from './chat/messages';
-import { selectBlockTypes, type BlockType } from './data/blocks';
+import Background from './components/layout/Background';
+import Header from './components/layout/Header';
+import { type BlockType, selectBlockTypes } from './data/blocks';
+import { BLOCKS } from './data/prompts';
+import { CFG } from './data/theme';
+import { createSiteEngine } from './engine';
 import type { BreakPillStatus, EngineHandle, GameStatus } from './engine/types';
+import { FG } from './styles/theme';
 
 const BLOCK_ORDER = selectBlockTypes(BLOCKS);
 const DEFAULT_BREAK_STATUS: BreakPillStatus = { canShow: true, label: 'Take a break' };
@@ -34,7 +34,12 @@ export default function App() {
     const unsubscribeBreakStatus = engine.onBreakStatusChange(setBreakStatus);
     const unsubscribeGameStatus = engine.onGameStatusChange(setGameStatus);
     if (rootRef.current) engine.mount(rootRef.current);
-    return () => { unsubscribeBreakStatus(); unsubscribeGameStatus(); engine.destroy(); engineRef.current = null; };
+    return () => {
+      unsubscribeBreakStatus();
+      unsubscribeGameStatus();
+      engine.destroy();
+      engineRef.current = null;
+    };
   }, []);
 
   useScrollToNewestTurn(live.length);
@@ -48,54 +53,77 @@ export default function App() {
   const onRestartGame = useCallback(() => engineRef.current?.restartGame(), []);
   const onQuitGame = useCallback(() => engineRef.current?.quitGame(), []);
 
-  const register = useMemo(() => ({
-    add: (el: HTMLElement | null) => engineRef.current?.addBubble(el),
-    remove: (el: HTMLElement | null) => engineRef.current?.removeBubble(el),
-  }), []);
+  const register = useMemo(
+    () => ({
+      add: (el: HTMLElement | null) => engineRef.current?.addBubble(el),
+      remove: (el: HTMLElement | null) => engineRef.current?.removeBubble(el),
+    }),
+    [],
+  );
 
-  const send = useCallback(async (text: string) => {
-    const q = text.trim();
-    if (!q || busy) return;
-    setBusy(true);
+  const send = useCallback(
+    async (text: string) => {
+      const q = text.trim();
+      if (!q || busy) return;
+      setBusy(true);
 
-    const userId = ++idRef.current;
-    const asstId = ++idRef.current;
-    setLive((prev) => [
-      ...prev,
-      { id: userId, role: 'user', text: q },
-      { id: asstId, role: 'assistant', text: '' },
-    ]);
+      const userId = ++idRef.current;
+      const asstId = ++idRef.current;
+      setLive((prev) => [...prev, { id: userId, role: 'user', text: q }, { id: asstId, role: 'assistant', text: '' }]);
 
-    const messages = buildMessages(live, q);
-    try {
-      await streamChat(messages, {
-        onDelta: (chunk) =>
-          setLive((prev) => prev.map((m) => (m.id === asstId ? { ...m, text: m.text + chunk } : m))),
-      });
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      setLive((prev) =>
-        prev.map((m) => (m.id === asstId ? { ...m, text: `_Something went wrong: ${message}_` } : m)));
-    } finally {
-      setBusy(false);
-    }
-  }, [busy, live]);
+      const messages = buildMessages(live, q);
+      try {
+        await streamChat(messages, {
+          onDelta: (chunk) =>
+            setLive((prev) => prev.map((m) => (m.id === asstId ? { ...m, text: m.text + chunk } : m))),
+        });
+      } catch (e) {
+        const message = e instanceof Error ? e.message : String(e);
+        setLive((prev) =>
+          prev.map((m) => (m.id === asstId ? { ...m, text: `_Something went wrong: ${message}_` } : m)),
+        );
+      } finally {
+        setBusy(false);
+      }
+    },
+    [busy, live],
+  );
 
   return (
-    <div ref={rootRef} style={{
-      position: 'relative', minHeight: '100vh',
-      background: 'radial-gradient(125% 95% at 76% -6%, #15181e 0%, #0a0b0d 58%)', fontFamily: FG,
-    }}>
+    <div
+      ref={rootRef}
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        background: 'radial-gradient(125% 95% at 76% -6%, #15181e 0%, #0a0b0d 58%)',
+        fontFamily: FG,
+      }}
+    >
       <Background gameStatus={gameStatus} onRestartGame={onRestartGame} onQuitGame={onQuitGame} />
       <Header />
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 760, margin: '0 auto', padding: '86px 22px 168px', display: 'flex', flexDirection: 'column', gap: 26 }}>
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          maxWidth: 760,
+          margin: '0 auto',
+          padding: '86px 22px 168px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 26,
+        }}
+      >
         {BLOCKS.map((block, i) =>
-          block.type === 'user' || block.type === 'assistant'
-            ? <ChatBubble key={i} role={block.type} text={block.text} />
-            : <Block key={i} block={block} />
+          block.type === 'user' || block.type === 'assistant' ? (
+            <ChatBubble key={i} role={block.type} text={block.text} />
+          ) : (
+            <Block key={i} block={block} />
+          ),
         )}
-        {live.map((m) => <ChatBubble key={m.id} role={m.role} text={m.text} live register={register} />)}
+        {live.map((m) => (
+          <ChatBubble key={m.id} role={m.role} text={m.text} live register={register} />
+        ))}
       </div>
 
       <Composer

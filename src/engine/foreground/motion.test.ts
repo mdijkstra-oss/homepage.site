@@ -1,23 +1,45 @@
 import { describe, expect, it } from 'vitest';
-import {
-  computeEntryFrame,
-  computeEntryProgress,
-  computeFlyOffset,
-  computeFlyVector,
-} from './motion';
+import { computeEntryFrame, computeEntryProgress, computeFlyOffset, computeFlyVector } from './motion';
 
 describe('computeEntryProgress', () => {
   it.each([
-    { name: 'position progress can reveal ahead of time', clockProgress: 0.2, positionProgress: 0.5, previousProgress: 0, expected: 0.5 },
-    { name: 'clock progress can carry reveal forward', clockProgress: 0.9, positionProgress: 0.1, previousProgress: 0, expected: 0.9 },
-    { name: 'previous progress keeps reveal monotonic', clockProgress: 0.3, positionProgress: 0.2, previousProgress: 0.7, expected: 0.7 },
+    {
+      name: 'position progress can reveal ahead of time',
+      clockProgress: 0.2,
+      positionProgress: 0.5,
+      previousProgress: 0,
+      expected: 0.5,
+    },
+    {
+      name: 'clock progress can carry reveal forward',
+      clockProgress: 0.9,
+      positionProgress: 0.1,
+      previousProgress: 0,
+      expected: 0.9,
+    },
+    {
+      name: 'previous progress keeps reveal monotonic',
+      clockProgress: 0.3,
+      positionProgress: 0.2,
+      previousProgress: 0.7,
+      expected: 0.7,
+    },
   ])('$name', ({ clockProgress, positionProgress, previousProgress, expected }) => {
     expect(computeEntryProgress(clockProgress, positionProgress, previousProgress)).toBe(expected);
   });
 });
 
 describe('computeEntryFrame', () => {
-  const fullCfg = { revealViewportRatio: 0.74, revealDurationMs: 700, revealRisePx: 34, revealDriftPx: 22, revealTiltDeg: 14, revealInitialScale: 0.94, revealBlurPx: 3, flyDurationMs: 1050 };
+  const fullCfg = {
+    revealViewportRatio: 0.74,
+    revealDurationMs: 700,
+    revealRisePx: 34,
+    revealDriftPx: 22,
+    revealTiltDeg: 14,
+    revealInitialScale: 0.94,
+    revealBlurPx: 3,
+    flyDurationMs: 1050,
+  };
 
   it('at p=0 returns the fully-offset starting frame', () => {
     const frame = computeEntryFrame(0, fullCfg, 1);

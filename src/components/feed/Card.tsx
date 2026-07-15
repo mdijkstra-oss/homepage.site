@@ -1,4 +1,4 @@
-import { useRef, type CSSProperties, type PointerEvent, type ReactNode } from 'react';
+import { type CSSProperties, type PointerEvent, type ReactNode, useRef } from 'react';
 import { clearPointerSpotlight, paintPointerSpotlight } from '../effects/pointerSpotlight';
 import styles from './Card.module.css';
 
@@ -10,7 +10,11 @@ interface CardProps {
 }
 
 export function Card({ radius = 22, style, children, className }: CardProps) {
-  return <CardFrame radius={radius} style={style} className={className}>{children}</CardFrame>;
+  return (
+    <CardFrame radius={radius} style={style} className={className}>
+      {children}
+    </CardFrame>
+  );
 }
 
 export function InteractiveCard({ radius = 22, style, children, className }: CardProps) {
@@ -22,14 +26,37 @@ export function InteractiveCard({ radius = 22, style, children, className }: Car
     if (fillRef.current) clearPointerSpotlight(fillRef.current);
   };
   return (
-    <CardFrame radius={radius} style={style} className={className} onPointerMove={handlePointerMove} onPointerLeave={handlePointerLeave}>
+    <CardFrame
+      radius={radius}
+      style={style}
+      className={className}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+    >
       <div ref={fillRef} className={styles.spotlight} />
       {children}
     </CardFrame>
   );
 }
 
-function CardFrame({ radius = 22, style, children, className, onPointerMove, onPointerLeave }: CardProps & { onPointerMove?: (event: PointerEvent<HTMLDivElement>) => void; onPointerLeave?: () => void }) {
+function CardFrame({
+  radius = 22,
+  style,
+  children,
+  className,
+  onPointerMove,
+  onPointerLeave,
+}: CardProps & { onPointerMove?: (event: PointerEvent<HTMLDivElement>) => void; onPointerLeave?: () => void }) {
   const runtimeStyle = { '--card-radius': `${radius}px`, ...style } as CSSProperties;
-  return <div data-bubble="" className={`${styles.card} ${className ?? ''}`} style={runtimeStyle} onPointerMove={onPointerMove} onPointerLeave={onPointerLeave}>{children}</div>;
+  return (
+    <div
+      data-bubble=""
+      className={`${styles.card} ${className ?? ''}`}
+      style={runtimeStyle}
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+    >
+      {children}
+    </div>
+  );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { type ReactNode, type RefObject, useEffect, useRef, useState } from 'react';
 import { clamp } from '../../lib/clamp';
 import { smoothstep } from '../../lib/easing';
 import styles from './ProximityReveal.module.css';
@@ -28,7 +28,8 @@ export default function ProximityReveal({ target, near = 40, far = 150, disabled
 
   useEffect(() => {
     function onMove(e: PointerEvent) {
-      const wrap = wrapRef.current, targetEl = target.current;
+      const wrap = wrapRef.current,
+        targetEl = target.current;
       if (!wrap) return;
       let raw = 0;
       if (!disabled && targetEl) {
@@ -42,11 +43,15 @@ export default function ProximityReveal({ target, near = 40, far = 150, disabled
       const nextCanInteract = !disabled && eased > 0.6;
       wrap.style.transform = `translateY(${((1 - eased) * 150).toFixed(1)}%)`;
       wrap.style.pointerEvents = nextCanInteract ? 'auto' : 'none';
-      setCanInteract((current) => current === nextCanInteract ? current : nextCanInteract);
+      setCanInteract((current) => (current === nextCanInteract ? current : nextCanInteract));
     }
     window.addEventListener('pointermove', onMove, { passive: true });
     return () => window.removeEventListener('pointermove', onMove);
   }, [target, near, far, disabled]);
 
-  return <div ref={wrapRef} className={styles.wrapper}>{children({ disabled: !canInteract, tabIndex: canInteract ? undefined : -1 })}</div>;
+  return (
+    <div ref={wrapRef} className={styles.wrapper}>
+      {children({ disabled: !canInteract, tabIndex: canInteract ? undefined : -1 })}
+    </div>
+  );
 }

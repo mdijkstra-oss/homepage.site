@@ -14,7 +14,17 @@ export interface PillProps {
   tabIndex?: number;
 }
 
-export default function Pill({ icon, label, iconColor, hoverBg, hoverColor, hoverBorder, onClick, disabled, tabIndex }: PillProps) {
+export default function Pill({
+  icon,
+  label,
+  iconColor,
+  hoverBg,
+  hoverColor,
+  hoverBorder,
+  onClick,
+  disabled,
+  tabIndex,
+}: PillProps) {
   const runtimeColors = {
     '--pill-icon-color': iconColor,
     '--pill-hover-background': hoverBg,
@@ -23,15 +33,18 @@ export default function Pill({ icon, label, iconColor, hoverBg, hoverColor, hove
   } as CSSProperties;
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       tabIndex={tabIndex}
       className={`${styles.pill} ${wipeStyles.wipe}`}
       style={runtimeColors}
     >
-      <span className={styles.icon}>{icon}</span>{label}
+      <span className={styles.icon}>{icon}</span>
+      {label}
       <span className={`${wipeStyles.fill} ${styles.fill}`}>
-        <span className={styles.icon}>{icon}</span>{label}
+        <span className={styles.icon}>{icon}</span>
+        {label}
       </span>
     </button>
   );

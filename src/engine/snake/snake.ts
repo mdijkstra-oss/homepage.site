@@ -25,10 +25,14 @@ export type SnakeStepResult =
   | { kind: 'died' };
 
 const KEY_DIRS: Readonly<Record<string, Dir>> = {
-  arrowup: { dc: 0, dr: -1 }, w: { dc: 0, dr: -1 },
-  arrowdown: { dc: 0, dr: 1 }, s: { dc: 0, dr: 1 },
-  arrowleft: { dc: -1, dr: 0 }, a: { dc: -1, dr: 0 },
-  arrowright: { dc: 1, dr: 0 }, d: { dc: 1, dr: 0 },
+  arrowup: { dc: 0, dr: -1 },
+  w: { dc: 0, dr: -1 },
+  arrowdown: { dc: 0, dr: 1 },
+  s: { dc: 0, dr: 1 },
+  arrowleft: { dc: -1, dr: 0 },
+  a: { dc: -1, dr: 0 },
+  arrowright: { dc: 1, dr: 0 },
+  d: { dc: 1, dr: 0 },
 };
 
 export function spawnSnakeAt(cols: number, rows: number): { snake: SnakeCell[]; dir: Dir } {
@@ -39,7 +43,10 @@ export function spawnSnakeAt(cols: number, rows: number): { snake: SnakeCell[]; 
 }
 
 export function stepSnake(
-  snake: ReadonlyArray<SnakeCell>, dir: Dir, cols: number, rows: number,
+  snake: ReadonlyArray<SnakeCell>,
+  dir: Dir,
+  cols: number,
+  rows: number,
   cellVisible: (idx: number) => number,
 ): SnakeStepResult {
   const nc = (snake[0].c + dir.dc + cols) % cols;

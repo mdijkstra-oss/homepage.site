@@ -1,1 +1,11 @@
-.list{display:flex;flex-wrap:wrap;gap:8px}.margin16{margin-top:16px}.margin18{margin-top:18px}
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.margin16 {
+  margin-top: 16px;
+}
+.margin18 {
+  margin-top: 18px;
+}

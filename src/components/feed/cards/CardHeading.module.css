@@ -1,1 +1,13 @@
-.title{color:#f4f7fd;font-size:21px;font-weight:700;letter-spacing:-.01em}.subtitle{margin-top:6px;color:#8fa0b8;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em}
+.title {
+  color: #f4f7fd;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.subtitle {
+  margin-top: 6px;
+  color: #8fa0b8;
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}

@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
-import styles from './WipeButton.module.css';
 import wipeStyles from '../primitives/Wipe.module.css';
+import styles from './WipeButton.module.css';
 
 interface WipeButtonProps {
   href: string;
@@ -13,7 +13,16 @@ interface WipeButtonProps {
   fillColor?: string;
 }
 
-export function WipeButton({ href, label, target, rel, background = '#fff', color = '#0a0c14', fillBg = '#567cff', fillColor = '#fff' }: WipeButtonProps) {
+export function WipeButton({
+  href,
+  label,
+  target,
+  rel,
+  background = '#fff',
+  color = '#0a0c14',
+  fillBg = '#567cff',
+  fillColor = '#fff',
+}: WipeButtonProps) {
   const runtimeColors = {
     '--wipe-background': background,
     '--wipe-color': color,

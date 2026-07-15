@@ -1,1 +1,17 @@
-.wipe{position:relative;overflow:hidden}.fill{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;clip-path:polygon(-40% 0%,-20% 0%,-40% 100%,-60% 100%);transition:clip-path .38s cubic-bezier(.4,0,.2,1)}.wipe:hover .fill{clip-path:polygon(-40% 0%,140% 0%,120% 100%,-60% 100%)}
+.wipe {
+  position: relative;
+  overflow: hidden;
+}
+.fill {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  clip-path: polygon(-40% 0%, -20% 0%, -40% 100%, -60% 100%);
+  transition: clip-path 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.wipe:hover .fill {
+  clip-path: polygon(-40% 0%, 140% 0%, 120% 100%, -60% 100%);
+}

@@ -1,1 +1,55 @@
-.form { display: flex; align-items: flex-end; gap: 10px; padding: 15px 17px; border: 1px solid rgba(255,255,255,.16); border-radius: 15px; background: linear-gradient(180deg, rgba(28,33,44,.45), rgba(16,20,27,.4)); box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 0 0 4px rgba(120,160,230,.045), 0 14px 34px rgba(0,0,0,.4); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); }.textarea { display: block; flex: 1; min-width: 0; max-height: 132px; margin: 0; padding: 0; overflow-y: auto; resize: none; border: none; outline: none; background: transparent; color: #eaf0ff; font-family: 'Space Mono', monospace; font-size: 13.5px; line-height: 1.5; }.textarea::placeholder { color: #5f7488; }.textarea:disabled { opacity: .7; }.send { padding: 0; border: none; background: none; color: #6aa6c4; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; line-height: 21px; white-space: nowrap; transition: opacity .15s ease; }.send:disabled { cursor: default; opacity: .45; }
+.form {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 15px 17px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 15px;
+  background: linear-gradient(180deg, rgba(28, 33, 44, 0.45), rgba(16, 20, 27, 0.4));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 4px rgba(120, 160, 230, 0.045),
+    0 14px 34px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+}
+.textarea {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  max-height: 132px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #eaf0ff;
+  font-family: "Space Mono", monospace;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.textarea::placeholder {
+  color: #5f7488;
+}
+.textarea:disabled {
+  opacity: 0.7;
+}
+.send {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #6aa6c4;
+  cursor: pointer;
+  font-family: "Space Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 21px;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+.send:disabled {
+  cursor: default;
+  opacity: 0.45;
+}

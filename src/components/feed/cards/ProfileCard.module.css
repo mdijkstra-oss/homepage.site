@@ -1,1 +1,104 @@
-.header{display:flex;flex-wrap:wrap;align-items:flex-start;gap:20px}.avatar{display:flex;align-items:center;justify-content:center;width:88px;height:88px;flex:0 0 auto;border:1px solid rgba(255,200,150,.4);border-radius:16px;background:linear-gradient(155deg,#f5a04f,#e8743b);box-shadow:inset 0 1px 0 rgba(255,255,255,.4);color:#3a1c06;font-size:26px;font-weight:700;letter-spacing:.04em}.content{flex:1;min-width:240px}.name{color:#f4f7fd;font-size:30px;font-weight:700;line-height:1.04;letter-spacing:-.01em}.label{margin-top:7px;color:#8fa0b8;font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.18em}.bio{margin:16px 0 0;color:#c4cee0;font-size:14.5px;line-height:1.62}.availability{display:inline-flex;align-items:center;gap:9px;margin-top:16px;color:#8fa0b8;font-family:'Space Mono',monospace;font-size:11.5px}.availabilityDot{width:6px;height:6px;flex:0 0 auto;border-radius:50%;background:#7bf5b0;opacity:.85}.hire{display:flex;flex-wrap:wrap;align-items:center;gap:13px;margin-top:20px}.note{position:relative;display:inline-block;height:14px;overflow:hidden;color:#6f7f95;font-family:'Space Mono',monospace;font-size:11px;line-height:14px}.noteA,.noteB{display:block;transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .3s ease}.noteB{position:absolute;top:0;left:0;color:#8fb0ff;white-space:nowrap;transform:translateY(100%);opacity:0}.hire:hover .noteA{transform:translateY(-100%);opacity:0}.hire:hover .noteB{transform:translateY(0);opacity:1}
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px;
+}
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 200, 150, 0.4);
+  border-radius: 16px;
+  background: linear-gradient(155deg, #f5a04f, #e8743b);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  color: #3a1c06;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.content {
+  flex: 1;
+  min-width: 240px;
+}
+.name {
+  color: #f4f7fd;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+}
+.label {
+  margin-top: 7px;
+  color: #8fa0b8;
+  font-family: "Space Mono", monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+}
+.bio {
+  margin: 16px 0 0;
+  color: #c4cee0;
+  font-size: 14.5px;
+  line-height: 1.62;
+}
+.availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 16px;
+  color: #8fa0b8;
+  font-family: "Space Mono", monospace;
+  font-size: 11.5px;
+}
+.availabilityDot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #7bf5b0;
+  opacity: 0.85;
+}
+.hire {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 13px;
+  margin-top: 20px;
+}
+.note {
+  position: relative;
+  display: inline-block;
+  height: 14px;
+  overflow: hidden;
+  color: #6f7f95;
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  line-height: 14px;
+}
+.noteA,
+.noteB {
+  display: block;
+  transition:
+    transform 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease;
+}
+.noteB {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #8fb0ff;
+  white-space: nowrap;
+  transform: translateY(100%);
+  opacity: 0;
+}
+.hire:hover .noteA {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.hire:hover .noteB {
+  transform: translateY(0);
+  opacity: 1;
+}

@@ -9,5 +9,5 @@ if (!rootEl) throw new Error('#root element not found');
 createRoot(rootEl).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

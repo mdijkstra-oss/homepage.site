@@ -10,9 +10,7 @@ export interface ProfilePayload {
   emailSubject: string;
 }
 
-export type RolePara =
-  | { text: string }
-  | { pre: string; linkText: string; url: string; post: string };
+export type RolePara = { text: string } | { pre: string; linkText: string; url: string; post: string };
 
 export interface RoleStat {
   value: string;

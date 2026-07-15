@@ -1,4 +1,14 @@
-* { box-sizing: border-box; }
-html, body { margin: 0; background: #0a0b0d; }
-#root { min-height: 100vh; }
-a { color: #9fb0c2; }
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  background: #0a0b0d;
+}
+#root {
+  min-height: 100vh;
+}
+a {
+  color: #9fb0c2;
+}

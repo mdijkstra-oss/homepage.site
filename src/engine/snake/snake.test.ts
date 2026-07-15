@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cellAt, nextPendingDir, nextSnakeInterval, spawnSnakeAt, stepSnake, type SnakeCell } from './snake';
+import { cellAt, nextPendingDir, nextSnakeInterval, type SnakeCell, spawnSnakeAt, stepSnake } from './snake';
 
 const noFood = () => 0;
 
@@ -22,34 +22,62 @@ describe('spawnSnakeAt', () => {
 });
 
 describe('stepSnake', () => {
-  const cols = 10, rows = 10;
-  const snake: SnakeCell[] = [{ c: 5, r: 5 }, { c: 4, r: 5 }, { c: 3, r: 5 }];
+  const cols = 10,
+    rows = 10;
+  const snake: SnakeCell[] = [
+    { c: 5, r: 5 },
+    { c: 4, r: 5 },
+    { c: 3, r: 5 },
+  ];
 
   it('moves forward and drops the tail when there is no food', () => {
     const result = stepSnake(snake, { dc: 1, dr: 0 }, cols, rows, noFood);
-    expect(result).toEqual({ kind: 'moved', snake: [{ c: 6, r: 5 }, { c: 5, r: 5 }, { c: 4, r: 5 }] });
+    expect(result).toEqual({
+      kind: 'moved',
+      snake: [
+        { c: 6, r: 5 },
+        { c: 5, r: 5 },
+        { c: 4, r: 5 },
+      ],
+    });
   });
 
   it('grows and reports the eaten index when food is visible', () => {
     const result = stepSnake(snake, { dc: 1, dr: 0 }, cols, rows, (idx) => (idx === 5 * cols + 6 ? 1 : 0));
     expect(result.kind).toBe('ate');
     if (result.kind === 'ate') {
-      expect(result.snake).toEqual([{ c: 6, r: 5 }, { c: 5, r: 5 }, { c: 4, r: 5 }, { c: 3, r: 5 }]);
+      expect(result.snake).toEqual([
+        { c: 6, r: 5 },
+        { c: 5, r: 5 },
+        { c: 4, r: 5 },
+        { c: 3, r: 5 },
+      ]);
       expect(result.ateIndex).toBe(5 * cols + 6);
     }
   });
 
   it('dies when the next head position overlaps its body', () => {
-    const loop: SnakeCell[] = [{ c: 5, r: 5 }, { c: 5, r: 6 }, { c: 6, r: 6 }, { c: 6, r: 5 }];
+    const loop: SnakeCell[] = [
+      { c: 5, r: 5 },
+      { c: 5, r: 6 },
+      { c: 6, r: 6 },
+      { c: 6, r: 5 },
+    ];
     const result = stepSnake(loop, { dc: 0, dr: 1 }, cols, rows, noFood);
     expect(result).toEqual({ kind: 'died' });
   });
 
   it('wraps around both axes', () => {
     const atRightEdge: SnakeCell[] = [{ c: cols - 1, r: 5 }];
-    expect(stepSnake(atRightEdge, { dc: 1, dr: 0 }, cols, rows, noFood)).toEqual({ kind: 'moved', snake: [{ c: 0, r: 5 }] });
+    expect(stepSnake(atRightEdge, { dc: 1, dr: 0 }, cols, rows, noFood)).toEqual({
+      kind: 'moved',
+      snake: [{ c: 0, r: 5 }],
+    });
     const atBottomEdge: SnakeCell[] = [{ c: 5, r: rows - 1 }];
-    expect(stepSnake(atBottomEdge, { dc: 0, dr: 1 }, cols, rows, noFood)).toEqual({ kind: 'moved', snake: [{ c: 5, r: 0 }] });
+    expect(stepSnake(atBottomEdge, { dc: 0, dr: 1 }, cols, rows, noFood)).toEqual({
+      kind: 'moved',
+      snake: [{ c: 5, r: 0 }],
+    });
   });
 });
 
@@ -76,7 +104,14 @@ describe('cellAt', () => {
 });
 
 describe('nextSnakeInterval', () => {
-  const cfg = { initialStepMs: 150, minimumStepMs: 60, stepReductionPerPointMs: 3, cellGapPx: 4, pickupParticleCount: 40, pickupParticleSpeed: 0.7 };
+  const cfg = {
+    initialStepMs: 150,
+    minimumStepMs: 60,
+    stepReductionPerPointMs: 3,
+    cellGapPx: 4,
+    pickupParticleCount: 40,
+    pickupParticleSpeed: 0.7,
+  };
   it.each([
     { name: 'uses initial speed before scoring', score: 0, expected: 150 },
     { name: 'subtracts configured reduction per point', score: 10, expected: 120 },

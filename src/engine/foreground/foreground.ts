@@ -36,7 +36,9 @@ function makeItem(el: HTMLElement, chrome: boolean, now: number): ForegroundItem
   const rect = el.getBoundingClientRect();
   const dir: 1 | -1 = rect.left + rect.width / 2 >= (window.innerWidth || 1200) / 2 ? 1 : -1;
   return {
-    el, chrome, dir,
+    el,
+    chrome,
+    dir,
     entryStart: chrome ? now - 1e6 : null,
     entryP: 0,
     fly: null,
@@ -49,9 +51,10 @@ function applyFrame(el: HTMLElement, frame: EntryFrame): void {
   el.style.transform =
     `perspective(1200px) translate(${frame.x.toFixed(1)}px,${frame.y.toFixed(1)}px) ` +
     `rotateX(${frame.rotX.toFixed(2)}deg) rotate(${frame.rotZ.toFixed(2)}deg) scale(${frame.scale.toFixed(3)})`;
-  el.style.filter = frame.blur > 0.05 || frame.brightness < 0.995
-    ? `blur(${frame.blur.toFixed(1)}px) brightness(${frame.brightness.toFixed(3)})`
-    : 'none';
+  el.style.filter =
+    frame.blur > 0.05 || frame.brightness < 0.995
+      ? `blur(${frame.blur.toFixed(1)}px) brightness(${frame.brightness.toFixed(3)})`
+      : 'none';
 }
 
 export function createForeground(root: HTMLElement, cfg: ForegroundConfig): ForegroundHandle {

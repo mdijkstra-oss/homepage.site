@@ -1,1 +1,4 @@
-.wrapper{transform:translateY(150%);pointer-events:none}
+.wrapper {
+  transform: translateY(150%);
+  pointer-events: none;
+}
