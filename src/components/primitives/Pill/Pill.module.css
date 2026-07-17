@@ -1,0 +1,27 @@
+.pill {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(40, 46, 60, 0.92), rgba(24, 29, 39, 0.92));
+  color: #d6def0;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.icon {
+  color: var(--pill-icon-color);
+  font-size: 11.5px;
+  opacity: 0.9;
+}
+.fill {
+  gap: 7px;
+  background: var(--pill-hover-background);
+  color: var(--pill-hover-color);
+}

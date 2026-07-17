@@ -14,9 +14,17 @@ body {
   margin: 0;
   background: #0a0b0d;
 }
+html {
+  scroll-behavior: smooth;
+}
 #root {
   min-height: 100vh;
 }
 a {
   color: #9fb0c2;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

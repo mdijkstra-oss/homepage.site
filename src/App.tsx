@@ -1,135 +1,81 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { streamChat } from './chat/client';
-import { buildMessages } from './chat/history';
-import type { LiveTurn } from './chat/messages';
-import ChatBubble from './components/chat/ChatBubble';
-import Composer from './components/chat/Composer';
-import { Block } from './components/feed/cards';
-import Background from './components/layout/Background';
-import Header from './components/layout/Header';
-import { type BlockType, selectBlockTypes } from './data/blocks';
-import { BLOCKS } from './data/prompts';
-import { CFG } from './data/theme';
-import { createSiteEngine } from './engine';
-import type { BreakPillStatus, EngineHandle, GameStatus } from './engine/types';
-import { FG } from './styles/theme';
-
-const BLOCK_ORDER = selectBlockTypes(BLOCKS);
-const DEFAULT_BREAK_STATUS: BreakPillStatus = { canShow: true, label: 'Take a break' };
-const DEFAULT_GAME_STATUS: GameStatus = { phase: null, score: 0, best: 0, newBest: false, countdownLabel: null };
+import { useCallback, useEffect, useRef } from 'react';
+import styles from './App.module.css';
+import Background from './components/layout/Background/Background';
+import BottomBar from './components/layout/BottomBar/BottomBar';
+import Header from './components/layout/Header/Header';
+import ChatBubble from './features/chat/components/ChatBubble/ChatBubble';
+import type { ChatTurn } from './features/chat/conversation/messages';
+import { useLLMChat } from './features/chat/hooks/useLLMChat';
+import { FOREGROUND_CONFIG } from './features/foreground/config';
+import { useFlyAway } from './features/foreground/flyAway/useFlyAway';
+import PageTransitionItem from './features/foreground/PageTransitionItem/PageTransitionItem';
+import Game from './features/game/Game/Game';
+import { useGameEngine } from './features/game/hooks/useGameEngine';
+import { GAME_CONFIG } from './features/game/settings';
+import { PORTFOLIO_CHAT_HISTORY } from './features/portfolio/chat/portfolioChatHistory';
+import { Block } from './features/portfolio/components/cards/Block';
+import { SECTIONS } from './features/portfolio/model/sections';
 
 export default function App() {
   const rootRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef<EngineHandle | null>(null);
-  const idRef = useRef(0);
+  const { messages, isGeneratingResponse, sendMessage } = useLLMChat(PORTFOLIO_CHAT_HISTORY);
+  const { golCanvasRef, burstCanvasRef, breakStatus, gameStatus, startOrResume, restartGame, quitGame } =
+    useGameEngine(GAME_CONFIG);
+  const { flyIn, flyOut } = useFlyAway(rootRef, FOREGROUND_CONFIG);
 
-  const [live, setLive] = useState<LiveTurn[]>([]);
-  const [busy, setBusy] = useState(false);
-  const [breakStatus, setBreakStatus] = useState<BreakPillStatus>(DEFAULT_BREAK_STATUS);
-  const [gameStatus, setGameStatus] = useState<GameStatus>(DEFAULT_GAME_STATUS);
-
-  useEffect(() => {
-    const engine = createSiteEngine(CFG, BLOCK_ORDER);
-    engineRef.current = engine;
-    const unsubscribeBreakStatus = engine.onBreakStatusChange(setBreakStatus);
-    const unsubscribeGameStatus = engine.onGameStatusChange(setGameStatus);
-    if (rootRef.current) engine.mount(rootRef.current);
-    return () => {
-      unsubscribeBreakStatus();
-      unsubscribeGameStatus();
-      engine.destroy();
-      engineRef.current = null;
-    };
-  }, []);
-
-  useScrollToNewestTurn(live.length);
-
-  const onJump = (type: BlockType) => engineRef.current?.jumpToType(type);
-
-  const onBreakPillClick = useCallback((origin: { x: number; y: number }) => {
-    engineRef.current?.triggerBreakPill(origin);
-  }, []);
-
-  const onRestartGame = useCallback(() => engineRef.current?.restartGame(), []);
-  const onQuitGame = useCallback(() => engineRef.current?.quitGame(), []);
-
-  const register = useMemo(
-    () => ({
-      add: (el: HTMLElement | null) => engineRef.current?.addBubble(el),
-      remove: (el: HTMLElement | null) => engineRef.current?.removeBubble(el),
-    }),
-    [],
+  useEffect(
+    function restoreForegroundOutsideGame() {
+      if (gameStatus.phase === null || gameStatus.phase === 'paused') flyIn();
+    },
+    [flyIn, gameStatus.phase],
   );
 
-  const send = useCallback(
-    async (text: string) => {
-      const q = text.trim();
-      if (!q || busy) return;
-      setBusy(true);
+  useScrollToLatestMessage(messages, isGeneratingResponse);
 
-      const userId = ++idRef.current;
-      const asstId = ++idRef.current;
-      setLive((prev) => [...prev, { id: userId, role: 'user', text: q }, { id: asstId, role: 'assistant', text: '' }]);
-
-      const messages = buildMessages(live, q);
-      try {
-        await streamChat(messages, {
-          onDelta: (chunk) =>
-            setLive((prev) => prev.map((m) => (m.id === asstId ? { ...m, text: m.text + chunk } : m))),
-        });
-      } catch (e) {
-        const message = e instanceof Error ? e.message : String(e);
-        setLive((prev) =>
-          prev.map((m) => (m.id === asstId ? { ...m, text: `_Something went wrong: ${message}_` } : m)),
-        );
-      } finally {
-        setBusy(false);
-      }
+  const onBreakPillClick = useCallback(
+    function onBreakPillClick(origin: { x: number; y: number }) {
+      flyOut(40);
+      startOrResume(origin);
     },
-    [busy, live],
+    [flyOut, startOrResume],
   );
 
   return (
-    <div
-      ref={rootRef}
-      style={{
-        position: 'relative',
-        minHeight: '100vh',
-        background: '#0a0b0d',
-        fontFamily: FG,
-      }}
-    >
-      <Background gameStatus={gameStatus} onRestartGame={onRestartGame} onQuitGame={onQuitGame} />
+    <div ref={rootRef} className={styles.app}>
+      <Background>
+        <Game
+          status={gameStatus}
+          onRestart={restartGame}
+          onQuit={quitGame}
+          golCanvasRef={golCanvasRef}
+          burstCanvasRef={burstCanvasRef}
+        />
+      </Background>
       <Header />
 
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          maxWidth: 760,
-          margin: '0 auto',
-          padding: '86px 22px 168px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 26,
-        }}
-      >
-        {BLOCKS.map((block, i) =>
-          block.type === 'user' || block.type === 'assistant' ? (
-            <ChatBubble key={i} role={block.type} text={block.text} />
-          ) : (
-            <Block key={i} block={block} />
-          ),
-        )}
-        {live.map((m) => (
-          <ChatBubble key={m.id} role={m.role} text={m.text} live register={register} />
+      <main className={styles.feed}>
+        {SECTIONS.map((section) => (
+          <section key={section.id} id={section.id} className={styles.section}>
+            <PageTransitionItem config={FOREGROUND_CONFIG}>
+              <ChatBubble speaker="user" text={section.prompt} />
+            </PageTransitionItem>
+            {section.blocks.map((block, index) => (
+              <PageTransitionItem key={`${block.type}-${index}`} config={FOREGROUND_CONFIG}>
+                <Block block={block} />
+              </PageTransitionItem>
+            ))}
+          </section>
         ))}
-      </div>
+        {messages.map((message) => (
+          <PageTransitionItem key={message.id} config={FOREGROUND_CONFIG}>
+            <ChatBubble speaker={message.role} text={message.text} />
+          </PageTransitionItem>
+        ))}
+      </main>
 
-      <Composer
-        onJump={onJump}
-        onSend={send}
-        busy={busy}
+      <BottomBar
+        onSend={sendMessage}
+        isGeneratingResponse={isGeneratingResponse}
         breakLabel={breakStatus.label}
         breakCanShow={breakStatus.canShow}
         onBreakPillClick={onBreakPillClick}
@@ -138,8 +84,12 @@ export default function App() {
   );
 }
 
-function useScrollToNewestTurn(turnCount: number): void {
+function useScrollToLatestMessage(messages: readonly ChatTurn[], isGeneratingResponse: boolean): void {
   useEffect(() => {
-    if (turnCount) window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  }, [turnCount]);
+    if (!messages.length) return;
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: isGeneratingResponse ? 'auto' : 'smooth',
+    });
+  }, [messages, isGeneratingResponse]);
 }

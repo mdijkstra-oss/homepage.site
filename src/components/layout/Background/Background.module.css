@@ -1,0 +1,50 @@
+.decorativeBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.lightBackground {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(125% 95% at 76% -6%, #15181e 0%, #0a0b0d 58%);
+}
+.aurora {
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(38% 34% at 28% 22%, rgba(86, 124, 255, 0.22), transparent 60%),
+    radial-gradient(34% 30% at 80% 80%, rgba(178, 84, 255, 0.15), transparent 60%);
+  filter: blur(52px);
+  animation: auroraDrift 20s ease-in-out infinite;
+}
+.grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(140, 170, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(140, 170, 255, 0.045) 1px, transparent 1px);
+  background-size: 30px 30px;
+  -webkit-mask-image: radial-gradient(140% 120% at 50% 26%, #000 56%, transparent 100%);
+  mask-image: radial-gradient(140% 120% at 50% 26%, #000 56%, transparent 100%);
+}
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(64% 70% at 50% 46%, rgba(8, 9, 13, 0.6), transparent 78%);
+}
+@keyframes auroraDrift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(5%, 4%) scale(1.1);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
