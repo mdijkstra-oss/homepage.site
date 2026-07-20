@@ -51,3 +51,7 @@ carries the `data-*` hooks the engine looks for) and tears it down on unmount.
 `demo.html` is the whole app inlined into one file (React + Babel from a CDN, compiled
 in the browser). Open it directly in a browser — no install needed. It's handy for a
 quick look, but use the Vite build for anything real.
+
+## License
+
+Released under the [Zero-Clause BSD](LICENSE) (0BSD) license — public-domain-equivalent, do whatever you like, no attribution required.
