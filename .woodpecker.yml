@@ -16,6 +16,9 @@ steps:
   build:
     image: node:22-alpine@sha256:16e22a550f3863206a3f701448c45f7912c6896a62de43add43bb9c86130c3e2
     commands:
+      # The tag must match package.json — use `npm version` to cut releases so
+      # they stay in sync; this fails the build if a hand-made tag diverges.
+      - test "v$(node -p "require('./package.json').version")" = "$CI_COMMIT_TAG"
       - npm ci
       - npm run lint
       - npm test
