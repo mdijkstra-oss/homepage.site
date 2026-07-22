@@ -29,9 +29,9 @@ steps:
     image: amazon/aws-cli:2.22.35@sha256:6977c83ae3dc99f28fcf8276b9ea5eec33833cd5be40574b34112e98113ec7a2
     environment:
       AWS_ACCESS_KEY_ID:
-        from_secret: scw_artifacts_access_key
+        from_secret: artifacts_upload_access_key
       AWS_SECRET_ACCESS_KEY:
-        from_secret: scw_artifacts_secret_key
+        from_secret: artifacts_upload_secret_key
       AWS_DEFAULT_REGION: nl-ams
     commands:
       # --if-none-match "*" makes this a write-once PutObject: if the key
