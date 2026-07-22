@@ -1,0 +1,43 @@
+# Release pipeline — Codeberg CI (Woodpecker).
+#
+# On a semver tag, run the full quality gate, build the site, and upload one
+# immutable tarball to the Scaleway artifacts bucket.
+#
+# The CI identity (OpenTofu: `artifacts-upload`) can ONLY PutObject under
+# `releases/*` in the isolated homepage-artifacts project — no list, no read,
+# no delete. So we upload a single object with `cp`, never `sync` (sync lists
+# the destination first and would get AccessDenied).
+
+when:
+  event: tag
+  ref: refs/tags/v*
+
+steps:
+  build:
+    image: node:22-alpine@sha256:16e22a550f3863206a3f701448c45f7912c6896a62de43add43bb9c86130c3e2
+    commands:
+      - npm ci
+      - npm run lint
+      - npm test
+      - npm run build
+      - tar czf site.tar.gz -C dist .
+
+  upload:
+    image: amazon/aws-cli:2.22.35@sha256:6977c83ae3dc99f28fcf8276b9ea5eec33833cd5be40574b34112e98113ec7a2
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: scw_artifacts_access_key
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: scw_artifacts_secret_key
+      AWS_DEFAULT_REGION: nl-ams
+    commands:
+      # --if-none-match "*" makes this a write-once PutObject: if the key
+      # already exists the request fails (412) instead of overwriting. Needs
+      # only PutObject, which is all the CI identity has.
+      - >
+        aws s3api put-object
+        --bucket mdijkstra-homepage-site-artifacts
+        --key releases/${CI_COMMIT_TAG}/site-${CI_COMMIT_SHA}.tar.gz
+        --body site.tar.gz
+        --if-none-match "*"
+        --endpoint-url https://s3.nl-ams.scw.cloud
