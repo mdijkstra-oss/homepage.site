@@ -39,7 +39,7 @@ steps:
       # only PutObject, which is all the CI identity has.
       - >
         aws s3api put-object
-        --bucket mdijkstra-homepage-site-artifacts
+        --bucket mdijkstra-homepage-artifacts
         --key releases/${CI_COMMIT_TAG}/site-${CI_COMMIT_SHA}.tar.gz
         --body site.tar.gz
         --if-none-match "*"
