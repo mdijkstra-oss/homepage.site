@@ -8,6 +8,7 @@
     "dev:all": "concurrently -k -n logos,site -c magenta,cyan \"npm:logos\" \"npm:dev\"",
     "logos": "cd ../../hermes/hermes-logos && make dev",
     "build": "tsc --noEmit && vite build",
+    "check": "biome ci .",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "preview": "vite preview",

@@ -1,0 +1,57 @@
+# Release pipeline — GitHub Actions.
+#
+# On a semver tag, run the full quality gate, build the site, and upload one
+# immutable tarball to the Scaleway artifacts bucket.
+#
+# The CI identity (OpenTofu: `artifacts-upload`) can ONLY PutObject under
+# `releases/*` in the isolated homepage-artifacts project — no list, no read,
+# no delete. So we upload a single object with `put-object`, never `sync`
+# (sync lists the destination first and would get AccessDenied).
+
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+
+      # The tag must match package.json — use `npm version` to cut releases so
+      # they stay in sync; this fails the build if a hand-made tag diverges.
+      - name: Verify tag matches package.json
+        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+      - run: tar czf site.tar.gz -C dist .
+
+      # --if-none-match "*" makes this a write-once PutObject: if the key
+      # already exists the request fails (412) instead of overwriting. Needs
+      # only PutObject, which is all the CI identity has.
+      - name: Upload release artifact
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_UPLOAD_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_UPLOAD_SECRET_KEY }}
+          AWS_DEFAULT_REGION: nl-ams
+        run: |
+          aws s3api put-object \
+            --bucket mdijkstra-homepage-artifacts \
+            --key "releases/${GITHUB_REF_NAME}/site-${GITHUB_SHA}.tar.gz" \
+            --body site.tar.gz \
+            --if-none-match "*" \
+            --endpoint-url https://s3.nl-ams.scw.cloud
