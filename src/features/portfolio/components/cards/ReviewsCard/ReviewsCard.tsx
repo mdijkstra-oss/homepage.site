@@ -11,7 +11,7 @@ export function ReviewsCard({ payload }: { payload: ReviewsPayload }) {
   return (
     <Row>
       <Card>
-        <Badge kind="reviews">RECOMMENDATIONS</Badge>
+        <Badge kind="reviews">{payload.badge}</Badge>
         <CardHeading title={payload.title} subtitle={payload.subtitle} />
         <div className={layoutStyles.list}>
           {payload.items.map((review) => (

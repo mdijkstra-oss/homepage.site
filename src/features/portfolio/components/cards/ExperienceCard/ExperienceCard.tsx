@@ -9,7 +9,7 @@ export function ExperienceCard({ payload }: { payload: ExperiencePayload }) {
   return (
     <Row>
       <InteractiveCard>
-        <Badge kind="experience">FREELANCE · PROJECT</Badge>
+        <Badge kind="experience">{payload.badge}</Badge>
         <div className={styles.video}>
           <iframe
             src={payload.video}

@@ -20,7 +20,7 @@ export function ProfileCard({ payload }: { payload: ProfilePayload }) {
             <p className={styles.bio}>{payload.bio}</p>
             <div className={styles.availability}>
               <span className={styles.availabilityDot} />
-              Available for Staff/founding roles · Remote (EU/US overlap)
+              {payload.availability}
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@ export function ProfileCard({ payload }: { payload: ProfilePayload }) {
           />
           <span className={styles.note}>
             <span className={styles.noteA}>{payload.note}</span>
-            <span className={styles.noteB}>1 of 1 available</span>
+            <span className={styles.noteB}>{payload.noteHover}</span>
           </span>
         </div>
       </InteractiveCard>

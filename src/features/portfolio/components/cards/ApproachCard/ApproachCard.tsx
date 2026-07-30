@@ -11,7 +11,7 @@ export function ApproachCard({ payload }: { payload: ApproachPayload }) {
   return (
     <Row>
       <Card>
-        <Badge kind="approach">APPROACH</Badge>
+        <Badge kind="approach">{payload.badge}</Badge>
         <CardHeading title={payload.title} />
         <p className={styles.intro}>{payload.intro}</p>
         <div className={layoutStyles.list}>

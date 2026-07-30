@@ -1,8 +1,60 @@
-import type { ContentSection } from './types';
+import type { ContentSection } from '../features/portfolio/model/types';
+
+export interface NavItem {
+  label: string;
+  href?: string;
+  target?: '_blank';
+  rel?: 'noopener';
+}
+
+export interface ComposerCopy {
+  placeholder: string;
+  send: string;
+  busy: string;
+}
+
+export interface SiteCopy {
+  logo: string;
+  nav: readonly NavItem[];
+  composer: ComposerCopy;
+  thinkingWords: readonly string[];
+}
+
+export const SITE: SiteCopy = {
+  logo: 'mdijkstra.dev',
+  nav: [
+    {
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/matthijn-dijkstra-65527199/',
+      target: '_blank',
+      rel: 'noopener',
+    },
+    { label: 'Resume', href: '/resume.pdf' },
+    { label: 'Contact', href: "mailto:hire@mdijkstra.dev?subject=Let's%20build%20something" },
+  ],
+  composer: {
+    placeholder: 'Ask anything about Matthijn',
+    send: '↵ send',
+    busy: '…',
+  },
+  thinkingWords: [
+    'Thinking',
+    'Pondering',
+    'Mulling it over',
+    'Reflecting',
+    'Considering',
+    'Gathering thoughts',
+    'Digging in',
+    'Working it out',
+    'Piecing it together',
+    'One sec',
+  ],
+};
 
 export const SECTIONS: readonly ContentSection[] = [
   {
     id: 'profile',
+    pillLabel: 'Profile',
     prompt: 'Who is Matthijn, in a nutshell?',
     blocks: [
       {
@@ -13,8 +65,10 @@ export const SECTIONS: readonly ContentSection[] = [
           label: 'STAFF ENGINEER',
           bio: "Software architect and engineer who owns the shape of a system, not just my corner of it. I've built platforms from the first line of code to production at scale, most recently as PeerWell's first full-time engineer, where I designed and built most of a digital therapeutics platform and grew with it through funding rounds and an acquisition, taking on more of the architecture as the team scaled across the US and Europe.",
           badge: 'AVAILABLE FOR WORK',
+          availability: 'Available for Staff/founding roles · Remote (EU/US overlap)',
           cta: 'Hire me →',
           note: 'usually replies same day',
+          noteHover: '1 of 1 available',
           email: 'hire@mdijkstra.dev',
           emailSubject: "Let's build something",
         },
@@ -23,6 +77,7 @@ export const SECTIONS: readonly ContentSection[] = [
   },
   {
     id: 'experience',
+    pillLabel: 'Experience',
     prompt: 'Walk me through his most significant work.',
     blocks: [
       {
@@ -118,11 +173,13 @@ export const SECTIONS: readonly ContentSection[] = [
   },
   {
     id: 'reviews',
+    pillLabel: 'Reviews',
     prompt: "What do people who've worked with him say?",
     blocks: [
       {
         type: 'reviews',
         payload: {
+          badge: 'RECOMMENDATIONS',
           title: 'What people say',
           subtitle: 'VIA LINKEDIN',
           items: [
@@ -160,11 +217,13 @@ export const SECTIONS: readonly ContentSection[] = [
   },
   {
     id: 'approach',
+    pillLabel: 'Approach',
     prompt: 'How does he approach the work?',
     blocks: [
       {
         type: 'approach',
         payload: {
+          badge: 'APPROACH',
           title: 'How I build',
           intro:
             "Tools change constantly. The convictions underneath don't. These are the ones that survived twenty years of the field reinventing itself.",
@@ -214,13 +273,17 @@ export const SECTIONS: readonly ContentSection[] = [
             "The work ran the full range. At one end, WordPress and marketing sites for local businesses, plus some design work. At the other, systems with real weight behind them: an online restaurant ordering and payments platform with orders printing straight to the counter, content pipelines chewing through large amounts of XML, and early 360° video for Mini's 50th anniversary that let people sit in the cars and walk through a museum.",
             "Across all of it, I owned the whole thing: the technical calls, the client relationship, and the unglamorous parts like scoping and quoting. That end-to-end ownership is what carried into being PeerWell's first engineer.",
           ],
-          loop: ['Consult', 'Scope', 'Design', 'Build', 'Deploy', 'Support'],
+          loop: {
+            label: '↻ THE LOOP',
+            steps: ['Consult', 'Scope', 'Design', 'Build', 'Deploy', 'Support'],
+          },
         },
       },
 
       {
         type: 'experience',
         payload: {
+          badge: 'FREELANCE · PROJECT',
           video: 'https://player.vimeo.com/video/178323880?h=ad16d3f9a9',
           name: 'The MINI Museum',
           meta: '2014 · FREELANCE @ YELLOWBIRD',
@@ -232,11 +295,13 @@ export const SECTIONS: readonly ContentSection[] = [
   },
   {
     id: 'education',
+    pillLabel: 'Education',
     prompt: "Where'd he study?",
     blocks: [
       {
         type: 'education',
         payload: {
+          badge: 'EDUCATION',
           title: 'Education',
           subtitle: 'DEGREES & STUDY',
           items: [

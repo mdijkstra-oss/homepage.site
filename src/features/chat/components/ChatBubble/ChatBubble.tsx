@@ -7,22 +7,11 @@ import {
   paintPointerSpotlight,
 } from '../../../../components/effects/PointerSpotlight/pointerSpotlight';
 import { Row } from '../../../../components/primitives/Row/Row';
+import { SITE } from '../../../../content/site';
 import type { ChatRole } from '../../conversation/messages';
 import styles from './ChatBubble.module.css';
 
-const THINKING = [
-  'Thinking',
-  'Pondering',
-  'Mulling it over',
-  'Reflecting',
-  'Considering',
-  'Gathering thoughts',
-  'Digging in',
-  'Working it out',
-  'Piecing it together',
-  'One sec',
-];
-const pickThinking = () => THINKING[Math.floor(Math.random() * THINKING.length)];
+const pickThinking = () => SITE.thinkingWords[Math.floor(Math.random() * SITE.thinkingWords.length)];
 
 export interface ChatBubbleProps {
   speaker: ChatRole;

@@ -8,12 +8,6 @@ export interface AccentPalette {
 
 export type BadgeKind = 'profile' | 'role' | 'note' | 'experience' | 'also' | 'education' | 'reviews' | 'approach';
 
-export interface PromptPill {
-  section: SectionId;
-  label: string;
-  palette: AccentPalette;
-}
-
 const BLUE: AccentPalette = {
   background: 'linear-gradient(180deg, rgba(34,52,104,0.95), rgba(22,34,70,0.92))',
   color: '#d7e2ff',
@@ -55,10 +49,11 @@ export const BADGE_PALETTES: Record<BadgeKind, AccentPalette> = {
   },
 };
 
-export const PROMPT_PILLS: PromptPill[] = [
-  { section: 'profile', label: 'Profile', palette: BADGE_PALETTES.profile },
-  { section: 'experience', label: 'Experience', palette: BADGE_PALETTES.role },
-  { section: 'reviews', label: 'Reviews', palette: BADGE_PALETTES.reviews },
-  { section: 'approach', label: 'Approach', palette: BADGE_PALETTES.approach },
-  { section: 'education', label: 'Education', palette: BADGE_PALETTES.education },
-];
+export const SECTION_PALETTES: Record<SectionId, AccentPalette> = {
+  profile: BADGE_PALETTES.profile,
+  experience: BADGE_PALETTES.role,
+  reviews: BADGE_PALETTES.reviews,
+  approach: BADGE_PALETTES.approach,
+  history: BADGE_PALETTES.note,
+  education: BADGE_PALETTES.education,
+};

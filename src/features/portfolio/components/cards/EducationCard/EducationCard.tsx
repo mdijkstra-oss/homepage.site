@@ -10,7 +10,7 @@ export function EducationCard({ payload }: { payload: EducationPayload }) {
   return (
     <Row>
       <Card>
-        <Badge kind="education">EDUCATION</Badge>
+        <Badge kind="education">{payload.badge}</Badge>
         <CardHeading title={payload.title} subtitle={payload.subtitle} />
         <div className={styles.list}>
           {payload.items.map((item) => (

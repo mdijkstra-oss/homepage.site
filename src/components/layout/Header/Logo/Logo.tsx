@@ -1,3 +1,4 @@
+import { SITE } from '../../../../content/site';
 import styles from './Logo.module.css';
 
 export default function Logo() {
@@ -14,7 +15,7 @@ export default function Logo() {
         <span className={styles.cell4} />
         <span className={styles.cell5} />
       </span>
-      mdijkstra.dev
+      {SITE.logo}
     </a>
   );
 }

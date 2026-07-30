@@ -1,4 +1,5 @@
 import { type ChangeEvent, type FormEvent, type KeyboardEvent, type RefObject, useRef, useState } from 'react';
+import { SITE } from '../../../../content/site';
 import styles from './MessageInput.module.css';
 
 const INPUT_MAX_HEIGHT = 132;
@@ -51,12 +52,12 @@ export default function MessageInput({ onSend, isGeneratingResponse, sendButtonR
         value={value}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        placeholder="Ask anything about Matthijn"
+        placeholder={SITE.composer.placeholder}
         disabled={isGeneratingResponse}
         className={styles.textarea}
       />
       <button ref={sendButtonRef} type="submit" disabled={isSendDisabled} className={styles.send}>
-        {isGeneratingResponse ? '…' : '↵ send'}
+        {isGeneratingResponse ? SITE.composer.busy : SITE.composer.send}
       </button>
     </form>
   );

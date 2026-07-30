@@ -1,6 +1,9 @@
 import Pill from '../../../components/primitives/Pill/Pill';
-import { PROMPT_PILLS } from '../model/palette';
+import { SECTIONS } from '../../../content/site';
+import { selectPromptPills } from '../model/promptPills';
 import styles from './PillRail.module.css';
+
+const PROMPT_PILLS = selectPromptPills(SECTIONS);
 
 export default function PillRail() {
   return (

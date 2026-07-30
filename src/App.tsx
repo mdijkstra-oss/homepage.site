@@ -3,6 +3,7 @@ import styles from './App.module.css';
 import Background from './components/layout/Background/Background';
 import BottomBar from './components/layout/BottomBar/BottomBar';
 import Header from './components/layout/Header/Header';
+import { SECTIONS } from './content/site';
 import ChatBubble from './features/chat/components/ChatBubble/ChatBubble';
 import type { ChatTurn } from './features/chat/conversation/messages';
 import { useLLMChat } from './features/chat/hooks/useLLMChat';
@@ -14,7 +15,6 @@ import { useGameEngine } from './features/game/hooks/useGameEngine';
 import { GAME_CONFIG } from './features/game/settings';
 import { PORTFOLIO_CHAT_HISTORY } from './features/portfolio/chat/portfolioChatHistory';
 import { Block } from './features/portfolio/components/cards/Block';
-import { SECTIONS } from './features/portfolio/model/sections';
 
 export default function App() {
   const rootRef = useRef<HTMLDivElement>(null);

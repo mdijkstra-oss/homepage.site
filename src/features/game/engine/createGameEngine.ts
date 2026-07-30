@@ -1,6 +1,7 @@
 import { smoothstep } from '../../../lib/animation/easing';
 import { selectScrollEasedValue } from '../../../lib/animation/scrollOpacity';
 import { clamp } from '../../../lib/clamp';
+import { GAME_COPY } from '../copy';
 import { createBurstState, sizeBurstCanvas, spawnBurst, tickBurst } from './burst';
 import { type EngineConfig, type EngineProps, readConfig } from './config';
 import {
@@ -30,7 +31,7 @@ import { createStatusChannel } from './status';
 import type { BreakPillStatus, GameEngineHandle, GamePhase, GameStatus } from './types';
 
 const CELL = 30;
-const COUNTDOWN_STEPS = ['3', '2', '1', 'GO'] as const;
+const COUNTDOWN_STEPS = GAME_COPY.countdown.steps;
 
 export function createGameEngine(props: EngineProps): GameEngineHandle {
   const cfg: EngineConfig = readConfig(props);
@@ -221,7 +222,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
       countdownLabel = COUNTDOWN_STEPS[i];
       gameStatus.notify();
       i++;
-      countTimer = setTimeout(run, countdownLabel === 'GO' ? 480 : 640);
+      countTimer = setTimeout(run, countdownLabel === GAME_COPY.countdown.go ? 480 : 640);
     };
     if (countTimer) clearTimeout(countTimer);
     run();
@@ -345,7 +346,10 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
   }
 
   function currentBreakStatus(): BreakPillStatus {
-    return { canShow: !game || game === 'paused', label: game === 'paused' ? 'Resume game' : 'Take a break' };
+    return {
+      canShow: !game || game === 'paused',
+      label: game === 'paused' ? GAME_COPY.resumePill : GAME_COPY.breakPill,
+    };
   }
 
   function currentGameStatus(): GameStatus {

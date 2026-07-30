@@ -20,9 +20,9 @@ export function NoteCard({ payload }: { payload: NotePayload }) {
         </div>
         {payload.loop && (
           <>
-            <div className={styles.loopLabel}>↻ THE LOOP</div>
+            <div className={styles.loopLabel}>{payload.loop.label}</div>
             <div className={styles.loop}>
-              {payload.loop.map((step) => (
+              {payload.loop.steps.map((step) => (
                 <span key={step} className={styles.loopStep}>
                   {step}
                 </span>

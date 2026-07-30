@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { GAME_COPY } from '../copy';
 import type { EngineProps } from '../engine/config';
 import { createGameEngine } from '../engine/createGameEngine';
 import type { BreakPillStatus, GameEngineHandle, GameStatus } from '../engine/types';
 
-const DEFAULT_BREAK_STATUS: BreakPillStatus = { canShow: true, label: 'Take a break' };
+const DEFAULT_BREAK_STATUS: BreakPillStatus = { canShow: true, label: GAME_COPY.breakPill };
 const DEFAULT_GAME_STATUS: GameStatus = { phase: null, score: 0, best: 0, newBest: false, countdownLabel: null };
 
 export function useGameEngine(config: EngineProps) {

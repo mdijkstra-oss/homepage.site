@@ -11,7 +11,7 @@ export function AlsoCard({ payload }: { payload: AlsoPayload }) {
   return (
     <Row>
       <Card>
-        <Badge kind="also">ALSO BUILT</Badge>
+        <Badge kind="also">{payload.badge}</Badge>
         <CardHeading title={payload.title} subtitle={payload.subtitle} />
         <div className={layoutStyles.list}>
           {payload.items.map((item) => (

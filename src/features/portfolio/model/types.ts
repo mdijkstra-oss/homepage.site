@@ -4,8 +4,10 @@ export interface ProfilePayload {
   label: string;
   bio: string;
   badge: string;
+  availability: string;
   cta: string;
   note: string;
+  noteHover: string;
   email: string;
   emailSubject: string;
 }
@@ -50,6 +52,7 @@ export interface Review {
 }
 
 export interface ReviewsPayload {
+  badge: string;
   title: string;
   subtitle: string;
   items: Review[];
@@ -62,9 +65,15 @@ export interface ApproachItem {
 }
 
 export interface ApproachPayload {
+  badge: string;
   title: string;
   intro: string;
   items: ApproachItem[];
+}
+
+export interface NoteLoop {
+  label: string;
+  steps: readonly string[];
 }
 
 export interface NotePayload {
@@ -72,7 +81,7 @@ export interface NotePayload {
   eyebrow: string;
   title: string;
   paragraphs: string[];
-  loop?: string[];
+  loop?: NoteLoop;
 }
 
 export interface EducationRow {
@@ -85,12 +94,14 @@ export interface EducationRow {
 }
 
 export interface EducationPayload {
+  badge: string;
   title: string;
   subtitle: string;
   items: EducationRow[];
 }
 
 export interface ExperiencePayload {
+  badge: string;
   video: string;
   name: string;
   meta: string;
@@ -106,6 +117,7 @@ export interface AlsoItem {
 }
 
 export interface AlsoPayload {
+  badge: string;
   title: string;
   subtitle: string;
   items: AlsoItem[];
@@ -125,6 +137,7 @@ export type SectionId = 'profile' | 'experience' | 'reviews' | 'approach' | 'his
 
 export interface ContentSection {
   id: SectionId;
+  pillLabel?: string;
   prompt: string;
   blocks: readonly CardBlock[];
 }

@@ -1,5 +1,5 @@
+import { SECTIONS } from '../../../content/site';
 import type { ChatMessage } from '../../chat/conversation/messages';
-import { SECTIONS } from '../model/sections';
 import type { ContentSection } from '../model/types';
 import { blockToConversationText } from './serializeBlock';
 
