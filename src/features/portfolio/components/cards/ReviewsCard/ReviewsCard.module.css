@@ -19,14 +19,14 @@
 }
 .name {
   color: var(--color-text-strong);
-  font-size: 14.5px;
+  font-size: var(--text-body);
   font-weight: 700;
 }
 .role {
   margin-top: 3px;
   color: #9aa9bd;
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--text-compact);
 }
 .link {
   position: relative;
@@ -91,7 +91,7 @@
 .quote {
   margin: 12px 0 0;
   color: #d2dae6;
-  font-size: 14px;
+  font-size: var(--text-base);
   font-style: italic;
   line-height: 1.62;
 }

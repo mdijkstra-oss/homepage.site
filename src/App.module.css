@@ -23,12 +23,14 @@
 
 @media (max-width: 640px), (max-height: 480px) {
   .feed {
-    gap: 18px;
+    /* Wider than the gap inside a section, so each exchange reads as its own
+       group once the cards run edge to edge. */
+    gap: 38px;
     /* The composer is the only thing left pinned to the bottom on small
        screens, so the feed clears it with far less room than on desktop. */
     padding: calc(var(--header-height) + 20px) 14px 122px;
   }
   .section {
-    gap: 18px;
+    gap: 24px;
   }
 }

@@ -43,7 +43,7 @@
   margin-top: 5px;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-label);
   letter-spacing: 0.1em;
 }
 .paragraphs {
@@ -55,7 +55,7 @@
 .paragraph {
   margin: 0;
   color: var(--color-text-body);
-  font-size: 14px;
+  font-size: var(--text-base);
   line-height: 1.68;
   text-wrap: pretty;
 }
@@ -108,10 +108,10 @@
 }
 .statNote {
   color: #bfeadd;
-  font-size: 10.5px;
+  font-size: var(--text-micro);
 }
 .statArrow {
-  font-size: 12.5px;
+  font-size: var(--text-small);
   line-height: 1;
 }
 .ctaNote {
@@ -130,7 +130,7 @@
 .footnote {
   color: #93b8cf;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: var(--text-micro);
   line-height: 1.5;
   text-decoration: none;
   transition: color 0.18s ease;

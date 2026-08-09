@@ -9,7 +9,7 @@
   flex: 0 0 auto;
   color: #6f7f95;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-label);
 }
 .text {
   flex: 1;
@@ -27,6 +27,6 @@
 .tech {
   color: #7e8ea2;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: var(--text-micro);
   white-space: nowrap;
 }

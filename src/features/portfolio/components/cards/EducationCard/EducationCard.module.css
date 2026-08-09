@@ -32,7 +32,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: linear-gradient(155deg, #2b313e, #1b2029);
   color: #9db4d6;
-  font-size: 13px;
+  font-size: var(--text-compact);
   font-weight: 700;
 }
 .text {
@@ -41,17 +41,17 @@
 }
 .degree {
   color: var(--color-text-strong);
-  font-size: 15.5px;
+  font-size: var(--text-lead);
   font-weight: 600;
 }
 .school {
   margin-top: 2px;
   color: #a9b6c8;
-  font-size: 13px;
+  font-size: var(--text-compact);
 }
 .year {
   color: var(--color-text-muted);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-label);
   white-space: nowrap;
 }

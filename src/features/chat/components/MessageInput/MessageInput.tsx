@@ -4,6 +4,14 @@ import styles from './MessageInput.module.css';
 
 const INPUT_MAX_HEIGHT = 132;
 
+/**
+ * Focusing on load saves a click with a mouse. On a touch screen it throws the
+ * keyboard over the page before the reader has seen any of it.
+ */
+function prefersFocusOnLoad(): boolean {
+  return window.matchMedia?.('(pointer: fine)').matches ?? false;
+}
+
 interface MessageInputProps {
   onSend: (text: string) => void;
   isGeneratingResponse: boolean;
@@ -12,6 +20,7 @@ interface MessageInputProps {
 
 export default function MessageInput({ onSend, isGeneratingResponse, sendButtonRef }: MessageInputProps) {
   const [value, setValue] = useState('');
+  const [focusOnLoad] = useState(prefersFocusOnLoad);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const resizeInput = (el: HTMLTextAreaElement | null) => {
@@ -46,7 +55,7 @@ export default function MessageInput({ onSend, isGeneratingResponse, sendButtonR
   return (
     <form onSubmit={submit} className={styles.form}>
       <textarea
-        autoFocus
+        autoFocus={focusOnLoad}
         ref={inputRef}
         rows={1}
         value={value}

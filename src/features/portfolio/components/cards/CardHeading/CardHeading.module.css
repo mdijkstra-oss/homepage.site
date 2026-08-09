@@ -8,6 +8,6 @@
   margin-top: 6px;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--text-label);
   letter-spacing: 0.16em;
 }

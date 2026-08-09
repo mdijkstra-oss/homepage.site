@@ -12,6 +12,12 @@
   text-decoration: none;
   white-space: nowrap;
 }
+@media (max-width: 640px) {
+  .button {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+}
 .label {
   display: block;
 }

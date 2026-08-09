@@ -10,14 +10,14 @@
   color: #d6def0;
   cursor: pointer;
   font-family: var(--font-display);
-  font-size: 12.5px;
+  font-size: var(--text-small);
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
 }
 .icon {
   color: var(--pill-icon-color);
-  font-size: 11.5px;
+  font-size: var(--text-meta);
   opacity: 0.9;
 }
 .fill {

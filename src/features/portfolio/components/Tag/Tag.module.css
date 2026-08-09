@@ -8,7 +8,7 @@
   color: #aebed4;
   cursor: default;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: var(--text-micro);
   transition:
     background-color 0.18s ease,
     transform 0.18s ease;

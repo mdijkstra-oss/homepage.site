@@ -11,7 +11,7 @@
     0 6px 18px rgba(0, 0, 0, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: var(--text-micro);
   letter-spacing: 0.14em;
   white-space: nowrap;
 }

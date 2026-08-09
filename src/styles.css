@@ -8,6 +8,29 @@
   --color-text-strong: #eef2f8;
   --color-text-body: #c4cee0;
   --color-text-muted: #8fa0b8;
+
+  /* Body and label sizes. A phone is held closer than a monitor but shows far
+     less text, so every step is a shade larger there. */
+  --text-micro: 10.5px;
+  --text-label: 11px;
+  --text-meta: 11.5px;
+  --text-small: 12.5px;
+  --text-compact: 13px;
+  --text-base: 14px;
+  --text-body: 14.5px;
+  --text-lead: 15.5px;
+}
+@media (max-width: 640px) {
+  :root {
+    --text-micro: 12px;
+    --text-label: 12.5px;
+    --text-meta: 13px;
+    --text-small: 13.5px;
+    --text-compact: 14px;
+    --text-base: 15px;
+    --text-body: 15.5px;
+    --text-lead: 16.5px;
+  }
 }
 * {
   box-sizing: border-box;
