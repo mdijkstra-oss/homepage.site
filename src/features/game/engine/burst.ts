@@ -241,6 +241,7 @@ function stepAndDrawShocks(ctx: CanvasRenderingContext2D, shocks: readonly Ring[
   return kept;
 }
 
+/** Returns whether the canvas still has moving content and needs another frame. */
 export function tickBurst(
   ctx: CanvasRenderingContext2D,
   state: BurstState,
@@ -248,13 +249,14 @@ export function tickBurst(
   dims: { bw: number; bh: number },
   gameActive: boolean,
   drawUnderlay: ((ctx: CanvasRenderingContext2D, now: number) => void) | null,
-): void {
+): boolean {
   if (!isBurstActive(state, gameActive)) {
     if (state.dirty) {
       ctx.clearRect(0, 0, dims.bw, dims.bh);
       state.dirty = false;
     }
-    return;
+    state.lastTick = null;
+    return false;
   }
   state.dirty = true;
   let dt = (now - (state.lastTick ?? now)) / 1000;
@@ -275,4 +277,5 @@ export function tickBurst(
 
   ctx.globalAlpha = 1;
   ctx.globalCompositeOperation = 'source-over';
+  return true;
 }

@@ -148,15 +148,14 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
     golLast = now;
     if (dt > 500) dt = 33;
     if (!grid.length) return;
-    if (phase < 1) {
-      phase = Math.min(1, phase + dt / fadeMs);
-    } else {
+    if (phase >= 1) {
       waitAcc += dt;
-      if (waitAcc >= waitMs) {
-        waitAcc = 0;
-        advanceGen();
-      }
+      // Between generations the pixels are identical, so painting them again is wasted GPU work.
+      if (waitAcc < waitMs) return;
+      waitAcc = 0;
+      advanceGen();
     }
+    phase = Math.min(1, phase + dt / fadeMs);
     paintGol();
   }
 
@@ -210,6 +209,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
   function startCountdown(): void {
     game = 'countdown';
     snakeAcc = 0;
+    startLoop();
     if (golCanvas) golCanvas.style.opacity = '1';
     breakStatus.notify();
     let i = 0;
@@ -364,6 +364,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
       return;
     }
     spawnBurst(burstState, origin.x, origin.y);
+    startLoop();
     if (snakeTimer) clearTimeout(snakeTimer);
     snakeTimer = setTimeout(startGame, 380);
   }
@@ -391,8 +392,19 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
     const loopDelta = lastLoopAt ? Math.min(80, now - lastLoopAt) : 16;
     lastLoopAt = now;
     tickSnake(loopDelta);
-    if (burstCtx)
+    const stillAnimating =
+      burstCtx !== null &&
       tickBurst(burstCtx, burstState, now, burstDims, game === 'play' || game === 'countdown', drawSnakeUnderlay);
+    if (stillAnimating) {
+      raf = requestAnimationFrame(loop);
+      return;
+    }
+    raf = 0;
+    lastLoopAt = 0;
+  }
+
+  function startLoop(): void {
+    if (raf) return;
     raf = requestAnimationFrame(loop);
   }
 
@@ -403,7 +415,6 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
     disposers.push(() => window.removeEventListener('resize', onResize));
     window.addEventListener('scroll', syncGolOpacity, { passive: true });
     disposers.push(() => window.removeEventListener('scroll', syncGolOpacity));
-    raf = requestAnimationFrame(loop);
   }
 
   function destroy(): void {
