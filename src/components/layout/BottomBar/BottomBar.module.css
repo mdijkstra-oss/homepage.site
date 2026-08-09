@@ -29,3 +29,13 @@
   padding: 3px 1px 0 14px;
   pointer-events: none;
 }
+
+@media (max-width: 640px), (max-height: 480px) {
+  .composer {
+    padding: 16px 14px 14px;
+  }
+  /* The game is driven by the arrow keys, so it has nothing to offer a phone. */
+  .break {
+    display: none;
+  }
+}

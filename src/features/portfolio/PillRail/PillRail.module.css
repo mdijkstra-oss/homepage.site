@@ -11,3 +11,11 @@
 .rail::-webkit-scrollbar {
   display: none;
 }
+
+/* Narrow phones, and phones held sideways, where the rail costs more room
+   than the shortcuts are worth. */
+@media (max-width: 640px), (max-height: 480px) {
+  .rail {
+    display: none;
+  }
+}

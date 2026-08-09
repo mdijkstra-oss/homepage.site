@@ -53,3 +53,13 @@
   cursor: default;
   opacity: 0.45;
 }
+
+@media (max-width: 640px), (max-height: 480px) {
+  .form {
+    padding: 13px 15px;
+  }
+  /* Safari on iOS zooms the page in when a focused field is under 16px. */
+  .textarea {
+    font-size: 16px;
+  }
+}

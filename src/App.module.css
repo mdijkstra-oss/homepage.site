@@ -1,6 +1,6 @@
 .app {
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
   background: #0a0b0d;
   font-family: var(--font-display);
 }
@@ -12,11 +12,23 @@
   gap: 26px;
   max-width: 760px;
   margin: 0 auto;
-  padding: 86px 22px 168px;
+  padding: calc(var(--header-height) + 28px) 22px 168px;
 }
 .section {
   display: flex;
   flex-direction: column;
   gap: 26px;
-  scroll-margin-top: 78px;
+  scroll-margin-top: calc(var(--header-height) + 20px);
+}
+
+@media (max-width: 640px), (max-height: 480px) {
+  .feed {
+    gap: 18px;
+    /* The composer is the only thing left pinned to the bottom on small
+       screens, so the feed clears it with far less room than on desktop. */
+    padding: calc(var(--header-height) + 20px) 14px 122px;
+  }
+  .section {
+    gap: 18px;
+  }
 }

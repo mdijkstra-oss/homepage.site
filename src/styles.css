@@ -1,4 +1,7 @@
 :root {
+  /* The fixed header's height. The feed's top padding, the scroll anchors and
+     the nav drop-down all key off it, so they stay aligned if it changes. */
+  --header-height: 58px;
   --font-display: "Space Grotesk", sans-serif;
   --font-mono: "Space Mono", monospace;
   --color-text-heading: #f4f7fd;
@@ -18,7 +21,8 @@ html {
   scroll-behavior: smooth;
 }
 #root {
-  min-height: 100vh;
+  /* dvh tracks the mobile browser's collapsing toolbars; vh does not. */
+  min-height: 100dvh;
 }
 a {
   color: #9fb0c2;
