@@ -30,7 +30,7 @@ export const SITE: SiteCopy = {
       rel: 'noopener',
     },
     { label: 'Resume', href: '/resume.pdf' },
-    { label: 'Contact', href: "mailto:hire@mdijkstra.dev?subject=Let's%20build%20something" },
+    { label: 'Contact', href: "mailto:hello@mdijkstra.dev?subject=Let's%20build%20something%20great" },
   ],
   composer: {
     placeholder: 'Ask anything about Matthijn',
@@ -63,14 +63,14 @@ export const SECTIONS: readonly ContentSection[] = [
           initials: 'MD',
           name: 'M. Dijkstra',
           label: 'STAFF ENGINEER',
-          bio: "Software architect and engineer who owns the shape of a system, not just my corner of it. I've built platforms from the first line of code to production at scale, most recently as PeerWell's first full-time engineer, where I designed and built most of a digital therapeutics platform and grew with it through funding rounds and an acquisition, taking on more of the architecture as the team scaled across the US and Europe.",
+          bio: "I'm a Software architect and engineer who owns the shape of a system, not just my corner of it. I've built platforms from the first line of code to production at scale, most recently as PeerWell's first full-time engineer, where I designed and built most of a digital therapeutics platform and grew with it through funding rounds and an acquisition, taking on more of the architecture as the team scaled across the US and Europe.",
           badge: 'AVAILABLE FOR WORK',
           availability: 'Available for Staff/founding roles · Remote (EU/US overlap)',
           cta: 'Hire me →',
           note: 'usually replies same day',
           noteHover: '1 of 1 available',
           email: 'hire@mdijkstra.dev',
-          emailSubject: "Let's build something",
+          emailSubject: "Let's build something great",
         },
       },
     ],
@@ -90,13 +90,13 @@ export const SECTIONS: readonly ContentSection[] = [
           meta: '2016–2022 · FIRST ENGINEER → ENGINEERING LEAD',
           paragraphs: [
             {
-              text: 'Joined PeerWell in 2016 as the first full-time engineer, building a digital therapeutics platform for surgical preparation and recovery. Healthcare software carries a higher bar. Patients rely on it for post-surgical guidance and clinicians build it into care pathways, so reliability and data accuracy matter more than in most consumer software.',
+              text: 'Joined PeerWell in 2016 as the first full-time engineer, build a digital therapeutics platform for surgical preparation and recovery. Healthcare software carries high bar. Patients rely on it for post-surgical guidance and clinicians build it into care pathways.',
             },
             {
-              text: "Designed and built most of the initial platform, including the architecture the patent describes: the recommendation engine, the configurable scoring, and the patient data model behind it. As the team grew across the US and Europe, I took on more of the system's design and worked with the other engineering leads as it scaled. Also helped interview and vet engineers as we hired, which mattered for a team that was remote almost from the start.",
+              text: "Designed and built most of the initial platform, including the architecture the patent describes: the recommendation engine, the configurable scoring, and the patient data model behind it. As the team grew across the US and Europe, I took on more of the system's design and worked with the other engineers as it scaled. Also involved with the interview and vetting process for hiring engineers for a team that was remote almost from the start.",
             },
             {
-              text: 'Did the early machine learning work on the product, mainly the image and pose recognition system behind the movement assessment features, and kept improving those methods over time.',
+              text: 'Build the early machine learning work on the product, mainly the image and pose recognition system behind the AI movement assisted features. Building a platform that allowed new exercises to be created from sample videos.',
             },
             {
               pre: 'Co-inventor on published U.S. Patent Application ',
@@ -157,7 +157,7 @@ export const SECTIONS: readonly ContentSection[] = [
           meta: '2022–2025 · LEAD ENGINEER, ACQUISITION INTEGRATION',
           paragraphs: [
             {
-              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. The platform moved onto Bardavon's infrastructure and its focus shifted from surgical patients to injured workers, launching in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches. My work spanned the codebase, the systems, and the team: merging engineering practices across two companies, documenting the architecture, and guiding Bardavon's engineers as they took ownership.",
+              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. The platform moved onto Bardavon's infrastructure and its focus shifted from surgical patients to injured workers, launching in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches. My work spanned across the codebase, systems, and the team: merging engineering practices across two companies, documenting the architecture, and guiding Bardavon's engineers as they took ownership.",
             },
             {
               text: "The premise that made PeerWell worth acquiring carried straight into its new use: give people recovering from injury the right information and guidance, and they get better faster at lower cost. Adapting the platform to deliver that for workers' compensation was the core of the work. That work wrapped in 2025. The measure of a good handover is that you can leave, and by then I could.",
@@ -250,7 +250,7 @@ export const SECTIONS: readonly ContentSection[] = [
             },
             {
               idx: '05',
-              lead: "The work is shifting from writing code to specifying it, and I've shifted with it.",
+              lead: "The work is shifting from writing code to specifying it, and I'm shifting with it.",
               body: "Agentic tools do more of the typing while I write the spec and review the output hard. It's the same skill as extracting requirements from stakeholders, pointed the other way. The leverage is enormous, and it's only worth as much as the review standards behind it.",
             },
           ],
@@ -269,9 +269,9 @@ export const SECTIONS: readonly ContentSection[] = [
           eyebrow: 'INDEPENDENT · 2007–2016',
           title: 'Freelance',
           paragraphs: [
-            "Spent close to nine years freelancing, alongside studying and later full-time work. Freelancing is mostly the same loop, repeated across very different clients: work out what someone actually needs from what they say they want, agree on what you'll deliver, and then build and ship it. Usually as the sole engineer, often working with designers and the client's own people. Doing that continuously for years is where I learned to work with clients rather than just for them.",
-            "The work ran the full range. At one end, WordPress and marketing sites for local businesses, plus some design work. At the other, systems with real weight behind them: an online restaurant ordering and payments platform with orders printing straight to the counter, content pipelines chewing through large amounts of XML, and early 360° video for Mini's 50th anniversary that let people sit in the cars and walk through a museum.",
-            "Across all of it, I owned the whole thing: the technical calls, the client relationship, and the unglamorous parts like scoping and quoting. That end-to-end ownership is what carried into being PeerWell's first engineer.",
+            "I spent close to nine years freelancing, alongside studying and later full-time work. Freelancing is mostly the same loop repeated across very different clients: work out what someone actually needs from what they say they want, agree on what you'll deliver, then build, ship and support it. Usually as the sole engineer, often alongside designers and the client's own people.",
+            "The work ran the full range. At one end, WordPress and marketing sites for local businesses. At the other, systems with real weight: an online restaurant ordering and payments platform with orders printing straight to the counter, and early 360° video for Mini's 50th anniversary that let people sit in the cars and walk through a museum.",
+            'Across all of it I owned the whole chain: the technical work and the client relationship.',
           ],
           loop: {
             label: '↻ THE LOOP',
@@ -306,7 +306,7 @@ export const SECTIONS: readonly ContentSection[] = [
           subtitle: 'DEGREES & STUDY',
           items: [
             {
-              img: 'https://api.mdijkstra.dev/public/images/hanze.jpeg',
+              img: 'https://api.mdijkstra.dev/public/images/hanze.webp',
               url: 'https://www.hanze.nl/en/',
               degree: 'Hanze University of Applied Sciences',
               school: 'Computer Science',
@@ -326,10 +326,11 @@ export const SECTIONS: readonly ContentSection[] = [
         type: 'note',
         payload: {
           eyebrow: 'PHILOSOPHY',
-          title: 'Always moving',
+          title: 'Still curious',
           paragraphs: [
-            "I've always thought software rewards curiosity. Languages evolve and frameworks come and go, and staying effective means adapting as the field moves. For me that's one of the best parts of the craft: every project is a chance to go deeper and work things out as they arrive.",
-            'I started teaching myself to code long before it was a career, and the same instinct now shapes how I lead: go deep enough to genuinely understand a system, so the calls you make for a team are the right ones and the people around you learn from them.',
+            "I taught myself to code years before it occurred to me it could be a job. Twenty-five years later the instinct hasn't changed: I want to know how the thing actually works.\n" +
+              '\n' +
+              "That's never stopped at my own layer. Following something end to end is what lets you tell the difference between a feature that ships and a product people actually come back to.",
           ],
         },
       },
