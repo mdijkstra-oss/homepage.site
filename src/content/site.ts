@@ -306,7 +306,7 @@ export const SECTIONS: readonly ContentSection[] = [
           subtitle: 'DEGREES & STUDY',
           items: [
             {
-              img: 'https://api.mdijkstra.dev/public/images/hanze.webp',
+              img: 'uploads/hanze.webp',
               url: 'https://www.hanze.nl/en/',
               degree: 'Hanze University of Applied Sciences',
               school: 'Computer Science',
