@@ -90,13 +90,13 @@ export const SECTIONS: readonly ContentSection[] = [
           meta: '2016–2022 · FIRST ENGINEER → ENGINEERING LEAD',
           paragraphs: [
             {
-              text: 'Joined PeerWell in 2016 as the first full-time engineer, build a digital therapeutics platform for surgical preparation and recovery. Healthcare software carries high bar. Patients rely on it for post-surgical guidance and clinicians build it into care pathways.',
+              text: 'Joined PeerWell in 2016 as the first full-time engineer, building a digital therapeutics platform for surgical preparation and recovery. Healthcare software carries a higher bar. Patients rely on it for post-surgical guidance and clinicians build it into care pathways.',
             },
             {
               text: "Designed and built most of the initial platform, including the architecture the patent describes: the recommendation engine, the configurable scoring, and the patient data model behind it. As the team grew across the US and Europe, I took on more of the system's design and worked with the other engineers as it scaled. Also involved with the interview and vetting process for hiring engineers for a team that was remote almost from the start.",
             },
             {
-              text: 'Build the early machine learning work on the product, mainly the image and pose recognition system behind the AI movement assisted features. Building a platform that allowed new exercises to be created from sample videos.',
+              text: 'Built the early machine learning work on the product, mainly the image and pose recognition system behind the AI movement assisted features, including a platform that allowed new exercises to be created from sample videos.',
             },
             {
               pre: 'Co-inventor on published U.S. Patent Application ',
