@@ -1,56 +1,3 @@
-import type { ContentSection } from '../features/portfolio/model/types';
-
-export interface NavItem {
-  label: string;
-  href?: string;
-  target?: '_blank';
-  rel?: 'noopener';
-}
-
-export interface ComposerCopy {
-  placeholder: string;
-  send: string;
-  busy: string;
-}
-
-export interface SiteCopy {
-  logo: string;
-  nav: readonly NavItem[];
-  composer: ComposerCopy;
-  thinkingWords: readonly string[];
-}
-
-export const SITE: SiteCopy = {
-  logo: 'mdijkstra.dev',
-  nav: [
-    {
-      label: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/matthijn-dijkstra-65527199/',
-      target: '_blank',
-      rel: 'noopener',
-    },
-    { label: 'Resume', href: '/resume.pdf' },
-    { label: 'Contact', href: "mailto:hello@mdijkstra.dev?subject=Let's%20build%20something%20great" },
-  ],
-  composer: {
-    placeholder: 'Ask anything about Matthijn',
-    send: '↵ send',
-    busy: '…',
-  },
-  thinkingWords: [
-    'Thinking',
-    'Pondering',
-    'Mulling it over',
-    'Reflecting',
-    'Considering',
-    'Gathering thoughts',
-    'Digging in',
-    'Working it out',
-    'Piecing it together',
-    'One sec',
-  ],
-};
-
 export const SECTIONS: readonly ContentSection[] = [
   {
     id: 'profile',
@@ -62,8 +9,8 @@ export const SECTIONS: readonly ContentSection[] = [
         payload: {
           initials: 'MD',
           name: 'M. Dijkstra',
-          label: 'STAFF ENGINEER',
-          bio: "I'm a Software architect and engineer who owns the shape of a system, not just my corner of it. I've built platforms from the first line of code to production at scale, most recently as PeerWell's first full-time engineer, where I designed and built most of a digital therapeutics platform and grew with it through funding rounds and an acquisition, taking on more of the architecture as the team scaled across the US and Europe.",
+          label: 'LEAD ENGINEER · ARCHITECT',
+          bio: "I'm a software architect and engineer who owns the shape of a system, not just my corner of it. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon — merging engineering practices across two companies and handing the architecture to a team I hadn't hired. I'm now building Nabu, an open-source research environment, in the open.",
           badge: 'AVAILABLE FOR WORK',
           availability: 'Available for Staff/founding roles · Remote (EU/US overlap)',
           cta: 'Hire me →',
@@ -90,13 +37,16 @@ export const SECTIONS: readonly ContentSection[] = [
           meta: '2016–2022 · FIRST ENGINEER → ENGINEERING LEAD',
           paragraphs: [
             {
-              text: 'Joined PeerWell in 2016 as the first full-time engineer, building a digital therapeutics platform for surgical preparation and recovery. Healthcare software carries a higher bar. Patients rely on it for post-surgical guidance and clinicians build it into care pathways.',
+              text: 'Joined PeerWell in 2016 as the first full-time engineer, building a digital therapeutics platform for surgical preparation and recovery. Patients acted on its guidance and clinicians built it into care pathways.',
             },
             {
-              text: "Designed and built most of the initial platform, including the architecture the patent describes: the recommendation engine, the configurable scoring, and the patient data model behind it. As the team grew across the US and Europe, I took on more of the system's design and worked with the other engineers as it scaled. Also involved with the interview and vetting process for hiring engineers for a team that was remote almost from the start.",
+              text: 'Designed and built most of the initial platform, including the architecture [the patent describes](https://patents.google.com/patent/US20180286509A1/en): the recommendation engine, the configurable scoring, and the patient data model behind it.',
             },
             {
-              text: 'Built the early machine learning work on the product, mainly the image and pose recognition system behind the AI movement assisted features, including a platform that allowed new exercises to be created from sample videos.',
+              text: 'Built the early machine learning work on the product, mainly the image and pose recognition behind the AI-assisted movement features, including a system for creating new exercises from sample videos.',
+            },
+            {
+              text: 'As the team grew across the US and Europe I took on more of the system design and worked alongside the other engineers on it. I also ran interviews and helped set the hiring bar for a team that was remote almost from the start.',
             },
             {
               pre: 'Co-inventor on published U.S. Patent Application ',
@@ -157,7 +107,10 @@ export const SECTIONS: readonly ContentSection[] = [
           meta: '2022–2025 · LEAD ENGINEER, ACQUISITION INTEGRATION',
           paragraphs: [
             {
-              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. The platform moved onto Bardavon's infrastructure and its focus shifted from surgical patients to injured workers, launching in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches. My work spanned across the codebase, systems, and the team: merging engineering practices across two companies, documenting the architecture, and guiding Bardavon's engineers as they took ownership.",
+              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. I moved the platform onto Bardavon's infrastructure, wired it into their CRM, and rebuilt what the shift in focus required — from surgical patients to injured workers — launching in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches.",
+            },
+            {
+              text: "The other half was working across two teams. PeerWell and Bardavon had different engineering practices and different assumptions about the codebase, and the integration meant reconciling them as we went. I documented the architecture and worked with Bardavon's engineers until they owned it.",
             },
             {
               text: "The premise that made PeerWell worth acquiring carried straight into its new use: give people recovering from injury the right information and guidance, and they get better faster at lower cost. Adapting the platform to deliver that for workers' compensation was the core of the work. That work wrapped in 2025. The measure of a good handover is that you can leave, and by then I could.",
@@ -167,6 +120,59 @@ export const SECTIONS: readonly ContentSection[] = [
           cta: 'View Recovery+ →',
           ctaNote: '@ bardavon.com',
           href: 'https://www.bardavon.com/injury-recovery/recovery-plus/',
+        },
+      },
+    ],
+  },
+  {
+    id: 'projects',
+    pillLabel: 'Projects',
+    prompt: "What's he building now?",
+    blocks: [
+      {
+        type: 'experience',
+        payload: {
+          badge: 'OPEN SOURCE · CURRENT',
+          video: '',
+          name: 'Nabu',
+          meta: '2025–PRESENT · SOLO · OPEN SOURCE',
+          blurb:
+            'An integrated research environment: the machinery of agentic IDEs pointed at a field where the source of truth is prose rather than code. Markdown files hold everything writable and every queryable view is projected from them, so no answer can drift from what the documents actually say. High-value passes go to models from different providers, and where two disagree a third decides — the passages they split on turn out to be the ones human coders argue about, so a run reports where the codebook itself is ambiguous.',
+          tech: ['React 19', 'TypeScript', 'DuckDB-WASM', 'Go', 'Docker', 'Multi-provider LLM'],
+          cta: 'View on GitHub →',
+          href: 'https://github.com/mdijkstra-oss/nabu-frontend',
+        },
+      },
+    ],
+  },
+  {
+    id: 'projects',
+    pillLabel: 'Projects',
+    prompt: "What's he building now?",
+    blocks: [
+      {
+        type: 'experience',
+        payload: {
+          badge: 'OPEN SOURCE · CURRENT',
+          video: '',
+          name: 'Nabu',
+          meta: '2025–PRESENT · SOLO · OPEN SOURCE',
+          blurb:
+            'An integrated research environment: the machinery of agentic IDEs pointed at a field where the source of truth is prose rather than code. Markdown files hold everything writable and every queryable view is projected from them, so no answer can drift from what the documents actually say. High-value passes go to models from different providers, and where two disagree a third decides — the passages they split on turn out to be the ones human coders argue about, so a run reports where the codebook itself is ambiguous.',
+          tech: ['React 19', 'TypeScript', 'DuckDB-WASM', 'Go', 'Docker', 'Multi-provider LLM'],
+          cta: 'View on GitHub →',
+          href: '',
+        },
+      },
+
+      {
+        type: 'note',
+        payload: {
+          eyebrow: 'APPROACH',
+          title: 'How I build',
+          paragraphs: [
+            "The work is shifting from writing code to specifying it, and I'm shifting with it. Agentic tools do more of the typing while I write the spec and review the output hard — the same skill as extracting requirements from stakeholders, pointed the other way. Nabu is where I've been working out what that actually changes, and so far the answer is that it's worth exactly as much as the review standards behind it.",
+          ],
         },
       },
     ],
@@ -194,7 +200,7 @@ export const SECTIONS: readonly ContentSection[] = [
             },
             {
               initials: 'MS',
-              name: 'Manish Sha',
+              name: 'Manish Shah',
               photo: 'uploads/manish.jpeg',
               role: 'CEO of PeerWell (co-founder, Rapleaf)',
               url: 'https://www.linkedin.com/in/mnshah/',
@@ -216,50 +222,8 @@ export const SECTIONS: readonly ContentSection[] = [
     ],
   },
   {
-    id: 'approach',
-    pillLabel: 'Approach',
-    prompt: 'How does he approach the work?',
-    blocks: [
-      {
-        type: 'approach',
-        payload: {
-          badge: 'APPROACH',
-          title: 'How I build',
-          intro:
-            "Tools change constantly. The convictions underneath don't. These are the ones that survived twenty years of the field reinventing itself.",
-          items: [
-            {
-              idx: '01',
-              lead: 'Quality is enforced by the system, not by discipline.',
-              body: "Hard gates in the pipeline: coverage, linting, security. Rules that depend on people remembering them erode, so the pipeline doesn't negotiate, and code review doesn't have to be the last line of defense.",
-            },
-            {
-              idx: '02',
-              lead: 'Architecture follows the problem.',
-              body: "Team shape, failure domains, and what genuinely needs to scale on its own decide the design, not what's currently fashionable. Systems built that way are the ones still standing years later.",
-            },
-            {
-              idx: '03',
-              lead: 'Everything reproducible.',
-              body: "Infrastructure as code, environments rebuilt from a repo, nothing that lives only in someone's head or on someone's laptop. If it can't be recreated, it's a liability.",
-            },
-            {
-              idx: '04',
-              lead: 'Built for the case where being wrong hurts someone.',
-              body: "Healthcare set the bar: patients acted on what the platform told them. That standard, data you can trust and failures thought through in advance, doesn't switch off in other domains.",
-            },
-            {
-              idx: '05',
-              lead: "The work is shifting from writing code to specifying it, and I'm shifting with it.",
-              body: "Agentic tools do more of the typing while I write the spec and review the output hard. It's the same skill as extracting requirements from stakeholders, pointed the other way. The leverage is enormous, and it's only worth as much as the review standards behind it.",
-            },
-          ],
-        },
-      },
-    ],
-  },
-  {
     id: 'history',
+    pillLabel: 'Freelance',
     prompt: 'Where did he start out?',
     blocks: [
       {
@@ -269,26 +233,14 @@ export const SECTIONS: readonly ContentSection[] = [
           eyebrow: 'INDEPENDENT · 2007–2016',
           title: 'Freelance',
           paragraphs: [
-            "I spent close to nine years freelancing, alongside studying and later full-time work. Freelancing is mostly the same loop repeated across very different clients: work out what someone actually needs from what they say they want, agree on what you'll deliver, then build, ship and support it. Usually as the sole engineer, often alongside designers and the client's own people.",
-            "The work ran the full range. At one end, WordPress and marketing sites for local businesses. At the other, systems with real weight: an online restaurant ordering and payments platform with orders printing straight to the counter, and early 360° video for Mini's 50th anniversary that let people sit in the cars and walk through a museum.",
-            'Across all of it I owned the whole chain: the technical work and the client relationship.',
+            'I freelanced for close to nine years, alongside studying and later full-time work. It was the same loop repeated across very different clients: work out what someone actually needs from what they say they want, agree what to deliver, then build it and ship it. Usually I was the only engineer, working with designers and whoever the client had in house.',
+            'The work ran the full range. At one end, WordPress and marketing sites for local businesses. At the other, an online restaurant ordering and payments platform with orders printing straight to the counter.',
+            'The client relationship was mine as much as the code: scoping the work, and taking the call when something broke.',
           ],
           loop: {
             label: '↻ THE LOOP',
             steps: ['Consult', 'Scope', 'Design', 'Build', 'Deploy', 'Support'],
           },
-        },
-      },
-
-      {
-        type: 'experience',
-        payload: {
-          badge: 'FREELANCE · PROJECT',
-          video: 'https://player.vimeo.com/video/178323880?h=ad16d3f9a9',
-          name: 'The MINI Museum',
-          meta: '2014 · FREELANCE @ YELLOWBIRD',
-          blurb:
-            "A pioneering 3D interactive video experience built for MINI's 50th birthday. Sit inside the cars and walk around the museum, all virtually.",
         },
       },
     ],
@@ -328,9 +280,7 @@ export const SECTIONS: readonly ContentSection[] = [
           eyebrow: 'PHILOSOPHY',
           title: 'Still curious',
           paragraphs: [
-            "I taught myself to code years before it occurred to me it could be a job. Twenty-five years later the instinct hasn't changed: I want to know how the thing actually works.\n" +
-              '\n' +
-              "That's never stopped at my own layer. Following something end to end is what lets you tell the difference between a feature that ships and a product people actually come back to.",
+            "I taught myself to code at eleven and had people paying me for it by fifteen, long before it occurred to me this could be a career. Twenty-five years later, two things haven't changed: I love building things people are glad to use, and I love working out how to get there.",
           ],
         },
       },
