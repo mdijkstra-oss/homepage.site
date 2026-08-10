@@ -107,6 +107,8 @@ export interface ExperiencePayload {
   meta: string;
   blurb: string;
   tech?: string[];
+  cta?: string;
+  href?: string;
 }
 
 export interface AlsoItem {
@@ -133,7 +135,7 @@ export type CardBlock =
   | { type: 'experience'; payload: ExperiencePayload }
   | { type: 'also'; payload: AlsoPayload };
 
-export type SectionId = 'profile' | 'experience' | 'reviews' | 'approach' | 'history' | 'education';
+export type SectionId = 'profile' | 'experience' | 'projects' | 'reviews' | 'approach' | 'history' | 'education';
 
 export interface ContentSection {
   id: SectionId;

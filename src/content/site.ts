@@ -24,6 +24,12 @@ export const SITE: SiteCopy = {
   logo: 'mdijkstra.dev',
   nav: [
     {
+      label: 'GitHub',
+      href: 'https://github.com/mdijkstra-oss/',
+      target: '_blank',
+      rel: 'noopener',
+    },
+    {
       label: 'LinkedIn',
       href: 'https://www.linkedin.com/in/matthijn-dijkstra-65527199/',
       target: '_blank',

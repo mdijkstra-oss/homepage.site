@@ -52,6 +52,7 @@ export const BADGE_PALETTES: Record<BadgeKind, AccentPalette> = {
 export const SECTION_PALETTES: Record<SectionId, AccentPalette> = {
   profile: BADGE_PALETTES.profile,
   experience: BADGE_PALETTES.role,
+  projects: BADGE_PALETTES.also,
   reviews: BADGE_PALETTES.reviews,
   approach: BADGE_PALETTES.approach,
   history: BADGE_PALETTES.note,
