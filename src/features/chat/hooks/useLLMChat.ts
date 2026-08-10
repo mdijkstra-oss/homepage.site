@@ -23,16 +23,37 @@ export function useLLMChat(initialMessages: readonly ChatMessage[]) {
       ]);
 
       const history = buildMessages(initialMessages, messages, question);
+
+      // Deltas arrive far faster than the eye reads; committing each one re-renders
+      // the page and re-parses the whole answer as markdown. Batch them per frame.
+      let pending = '';
+      let flushHandle = 0;
+      const flush = () => {
+        flushHandle = 0;
+        if (!pending) return;
+        const chunk = pending;
+        pending = '';
+        setMessages((previous) =>
+          previous.map((message) =>
+            message.id === assistantId ? { ...message, text: message.text + chunk } : message,
+          ),
+        );
+      };
+      const settle = () => {
+        if (flushHandle) cancelAnimationFrame(flushHandle);
+        flush();
+      };
+
       try {
         await streamChat(history, {
-          onDelta: (chunk) =>
-            setMessages((previous) =>
-              previous.map((message) =>
-                message.id === assistantId ? { ...message, text: message.text + chunk } : message,
-              ),
-            ),
+          onDelta: (chunk) => {
+            pending += chunk;
+            if (!flushHandle) flushHandle = requestAnimationFrame(flush);
+          },
         });
+        settle();
       } catch (error) {
+        settle();
         const errorMessage = error instanceof Error ? error.message : String(error);
         setMessages((previous) =>
           previous.map((message) =>

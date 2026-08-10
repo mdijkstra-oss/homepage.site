@@ -84,9 +84,17 @@ export default function App() {
   );
 }
 
+const FOLLOW_BOTTOM_SLACK_PX = 160;
+
+/** Follows the streaming answer, but lets go as soon as the reader scrolls up. A new send always snaps down. */
 function useScrollToLatestMessage(messages: readonly ChatTurn[], isGeneratingResponse: boolean): void {
+  const seenCount = useRef(0);
   useEffect(() => {
     if (!messages.length) return;
+    const isNewTurn = messages.length !== seenCount.current;
+    seenCount.current = messages.length;
+    const distanceFromBottom = document.body.scrollHeight - window.innerHeight - window.scrollY;
+    if (!isNewTurn && distanceFromBottom > FOLLOW_BOTTOM_SLACK_PX) return;
     window.scrollTo({
       top: document.body.scrollHeight,
       behavior: isGeneratingResponse ? 'auto' : 'smooth',

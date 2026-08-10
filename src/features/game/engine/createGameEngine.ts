@@ -32,9 +32,14 @@ import type { BreakPillStatus, GameEngineHandle, GamePhase, GameStatus } from '.
 
 const CELL = 30;
 const COUNTDOWN_STEPS = GAME_COPY.countdown.steps;
+// The ambient background is decoration; it gets half the tick rate and no
+// retina resolution. Both go back up while the snake game needs to feel crisp.
+const AMBIENT_TICK_MS = 66;
+const GAME_TICK_MS = 33;
 
 export function createGameEngine(props: EngineProps): GameEngineHandle {
   const cfg: EngineConfig = readConfig(props);
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
   let raf = 0;
   let lastLoopAt = 0;
@@ -47,6 +52,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
   let lightBuf = new Float32Array(0);
   let golDims: GolDims = { cols: 0, rows: 0 };
   let golViewport = { vw: 0, vh: 0 };
+  let golDpr = 0;
   let phase = 0;
   let waitAcc = 0;
   let golLast = 0;
@@ -80,9 +86,18 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
   const breakStatus = createStatusChannel(currentBreakStatus);
   const gameStatus = createStatusChannel(currentGameStatus);
 
+  function gameIsActive(): boolean {
+    return game === 'play' || game === 'countdown';
+  }
+
+  function targetGolDpr(): number {
+    return gameIsActive() ? Math.min(window.devicePixelRatio || 1, 2) : 1;
+  }
+
   function sizeGol(): void {
     if (!golCanvas || !golCtx) return;
-    const sized = sizeLifeCanvas(golCanvas, golCtx, CELL);
+    golDpr = targetGolDpr();
+    const sized = sizeLifeCanvas(golCanvas, golCtx, CELL, golDpr);
     golDims = { cols: sized.cols, rows: sized.rows };
     golViewport = { vw: sized.vw, vh: sized.vh };
     const N = golDims.cols * golDims.rows;
@@ -96,18 +111,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
 
   function paintGol(): void {
     if (!golCtx) return;
-    paintLife(
-      golCtx,
-      grid,
-      prevGrid,
-      golDims,
-      CELL,
-      hueBuf,
-      lightBuf,
-      phase,
-      golViewport,
-      game === 'play' || game === 'countdown',
-    );
+    paintLife(golCtx, grid, prevGrid, golDims, CELL, hueBuf, lightBuf, phase, golViewport, gameIsActive());
   }
 
   function cellVisible(idx: number): number {
@@ -177,6 +181,30 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
     if (golCanvas) golCanvas.style.opacity = String(selectGolOpacity());
   }
 
+  function selectGolTickMs(): number | null {
+    if (document.hidden) return null;
+    if (gameIsActive()) return GAME_TICK_MS;
+    return reducedMotion ? null : AMBIENT_TICK_MS;
+  }
+
+  /** Re-derives timer cadence, canvas resolution, and opacity from the current game phase and tab visibility. */
+  function syncGolMode(): void {
+    if (golTimer) {
+      clearInterval(golTimer);
+      golTimer = null;
+    }
+    if (!golCanvas || !golCtx) return;
+    if (targetGolDpr() !== golDpr) {
+      sizeGol();
+      paintGol();
+    }
+    syncGolOpacity();
+    const tick = selectGolTickMs();
+    if (tick === null) return;
+    golLast = performance.now();
+    golTimer = setInterval(animLife, tick);
+  }
+
   function initGol(canvas: HTMLElement | null): void {
     if (!(canvas instanceof HTMLCanvasElement)) return;
     golCanvas = canvas;
@@ -187,10 +215,13 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
     ({ hueBuf, lightBuf } = computeColors(grid, golDims));
     phase = 0;
     waitAcc = 0;
-    golLast = performance.now();
-    syncGolOpacity();
+    // With reduced motion there is no fade-in to animate; paint the seed at full strength.
+    if (reducedMotion) {
+      prevGrid.set(grid);
+      phase = 1;
+    }
     paintGol();
-    golTimer = setInterval(animLife, 33);
+    syncGolMode();
   }
 
   function startGame(): void {
@@ -210,7 +241,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
     game = 'countdown';
     snakeAcc = 0;
     startLoop();
-    if (golCanvas) golCanvas.style.opacity = '1';
+    syncGolMode();
     breakStatus.notify();
     let i = 0;
     const run = () => {
@@ -242,7 +273,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
     if (countTimer) clearTimeout(countTimer);
     game = 'paused';
     countdownLabel = null;
-    syncGolOpacity();
+    syncGolMode();
     breakStatus.notify();
     gameStatus.notify();
   }
@@ -254,7 +285,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
     if (snakeTimer) clearTimeout(snakeTimer);
     if (countTimer) clearTimeout(countTimer);
     countdownLabel = null;
-    syncGolOpacity();
+    syncGolMode();
     breakStatus.notify();
     gameStatus.notify();
     paintGol();
@@ -262,6 +293,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
 
   function snakeDie(): void {
     game = 'dead';
+    syncGolMode();
     const head = snake[0];
     spawnBurst(burstState, (head.c + 0.5) * CELL, (head.r + 0.5) * CELL);
     newBest = score > best;
@@ -358,15 +390,10 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
 
   function startOrResume(origin: { x: number; y: number }): void {
     if (game && game !== 'paused') return;
-    if (game === 'paused') {
-      if (snakeTimer) clearTimeout(snakeTimer);
-      snakeTimer = setTimeout(startCountdown, 260);
-      return;
-    }
-    spawnBurst(burstState, origin.x, origin.y);
+    spawnBurst(burstState, origin.x, origin.y, { sparks: 125, stars: 40 });
     startLoop();
     if (snakeTimer) clearTimeout(snakeTimer);
-    snakeTimer = setTimeout(startGame, 380);
+    snakeTimer = setTimeout(game === 'paused' ? startCountdown : startGame, game === 'paused' ? 260 : 380);
   }
 
   function initInteractive(canvas: HTMLCanvasElement): void {
@@ -415,6 +442,8 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
     disposers.push(() => window.removeEventListener('resize', onResize));
     window.addEventListener('scroll', syncGolOpacity, { passive: true });
     disposers.push(() => window.removeEventListener('scroll', syncGolOpacity));
+    document.addEventListener('visibilitychange', syncGolMode);
+    disposers.push(() => document.removeEventListener('visibilitychange', syncGolMode));
   }
 
   function destroy(): void {

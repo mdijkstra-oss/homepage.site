@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { assertNever } from '../../../../lib/assertNever';
 import type { CardBlock } from '../../model/types';
 import { AlsoCard } from './AlsoCard/AlsoCard';
@@ -9,7 +10,8 @@ import { ProfileCard } from './ProfileCard/ProfileCard';
 import { ReviewsCard } from './ReviewsCard/ReviewsCard';
 import { RoleCard } from './RoleCard/RoleCard';
 
-export function Block({ block }: { block: CardBlock }) {
+// Memoized: blocks come from static content, so chat re-renders skip the card tree.
+export const Block = memo(function Block({ block }: { block: CardBlock }) {
   switch (block.type) {
     case 'profile':
       return <ProfileCard payload={block.payload} />;
@@ -30,4 +32,4 @@ export function Block({ block }: { block: CardBlock }) {
     default:
       return assertNever(block);
   }
-}
+});

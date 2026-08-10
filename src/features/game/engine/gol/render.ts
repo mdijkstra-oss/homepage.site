@@ -5,10 +5,11 @@ export function sizeLifeCanvas(
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
   cellSize: number,
+  maxDpr: number,
 ): GolDims & { vw: number; vh: number } {
   const w = window.innerWidth,
     h = window.innerHeight;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
   canvas.width = Math.ceil(w * dpr);
   canvas.height = Math.ceil(h * dpr);
   canvas.style.width = `${w}px`;

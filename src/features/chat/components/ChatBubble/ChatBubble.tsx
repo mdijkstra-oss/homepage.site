@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { memo, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import spotlightStyles from '../../../../components/effects/PointerSpotlight/PointerSpotlight.module.css';
@@ -18,7 +18,11 @@ export interface ChatBubbleProps {
   text: string;
 }
 
-export default function ChatBubble({ speaker, text }: ChatBubbleProps) {
+// Memoized so a streaming delta re-renders only the bubble it lands in; every
+// other bubble on the page keeps its parsed markdown.
+export default memo(ChatBubble);
+
+function ChatBubble({ speaker, text }: ChatBubbleProps) {
   const fillRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<string | null>(null);
   if (wordRef.current === null) wordRef.current = pickThinking();
