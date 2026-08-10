@@ -1,12 +1,8 @@
 # Release pipeline — GitHub Actions.
 #
-# On a semver tag, run the full quality gate, build the site, and upload one
-# immutable tarball to the Scaleway artifacts bucket.
-#
-# The CI identity (OpenTofu: `artifacts-upload`) can ONLY PutObject under
-# `releases/*` in the isolated homepage-artifacts project — no list, no read,
-# no delete. So we upload a single object with `put-object`, never `sync`
-# (sync lists the destination first and would get AccessDenied).
+# On a semver tag, run the full quality gate and push one container image to the
+# Scaleway registry namespace, tagged with the release. Infra pins that tag to
+# deploy it.
 
 name: release
 
@@ -18,13 +14,18 @@ on:
 permissions:
   contents: read
 
+env:
+  REGISTRY: rg.nl-ams.scw.cloud
+  NAMESPACE: mdijkstra-homepage
+  IMAGE: homepage-site
+
 jobs:
   release:
     runs-on: ubuntu-latest
     # Job-level, not on the build step: vitest resolves the same vite.config.ts
-    # that holds the guard, so `npm test` throws at config time without it and
-    # the build is never reached. The value is inlined into the bundle, which is
-    # why it is a variable and not a secret.
+    # that holds the guard, so `npm test` throws at config time without it. The
+    # value is inlined into the bundle, which is why it is a variable and not a
+    # secret.
     env:
       VITE_AGENT_URL: ${{ vars.VITE_AGENT_URL }}
     steps:
@@ -43,21 +44,21 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm test
-      - run: npm run build
-      - run: tar czf site.tar.gz -C dist .
 
-      # --if-none-match "*" makes this a write-once PutObject: if the key
-      # already exists the request fails (412) instead of overwriting. Needs
-      # only PutObject, which is all the CI identity has.
-      - name: Upload release artifact
+      - name: Log in to the registry
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_UPLOAD_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_UPLOAD_SECRET_KEY }}
-          AWS_DEFAULT_REGION: nl-ams
+          SCW_SECRET_KEY: ${{ secrets.REGISTRY_PUSH_SECRET_KEY }}
         run: |
-          aws s3api put-object \
-            --bucket mdijkstra-homepage-artifacts \
-            --key "releases/${GITHUB_REF_NAME}/site-${GITHUB_SHA}.tar.gz" \
-            --body site.tar.gz \
-            --if-none-match "*" \
-            --endpoint-url https://s3.nl-ams.scw.cloud
+          echo "$SCW_SECRET_KEY" |
+            docker login "$REGISTRY/$NAMESPACE" -u nologin --password-stdin
+
+      # The Dockerfile runs the production build itself, so the image is
+      # reproducible from a clone rather than from this runner's working tree.
+      - name: Build and push
+        run: |
+          IMAGE_REF="$REGISTRY/$NAMESPACE/$IMAGE:$GITHUB_REF_NAME"
+          docker build \
+            --build-arg "VITE_AGENT_URL=$VITE_AGENT_URL" \
+            --tag "$IMAGE_REF" \
+            .
+          docker push "$IMAGE_REF"
