@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import spotlightStyles from '../../../../components/effects/PointerSpotlight/PointerSpotlight.module.css';
@@ -11,7 +11,25 @@ import { SITE } from '../../../../content/site';
 import type { ChatRole } from '../../conversation/messages';
 import styles from './ChatBubble.module.css';
 
-const pickThinking = () => SITE.thinkingWords[Math.floor(Math.random() * SITE.thinkingWords.length)];
+// A cold backend instance can take several seconds to answer, and the model
+// reasons before it emits any text. One frozen word through all of that reads
+// as a hung page, so the wait advances through the list and stops on the last.
+const THINKING_STEP_MS = 2500;
+
+function useThinkingWord(waiting: boolean): string {
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    if (!waiting) return;
+    const timer = setInterval(
+      () => setStep((current) => Math.min(current + 1, SITE.thinkingWords.length - 1)),
+      THINKING_STEP_MS,
+    );
+    return () => clearInterval(timer);
+  }, [waiting]);
+
+  return SITE.thinkingWords[step];
+}
 
 export interface ChatBubbleProps {
   speaker: ChatRole;
@@ -24,8 +42,7 @@ export default memo(ChatBubble);
 
 function ChatBubble({ speaker, text }: ChatBubbleProps) {
   const fillRef = useRef<HTMLDivElement>(null);
-  const wordRef = useRef<string | null>(null);
-  if (wordRef.current === null) wordRef.current = pickThinking();
+  const thinkingWord = useThinkingWord(speaker === 'assistant' && !text);
   const bubbleClassName = `${styles.bubble} ${styles[speaker]}`;
 
   return (
@@ -42,7 +59,7 @@ function ChatBubble({ speaker, text }: ChatBubbleProps) {
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
             </div>
           ) : (
-            <span className={styles.thinking}>{wordRef.current}…</span>
+            <span className={styles.thinking}>{thinkingWord}…</span>
           )
         ) : (
           text
