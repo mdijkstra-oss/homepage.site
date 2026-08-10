@@ -1,3 +1,56 @@
+import type { ContentSection } from '../features/portfolio/model/types';
+
+export interface NavItem {
+  label: string;
+  href?: string;
+  target?: '_blank';
+  rel?: 'noopener';
+}
+
+export interface ComposerCopy {
+  placeholder: string;
+  send: string;
+  busy: string;
+}
+
+export interface SiteCopy {
+  logo: string;
+  nav: readonly NavItem[];
+  composer: ComposerCopy;
+  thinkingWords: readonly string[];
+}
+
+export const SITE: SiteCopy = {
+  logo: 'mdijkstra.dev',
+  nav: [
+    {
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/matthijn-dijkstra-65527199/',
+      target: '_blank',
+      rel: 'noopener',
+    },
+    { label: 'Resume', href: '/resume.pdf' },
+    { label: 'Contact', href: "mailto:hello@mdijkstra.dev?subject=Let's%20build%20something%20great" },
+  ],
+  composer: {
+    placeholder: 'Ask anything about Matthijn',
+    send: '↵ send',
+    busy: '…',
+  },
+  thinkingWords: [
+    'Thinking',
+    'Pondering',
+    'Mulling it over',
+    'Reflecting',
+    'Considering',
+    'Gathering thoughts',
+    'Digging in',
+    'Working it out',
+    'Piecing it together',
+    'One sec',
+  ],
+};
+
 export const SECTIONS: readonly ContentSection[] = [
   {
     id: 'profile',
@@ -10,7 +63,7 @@ export const SECTIONS: readonly ContentSection[] = [
           initials: 'MD',
           name: 'M. Dijkstra',
           label: 'LEAD ENGINEER · ARCHITECT',
-          bio: "I'm a software architect and engineer who owns the shape of a system, not just my corner of it. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon — merging engineering practices across two companies and handing the architecture to a team I hadn't hired. I'm now building Nabu, an open-source research environment, in the open.",
+          bio: "I'm a software architect and engineer who owns the shape of a system, not just my corner of it. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon, merging engineering practices across two companies.",
           badge: 'AVAILABLE FOR WORK',
           availability: 'Available for Staff/founding roles · Remote (EU/US overlap)',
           cta: 'Hire me →',
@@ -107,7 +160,7 @@ export const SECTIONS: readonly ContentSection[] = [
           meta: '2022–2025 · LEAD ENGINEER, ACQUISITION INTEGRATION',
           paragraphs: [
             {
-              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. I moved the platform onto Bardavon's infrastructure, wired it into their CRM, and rebuilt what the shift in focus required — from surgical patients to injured workers — launching in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches.",
+              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. I moved the platform onto Bardavon's infrastructure, wired it into their CRM, and rebuilt what the shift in focus required, from surgical patients to injured workers. It launched in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches.",
             },
             {
               text: "The other half was working across two teams. PeerWell and Bardavon had different engineering practices and different assumptions about the codebase, and the integration meant reconciling them as we went. I documented the architecture and worked with Bardavon's engineers until they owned it.",
@@ -137,31 +190,10 @@ export const SECTIONS: readonly ContentSection[] = [
           name: 'Nabu',
           meta: '2025–PRESENT · SOLO · OPEN SOURCE',
           blurb:
-            'An integrated research environment: the machinery of agentic IDEs pointed at a field where the source of truth is prose rather than code. Markdown files hold everything writable and every queryable view is projected from them, so no answer can drift from what the documents actually say. High-value passes go to models from different providers, and where two disagree a third decides — the passages they split on turn out to be the ones human coders argue about, so a run reports where the codebook itself is ambiguous.',
+            'An integrated research environment concept: the machinery of agentic IDEs pointed at a field where the source of truth is prose rather than code. Markdown files hold everything writable and every queryable view is projected from them, so no answer can drift from what the documents actually say. High-value passes go to models from different providers, and where two disagree a third decides. The passages they split on turn out to be the ones human coders argue about, so a run reports where the codebook itself is ambiguous.',
           tech: ['React 19', 'TypeScript', 'DuckDB-WASM', 'Go', 'Docker', 'Multi-provider LLM'],
           cta: 'View on GitHub →',
           href: 'https://github.com/mdijkstra-oss/nabu-frontend',
-        },
-      },
-    ],
-  },
-  {
-    id: 'projects',
-    pillLabel: 'Projects',
-    prompt: "What's he building now?",
-    blocks: [
-      {
-        type: 'experience',
-        payload: {
-          badge: 'OPEN SOURCE · CURRENT',
-          video: '',
-          name: 'Nabu',
-          meta: '2025–PRESENT · SOLO · OPEN SOURCE',
-          blurb:
-            'An integrated research environment: the machinery of agentic IDEs pointed at a field where the source of truth is prose rather than code. Markdown files hold everything writable and every queryable view is projected from them, so no answer can drift from what the documents actually say. High-value passes go to models from different providers, and where two disagree a third decides — the passages they split on turn out to be the ones human coders argue about, so a run reports where the codebook itself is ambiguous.',
-          tech: ['React 19', 'TypeScript', 'DuckDB-WASM', 'Go', 'Docker', 'Multi-provider LLM'],
-          cta: 'View on GitHub →',
-          href: '',
         },
       },
 
@@ -171,7 +203,7 @@ export const SECTIONS: readonly ContentSection[] = [
           eyebrow: 'APPROACH',
           title: 'How I build',
           paragraphs: [
-            "The work is shifting from writing code to specifying it, and I'm shifting with it. Agentic tools do more of the typing while I write the spec and review the output hard — the same skill as extracting requirements from stakeholders, pointed the other way. Nabu is where I've been working out what that actually changes, and so far the answer is that it's worth exactly as much as the review standards behind it.",
+            "The work is shifting from writing every line of code to specifying it, and I'm shifting with it. Agentic tools do more of the typing while I write the spec and review and refine the output.",
           ],
         },
       },
