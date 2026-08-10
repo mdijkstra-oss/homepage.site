@@ -21,6 +21,12 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Job-level, not on the build step: vitest resolves the same vite.config.ts
+    # that holds the guard, so `npm test` throws at config time without it and
+    # the build is never reached. The value is inlined into the bundle, which is
+    # why it is a variable and not a secret.
+    env:
+      VITE_AGENT_URL: ${{ vars.VITE_AGENT_URL }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 

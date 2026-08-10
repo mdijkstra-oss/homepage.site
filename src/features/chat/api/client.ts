@@ -2,15 +2,22 @@ import { parseJson } from '../../../lib/json';
 import type { ChatMessage, StreamHandlers } from '../conversation/messages';
 import { getFailedResponseEvent, getTextDeltaEvent } from './events';
 
-const AGENT_URL = import.meta.env.VITE_AGENT_URL || 'http://localhost:8081/cv';
+const AGENT_URL = import.meta.env.VITE_AGENT_URL;
+const RATE_LIMITED_STATUS = 429;
+export const RATE_LIMITED_MESSAGE = 'the assistant is busy right now, try again shortly';
+export const INCOMPLETE_MESSAGE = 'the answer was cut off before it finished';
+const COMPLETED_EVENT = 'response.completed';
 
 export async function streamChat(messages: ChatMessage[], { onDelta, signal }: StreamHandlers = {}) {
   const res = await fetch(AGENT_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages }),
+    headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
+    body: JSON.stringify({ input: messages, stream: true }),
     signal,
   });
+  if (res.status === RATE_LIMITED_STATUS) {
+    throw new Error(RATE_LIMITED_MESSAGE);
+  }
   if (!res.ok || !res.body) {
     throw new Error(`chat request failed (${res.status})`);
   }
@@ -26,16 +33,21 @@ export async function streamChat(messages: ChatMessage[], { onDelta, signal }: S
     if (error) throw error;
     if (done) break;
   }
+
+  if (!streamState.completed) {
+    throw new Error(INCOMPLETE_MESSAGE);
+  }
 }
 
 export interface EventStreamState {
   buffer: string;
   event: string;
   data: string[];
+  completed: boolean;
 }
 
 export function createEventStreamState(): EventStreamState {
-  return { buffer: '', event: '', data: [] };
+  return { buffer: '', event: '', data: [], completed: false };
 }
 
 export function readEventStreamChunk(
@@ -73,7 +85,10 @@ function dispatchEventStreamRecord(state: EventStreamState, onDelta?: (chunk: st
   const data = state.data.join('\n');
   state.event = '';
   state.data = [];
-  return data ? readStreamEvent(event, data, onDelta) : undefined;
+  state.completed ||= event === COMPLETED_EVENT;
+  // On the name, not the payload: a `response.failed` carrying no usable data is
+  // still a failure, and gating on data is what would swallow it.
+  return event ? readStreamEvent(event, data, onDelta) : undefined;
 }
 
 export function readStreamEvent(event: string, data: string, onDelta?: (chunk: string) => void): Error | undefined {

@@ -21,6 +21,19 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    # Every step that loads vite.config.ts needs this: the config guard reads it
+    # through loadEnv, and a runner has no .env to fall back on. `npm test` runs
+    # vitest against the same config, so scoping it to the build step would fail
+    # every pull request.
+    # The fallback is what keeps this gate green before the backend exists: the
+    # container's endpoint is only known after infra's second apply, and every
+    # step here loads vite.config.ts, whose guard throws on an unset value.
+    #
+    # `.invalid` is reserved and can never resolve, so a bundle built here is
+    # visibly not one to serve. Nothing published comes from this workflow anyway
+    # — release.yml reads the variable bare and fails when it is unset.
+    env:
+      VITE_AGENT_URL: ${{ vars.VITE_AGENT_URL || 'https://backend.invalid/cv' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 

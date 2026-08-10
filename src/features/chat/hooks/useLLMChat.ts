@@ -36,7 +36,7 @@ export function useLLMChat(initialMessages: readonly ChatMessage[]) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         setMessages((previous) =>
           previous.map((message) =>
-            message.id === assistantId ? { ...message, text: `_Something went wrong: ${errorMessage}_` } : message,
+            message.id === assistantId ? { ...message, text: withFailureMarker(message.text, errorMessage) } : message,
           ),
         );
       } finally {
@@ -47,4 +47,9 @@ export function useLLMChat(initialMessages: readonly ChatMessage[]) {
   );
 
   return { messages, isGeneratingResponse, sendMessage };
+}
+
+function withFailureMarker(streamed: string, errorMessage: string): string {
+  const marker = `_Something went wrong: ${errorMessage}_`;
+  return streamed ? `${streamed}\n\n${marker}` : marker;
 }
