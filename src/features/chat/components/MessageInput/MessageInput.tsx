@@ -1,14 +1,22 @@
-import { type ChangeEvent, type FormEvent, type KeyboardEvent, type RefObject, useRef, useState } from 'react';
+import {
+  type ChangeEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  type RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { SITE } from '../../../../content/site';
 import styles from './MessageInput.module.css';
 
 const INPUT_MAX_HEIGHT = 132;
 
 /**
- * Focusing on load saves a click with a mouse. On a touch screen it throws the
- * keyboard over the page before the reader has seen any of it.
+ * A mouse can hold focus for free. On a touch screen focus means the keyboard
+ * covers the page, so the input takes it only while the reader is typing.
  */
-function prefersFocusOnLoad(): boolean {
+function hasFinePointer(): boolean {
   return window.matchMedia?.('(pointer: fine)').matches ?? false;
 }
 
@@ -20,8 +28,14 @@ interface MessageInputProps {
 
 export default function MessageInput({ onSend, isGeneratingResponse, sendButtonRef }: MessageInputProps) {
   const [value, setValue] = useState('');
-  const [focusOnLoad] = useState(prefersFocusOnLoad);
+  const [finePointer] = useState(hasFinePointer);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const wasGenerating = useRef(false);
+
+  useEffect(() => {
+    if (finePointer && wasGenerating.current && !isGeneratingResponse) inputRef.current?.focus();
+    wasGenerating.current = isGeneratingResponse;
+  }, [finePointer, isGeneratingResponse]);
 
   const resizeInput = (el: HTMLTextAreaElement | null) => {
     if (!el) return;
@@ -36,6 +50,7 @@ export default function MessageInput({ onSend, isGeneratingResponse, sendButtonR
     onSend(q);
     setValue('');
     if (inputRef.current) inputRef.current.style.height = 'auto';
+    if (!finePointer) inputRef.current?.blur();
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -55,7 +70,7 @@ export default function MessageInput({ onSend, isGeneratingResponse, sendButtonR
   return (
     <form onSubmit={submit} className={styles.form}>
       <textarea
-        autoFocus={focusOnLoad}
+        autoFocus={finePointer}
         ref={inputRef}
         rows={1}
         value={value}
