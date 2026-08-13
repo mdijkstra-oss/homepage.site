@@ -67,7 +67,7 @@ export default function App() {
           </section>
         ))}
         {messages.map((message) => (
-          <PageTransitionItem key={message.id} config={FOREGROUND_CONFIG}>
+          <PageTransitionItem key={message.id} config={FOREGROUND_CONFIG} revealOnMount>
             <ChatBubble speaker={message.role} text={message.text} />
           </PageTransitionItem>
         ))}

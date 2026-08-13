@@ -108,6 +108,7 @@ export interface ExperiencePayload {
   blurb: string;
   tech?: string[];
   cta?: string;
+  ctaNote?: string;
   href?: string;
 }
 

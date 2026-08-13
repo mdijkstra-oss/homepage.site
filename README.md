@@ -1,57 +1,104 @@
-# M. Dijkstra — portfolio (React + Vite)
+# homepage.site
 
-A packable, static build of the chat-style portfolio. Same visuals and behaviour
-as the original single-file design: scroll-lift card reveals, mouse-follow shine,
-ink-wipe buttons, the Conway's-Game-of-Life background, and the hidden
-snake game (click **Take a break**, or enter the Konami code).
+The frontend of [mdijkstra.dev](https://mdijkstra.dev): a portfolio page laid out as a chat conversation, with a composer at the bottom that answers questions through a real LLM backend, and a hidden snake game.
 
-## Run it
+The build is a fully static site. It talks to exactly one external endpoint — the chat backend named by `VITE_AGENT_URL` — using the [OpenAI Responses API streaming shape](https://platform.openai.com/docs/api-reference/responses-streaming) over server-sent events. Everything else on the page ships in the bundle.
 
-```bash
-npm install
-npm run dev        # local dev server (hot reload)
-npm run build      # static production build -> dist/
+## Content
+
+Every card, pill, nav link and piece of copy on the page comes from [`src/content/site.ts`](src/content/site.ts). Editing the `SECTIONS` array changes, adds or reorders cards; the `SITE` object holds the header, nav and composer text. Images live in [`public/uploads/`](public/uploads) and are served at `/uploads/…`; the resume is served at `/resume.pdf`.
+
+There's a chat button at the bottom of the page hooked up to an LLM.
+
+## Quick start
+
+Needs Node `22` and a value for `VITE_AGENT_URL` — a URL that points at nothing still builds and serves, and the chat fails only when used.
+
+1. Install and configure:
+
+```console
+$ npm install
+$ cp .env.example .env.local   # VITE_AGENT_URL=http://localhost:8081/cv
+```
+
+2. Run the dev server with hot reload:
+
+```sh
+npm run dev
+```
+
+3. Or build the static site into `dist/`:
+
+```console
+$ npm run build
+
+> mdijkstra-portfolio@1.1.2 build
+> tsc --noEmit && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 378 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.73 kB │ gzip:   0.40 kB
+dist/assets/index-DR36olxm.css   26.83 kB │ gzip:   6.38 kB
+dist/assets/index-DygiocX2.js   359.25 kB │ gzip: 115.64 kB
+✓ built in 866ms
+```
+
+`dist/` works on any static host, and — because asset paths are relative — from a subfolder too.
+
+## Runtime environment
+
+| variable | default | meaning |
+| :--- | :--- | :--- |
+| `VITE_AGENT_URL` | none — the build refuses to start without it | absolute `http`/`https` URL of the chat backend |
+
+The variable is read at build time and compiled into the bundle; the built site reads no environment at run time. An unset or malformed value stops `npm run dev` and `npm run build` with `VITE_AGENT_URL is not set. Copy .env.example to .env.local, or set the repository variable.`
+
+> [!NOTE]
+> **A change of backend URL is a rebuild.** The URL is baked into the JavaScript bundle, so pointing a deployed site at a different backend means building a new image, not editing configuration.
+
+## Deployment
+
+```sh
+docker build --build-arg VITE_AGENT_URL=https://backend.example/cv -t homepage-site .
+```
+
+The image holds nginx and the built `dist/` and nothing else — no Node, no source. It listens on `8080` as an unprivileged user and behaves like this:
+
+| request | response |
+| :--- | :--- |
+| `GET /healthz` | `200` with body `ok` |
+| any URL on a `www.` host | `301` to the same path on the bare domain |
+| any request whose `X-Forwarded-Proto` header is `http` | `301` to the `https` URL |
+| `/assets/…` | cached for a year (`immutable` — Vite hashes the filenames) |
+| everything else | `Cache-Control: no-cache`, revalidated on each visit |
+
+Pushing a tag `v*` runs the release workflow: it verifies the tag matches the `package.json` version, runs the checks and tests, then builds and pushes `rg.nl-ams.scw.cloud/mdijkstra-homepage/homepage-site:<tag>`. Cut releases with `npm version` so tag and version stay in sync. The [homepage.infra](https://github.com/mdijkstra-oss/homepage.infra) repo pins that tag to deploy it.
+
+## Development
+
+```sh
+npm run dev        # vite dev server with hot reload
+npm run dev:all    # dev server plus the hermes-logos sibling repo (../../hermes/hermes-logos)
+npm test           # vitest, single run
+npm run typecheck  # tsc --noEmit
+npm run lint       # biome lint
+npm run format     # biome format --write
+npm run check      # biome ci — what CI and the pre-commit hook enforce
 npm run preview    # serve the built dist/ locally
 ```
 
-The `dist/` folder after `npm run build` is a fully static site — drop it on any
-static host (Netlify, GitHub Pages, S3, nginx…). `vite.config.js` uses
-`base: './'` so it also works from a subfolder or opened directly.
+`npm install` installs a husky pre-commit hook that runs `biome check --write` on staged files. CI runs `check`, `typecheck`, `test` and `build` on every push and pull request, using a `backend.invalid` fallback URL when the repository variable is unset — nothing published comes from that workflow.
 
-## Layout
-
-```
-src/
-  main.jsx              React entry
-  App.jsx               page shell; mounts the engine, renders the block list
-  data.js               ← all portfolio content (single source of truth) + chat pills
-  engine.js             imperative canvas/animation engine (scroll-lift, fly-away,
-                        Game of Life, snake, spark bursts). Framework-agnostic.
-  styles.css            resets, keyframes, and the few CSS-only :hover states
-  components/
-    ui.js               shared primitives: Card, Row, Badge, TechTag, WipeButton
-    cards.jsx           one component per card type + <Block> dispatcher
-    Header.jsx          top chrome
-    Composer.jsx        bottom chip rail + faux input + "take a break" pill
-    Background.jsx      canvases + ambient layers + game overlays
-public/uploads/         logos & avatars (served at /uploads/…)
-```
-
-### Editing content
-Everything shown on the page comes from `src/data.js` — edit the `BLOCKS` array to
-change/add/reorder cards. Card visuals live in `src/components/cards.jsx`.
-
-### Why the engine is a plain class
-The scroll reveal, Game of Life, snake and particle systems are `requestAnimationFrame`
-+ `<canvas>` work that shouldn't re-render through React. `SiteEngine` owns the DOM
-imperatively; `App.jsx` just mounts it once against the rendered markup (each card
-carries the `data-*` hooks the engine looks for) and tears it down on unmount.
-
-## Bonus: zero-build demo
-`demo.html` is the whole app inlined into one file (React + Babel from a CDN, compiled
-in the browser). Open it directly in a browser — no install needed. It's handy for a
-quick look, but use the Vite build for anything real.
+Source layout: `src/content/` holds the page content, `src/features/` the four feature areas (`portfolio` cards and pills, `chat` streaming client and hooks, `game` snake and Game of Life engines, `foreground` fly-away page transitions), `src/components/` shared layout and primitives, and `src/lib/` small utilities including the `VITE_AGENT_URL` guard the Vite config calls.
 
 ## License
 
 Released under the [Zero-Clause BSD](LICENSE) (0BSD) license — public-domain-equivalent, do whatever you like, no attribution required.
+
+## See also
+
+- [homepage.infra](https://github.com/mdijkstra-oss/homepage.infra) — the OpenTofu that deploys this image and owns the DNS.
+- [homepage.backend](https://github.com/mdijkstra-oss/homepage.backend) — the chat agent the composer talks to.

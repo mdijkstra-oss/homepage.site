@@ -14,7 +14,7 @@ export default function PillRail() {
           href={`#${pill.section}`}
           icon={pill.palette.icon}
           label={pill.label}
-          iconColor={pill.palette.color}
+          iconColor={pill.palette.accent}
           hoverBg={pill.palette.background}
           hoverColor={pill.palette.color}
         />

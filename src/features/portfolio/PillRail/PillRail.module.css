@@ -1,7 +1,7 @@
 .rail {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   overflow-x: auto;
   padding: 3px 1px 1px;
   scrollbar-width: none;

@@ -25,11 +25,15 @@
   --badge-border: rgba(190, 150, 255, 0.55);
   --badge-color: #e2d4ff;
 }
-.note,
-.experience {
+.note {
   --badge-background: linear-gradient(180deg, rgba(34, 52, 104, 0.95), rgba(22, 34, 70, 0.92));
   --badge-border: rgba(140, 170, 255, 0.55);
   --badge-color: #d7e2ff;
+}
+.experience {
+  --badge-background: linear-gradient(180deg, rgba(94, 64, 20, 0.95), rgba(66, 44, 14, 0.92));
+  --badge-border: rgba(255, 190, 110, 0.5);
+  --badge-color: #ffdca8;
 }
 .also {
   --badge-background: linear-gradient(180deg, rgba(40, 48, 62, 0.96), rgba(26, 32, 42, 0.92));

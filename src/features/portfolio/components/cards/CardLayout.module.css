@@ -10,3 +10,8 @@
   gap: 13px;
   margin-top: 20px;
 }
+.ctaNote {
+  color: #6f7f95;
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}

@@ -33,6 +33,7 @@ export function ExperienceCard({ payload }: { payload: ExperiencePayload }) {
         {payload.href && (
           <div className={layoutStyles.actionRow}>
             <WipeButton href={payload.href} label={payload.cta ?? ''} target="_blank" rel="noopener" />
+            {payload.ctaNote && <span className={layoutStyles.ctaNote}>{payload.ctaNote}</span>}
           </div>
         )}
       </InteractiveCard>

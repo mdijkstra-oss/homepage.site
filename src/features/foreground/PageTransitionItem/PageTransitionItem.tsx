@@ -5,9 +5,15 @@ import styles from './PageTransitionItem.module.css';
 interface PageTransitionItemProps {
   children: ReactNode;
   config: ForegroundConfig;
+  /**
+   * A live chat turn has already arrived, so it fades in where it lands. Waiting to be
+   * scrolled to would hide it: the feed's bottom padding drops a new turn below the
+   * reveal line, and an empty thinking bubble is too short to ever reach it.
+   */
+  revealOnMount?: boolean;
 }
 
-export default function PageTransitionItem({ children, config }: PageTransitionItemProps) {
+export default function PageTransitionItem({ children, config, revealOnMount = false }: PageTransitionItemProps) {
   const scrollRevealRef = useRef<HTMLDivElement>(null);
 
   useEffect(
@@ -19,7 +25,7 @@ export default function PageTransitionItem({ children, config }: PageTransitionI
       const direction = rect.left + rect.width / 2 >= window.innerWidth / 2 ? 1 : -1;
       element.style.setProperty('--reveal-x', `${config.revealDriftPx * direction}px`);
 
-      if (!('IntersectionObserver' in window)) {
+      if (revealOnMount || !('IntersectionObserver' in window)) {
         element.dataset.visible = '';
         return;
       }
@@ -36,7 +42,7 @@ export default function PageTransitionItem({ children, config }: PageTransitionI
       observer.observe(element);
       return () => observer.disconnect();
     },
-    [config],
+    [config, revealOnMount],
   );
 
   const revealStyle = {

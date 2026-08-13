@@ -60,7 +60,7 @@ export const SITE: SiteCopy = {
 export const SECTIONS: readonly ContentSection[] = [
   {
     id: 'profile',
-    pillLabel: 'Profile',
+    pillLabel: 'About',
     prompt: 'Who is Matthijn, in a nutshell?',
     blocks: [
       {
@@ -199,6 +199,7 @@ export const SECTIONS: readonly ContentSection[] = [
             'An integrated research environment concept: the machinery of agentic IDEs pointed at a field where the source of truth is prose rather than code. Markdown files hold everything writable and every queryable view is projected from them, so no answer can drift from what the documents actually say. High-value passes go to models from different providers, and where two disagree a third decides. The passages they split on turn out to be the ones human coders argue about, so a run reports where the codebook itself is ambiguous.',
           tech: ['React 19', 'TypeScript', 'DuckDB-WASM', 'Go', 'Docker', 'Multi-provider LLM'],
           cta: 'View on GitHub →',
+          ctaNote: 'source + docs',
           href: 'https://github.com/mdijkstra-oss/nabu-frontend',
         },
       },
@@ -318,7 +319,7 @@ export const SECTIONS: readonly ContentSection[] = [
           eyebrow: 'PHILOSOPHY',
           title: 'Still curious',
           paragraphs: [
-            "I taught myself to code at eleven and had people paying me for it by fifteen, long before it occurred to me this could be a career. Twenty-five years later, two things haven't changed: I love building things people are glad to use, and I love working out how to get there.",
+            "I taught myself to code around 10, for the simple reason that I liked doing it. Twenty-five years later, two things haven't changed: I love building things people are glad to use, and I love working out how to get there.",
           ],
         },
       },
