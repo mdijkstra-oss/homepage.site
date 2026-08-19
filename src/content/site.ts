@@ -69,13 +69,13 @@ export const SECTIONS: readonly ContentSection[] = [
           initials: 'MD',
           name: 'M. Dijkstra',
           label: 'LEAD ENGINEER · ARCHITECT',
-          bio: "I'm a software architect and engineer who owns the shape of a system, not just my corner of it. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon, merging engineering practices across two companies.",
+          bio: "I'm a software engineer and architect who owns the shape of a system, not just my corner of it. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon, merging engineering practices across two companies.",
           badge: 'AVAILABLE FOR WORK',
           availability: 'Available for Staff/founding roles · Remote (EU/US overlap)',
           cta: 'Hire me →',
           note: 'usually replies same day',
           noteHover: '1 of 1 available',
-          email: 'hire@mdijkstra.dev',
+          email: 'hello@mdijkstra.dev',
           emailSubject: "Let's build something great",
         },
       },
@@ -137,7 +137,7 @@ export const SECTIONS: readonly ContentSection[] = [
               href: 'https://www.bardavon.com/case-studies/peerwells-digital-lower-back-program-reduced-back-pain-by-35/',
             },
           ],
-          tech: ['TypeScript', 'React', 'Node', 'iOS', 'Computer Vision', 'DocumentDB'],
+          tech: ['React', 'Node/TS', 'DocumentDB', 'Native iOS', 'Computer Vision', 'Observability', 'HIPAA'],
           cta: 'View PeerWell →',
           ctaNote: '@ internet archive',
           href: 'https://web.archive.org/web/20210610225140/https://peerwell.co/',
@@ -166,7 +166,7 @@ export const SECTIONS: readonly ContentSection[] = [
           meta: '2022–2025 · LEAD ENGINEER, ACQUISITION INTEGRATION',
           paragraphs: [
             {
-              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. I moved the platform onto Bardavon's infrastructure, wired it into their CRM, and rebuilt what the shift in focus required, from surgical patients to injured workers. It launched in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches.",
+              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. I moved the platform onto Bardavon's infrastructure, integrated it with their visual workflow automation platform, and rebuilt what the shift in focus required, from surgical patients to injured workers. It launched in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches.",
             },
             {
               text: "The other half was working across two teams. PeerWell and Bardavon had different engineering practices and different assumptions about the codebase, and the integration meant reconciling them as we went. I documented the architecture and worked with Bardavon's engineers until they owned it.",
@@ -175,7 +175,7 @@ export const SECTIONS: readonly ContentSection[] = [
               text: "The premise that made PeerWell worth acquiring carried straight into its new use: give people recovering from injury the right information and guidance, and they get better faster at lower cost. Adapting the platform to deliver that for workers' compensation was the core of the work. That work wrapped in 2025. The measure of a good handover is that you can leave, and by then I could.",
             },
           ],
-          tech: ['AWS Fargate', 'Terraform', 'Docker', 'GitHub Actions', 'CI/CD'],
+          tech: ['AWS Fargate', 'Docker', 'GitHub Actions', 'CI/CD', 'IaC/TerraForm'],
           cta: 'View Recovery+ →',
           ctaNote: '@ bardavon.com',
           href: 'https://www.bardavon.com/injury-recovery/recovery-plus/',
@@ -196,22 +196,11 @@ export const SECTIONS: readonly ContentSection[] = [
           name: 'Nabu',
           meta: '2025–PRESENT · SOLO · OPEN SOURCE',
           blurb:
-            'An integrated research environment concept: the machinery of agentic IDEs pointed at a field where the source of truth is prose rather than code. Markdown files hold everything writable and every queryable view is projected from them, so no answer can drift from what the documents actually say. High-value passes go to models from different providers, and where two disagree a third decides. The passages they split on turn out to be the ones human coders argue about, so a run reports where the codebook itself is ambiguous.',
-          tech: ['React 19', 'TypeScript', 'DuckDB-WASM', 'Go', 'Docker', 'Multi-provider LLM'],
+            'Nabu: an AI-native Integrated Research Environment (IRE) that treats prose documents as the source of truth. Developed a local-first, agentic research platform combining LLM-powered qualitative coding, RAG, structured data extraction, multimodal consensus, SQL querying, and document versioning.',
+          tech: ['React', 'DuckDB-WASM', 'Go', 'RAG/HyDE', 'Multi-model voting'],
           cta: 'View on GitHub →',
           ctaNote: 'source + docs',
           href: 'https://github.com/mdijkstra-oss/nabu-frontend',
-        },
-      },
-
-      {
-        type: 'note',
-        payload: {
-          eyebrow: 'APPROACH',
-          title: 'How I build',
-          paragraphs: [
-            "The work is shifting from writing every line of code to specifying it, and I'm shifting with it. Agentic tools do more of the typing while I write the spec and review and refine the output.",
-          ],
         },
       },
     ],
@@ -319,7 +308,7 @@ export const SECTIONS: readonly ContentSection[] = [
           eyebrow: 'PHILOSOPHY',
           title: 'Still curious',
           paragraphs: [
-            "I taught myself to code around 10, for the simple reason that I liked doing it. Twenty-five years later, two things haven't changed: I love building things people are glad to use, and I love working out how to get there.",
+            "I taught myself to code around 10, for the simple reason that I liked doing it. Twenty-five years later, things haven't changed: I love building things people are glad to use, and I love working out how to get there.",
           ],
         },
       },
