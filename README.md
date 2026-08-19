@@ -1,6 +1,6 @@
 # homepage.site
 
-The frontend of [mdijkstra.dev](https://mdijkstra.dev): a portfolio page laid out as a chat conversation, with a composer at the bottom that answers questions through a real LLM backend, and a hidden snake game.
+The frontend of [mdijkstra.dev](https://mdijkstra.dev): a portfolio page laid out as a chat conversation, with a composer at the bottom that answers questions through a real LLM backend, and a hidden easter egg.
 
 The build is a fully static site. It talks to exactly one external endpoint — the chat backend named by `VITE_AGENT_URL` — using the [OpenAI Responses API streaming shape](https://platform.openai.com/docs/api-reference/responses-streaming) over server-sent events. Everything else on the page ships in the bundle.
 
@@ -46,8 +46,6 @@ dist/assets/index-DygiocX2.js   359.25 kB │ gzip: 115.64 kB
 ✓ built in 866ms
 ```
 
-`dist/` works on any static host, and — because asset paths are relative — from a subfolder too.
-
 ## Runtime environment
 
 | variable | default | meaning |
@@ -56,16 +54,13 @@ dist/assets/index-DygiocX2.js   359.25 kB │ gzip: 115.64 kB
 
 The variable is read at build time and compiled into the bundle; the built site reads no environment at run time. An unset or malformed value stops `npm run dev` and `npm run build` with `VITE_AGENT_URL is not set. Copy .env.example to .env.local, or set the repository variable.`
 
-> [!NOTE]
-> **A change of backend URL is a rebuild.** The URL is baked into the JavaScript bundle, so pointing a deployed site at a different backend means building a new image, not editing configuration.
-
 ## Deployment
 
 ```sh
 docker build --build-arg VITE_AGENT_URL=https://backend.example/cv -t homepage-site .
 ```
 
-The image holds nginx and the built `dist/` and nothing else — no Node, no source. It listens on `8080` as an unprivileged user and behaves like this:
+The image holds nginx and the built `dist/` . It listens on `8080` as an unprivileged user and behaves like this:
 
 | request | response |
 | :--- | :--- |
@@ -91,8 +86,6 @@ npm run preview    # serve the built dist/ locally
 ```
 
 `npm install` installs a husky pre-commit hook that runs `biome check --write` on staged files. CI runs `check`, `typecheck`, `test` and `build` on every push and pull request, using a `backend.invalid` fallback URL when the repository variable is unset — nothing published comes from that workflow.
-
-Source layout: `src/content/` holds the page content, `src/features/` the four feature areas (`portfolio` cards and pills, `chat` streaming client and hooks, `game` snake and Game of Life engines, `foreground` fly-away page transitions), `src/components/` shared layout and primitives, and `src/lib/` small utilities including the `VITE_AGENT_URL` guard the Vite config calls.
 
 ## License
 
