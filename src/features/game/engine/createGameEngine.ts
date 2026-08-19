@@ -390,7 +390,7 @@ export function createGameEngine(props: EngineProps): GameEngineHandle {
 
   function startOrResume(origin: { x: number; y: number }): void {
     if (game && game !== 'paused') return;
-    spawnBurst(burstState, origin.x, origin.y, { sparks: 125, stars: 40 });
+    spawnBurst(burstState, origin.x, origin.y, { sparks: 31, stars: 10 });
     startLoop();
     if (snakeTimer) clearTimeout(snakeTimer);
     snakeTimer = setTimeout(game === 'paused' ? startCountdown : startGame, game === 'paused' ? 260 : 380);
