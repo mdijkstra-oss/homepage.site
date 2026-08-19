@@ -69,7 +69,7 @@ export const SECTIONS: readonly ContentSection[] = [
           initials: 'MD',
           photo: 'uploads/self-480.png',
           name: 'M. Dijkstra',
-          label: 'LEAD ENGINEER · ARCHITECT',
+          label: 'STAFF ENGINEER · ARCHITECT',
           bio: "I'm a software engineer and architect who owns the shape of a system, not just my corner of it. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon, merging engineering practices across two companies.",
           badge: 'AVAILABLE FOR WORK',
           availability: 'Available for Staff/founding roles · Remote (EU/US overlap)',
