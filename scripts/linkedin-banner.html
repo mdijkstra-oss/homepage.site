@@ -1,0 +1,240 @@
+<!-- Source for the LinkedIn profile banner. Regenerate by loading this file in a browser at
+     exactly 1584x396 and screenshotting the viewport. The bottom-left corner is left empty:
+     LinkedIn draws the profile photo over it. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>linkedin banner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-display: "Space Grotesk", sans-serif;
+        --font-mono: "Space Mono", monospace;
+      }
+      * { box-sizing: border-box; margin: 0; }
+      html, body { background: #0a0b0d; }
+      body { width: 1584px; height: 396px; overflow: hidden; }
+
+      .banner {
+        position: relative;
+        width: 1584px;
+        height: 396px;
+        overflow: hidden;
+        font-family: var(--font-display);
+      }
+
+      /* The site's background layers, re-aimed at a 4:1 frame. */
+      .lightBackground {
+        position: absolute; inset: 0;
+        background: radial-gradient(120% 280% at 62% -50%, #1a1e26 0%, #0a0b0d 72%);
+      }
+      .aurora {
+        position: absolute; inset: -60% -8%;
+        background:
+          radial-gradient(26% 60% at 14% 44%, rgba(86, 124, 255, 0.36), transparent 66%),
+          radial-gradient(30% 62% at 44% 78%, rgba(178, 84, 255, 0.18), transparent 66%),
+          radial-gradient(26% 58% at 66% 26%, rgba(86, 124, 255, 0.2), transparent 66%),
+          radial-gradient(22% 52% at 90% 70%, rgba(110, 200, 235, 0.12), transparent 68%);
+        filter: blur(60px);
+      }
+      #life { position: absolute; inset: 0; opacity: 0.62; }
+      .grid {
+        position: absolute; inset: 0;
+        background-image:
+          linear-gradient(rgba(140, 170, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(140, 170, 255, 0.05) 1px, transparent 1px);
+        background-size: 30px 30px;
+        mask-image: radial-gradient(120% 150% at 52% 34%, #000 52%, transparent 100%);
+      }
+      .vignette {
+        position: absolute; inset: 0;
+        background: radial-gradient(78% 120% at 50% 50%, rgba(8, 9, 13, 0.3), transparent 78%);
+      }
+      /* Keeps the photo corner dark so the avatar never lands on a bright cell, and settles
+         the field behind the wordmark so it stays legible. */
+      .photoShade {
+        position: absolute; inset: 0;
+        background:
+          radial-gradient(30% 90% at 6% 105%, rgba(8, 9, 13, 0.85), transparent 70%),
+          radial-gradient(30% 85% at 50% 50%, rgba(8, 9, 13, 0.62), transparent 72%);
+      }
+
+      /* Centred, not corner-set: phones crop the banner to its middle 60%. */
+      .plate {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex; flex-direction: column; align-items: center; gap: 18px;
+        text-align: center;
+      }
+      .logo {
+        display: flex; align-items: center; gap: 18px;
+        color: #f4f7fd; font-size: 40px; font-weight: 700; letter-spacing: -0.01em;
+      }
+      .glider {
+        display: grid;
+        grid-template-columns: repeat(3, 13px);
+        grid-auto-rows: 13px;
+        gap: 4px;
+      }
+      .glider span { border-radius: 3px; }
+      .off { background: rgba(140, 170, 255, 0.09); }
+      .c1 { background: #9fd8f2; box-shadow: 0 0 14px rgba(140, 210, 240, 0.75); }
+      .c2 { background: #7fc0e0; box-shadow: 0 0 14px rgba(120, 190, 225, 0.65); }
+      .c3 { background: #6aa6c4; box-shadow: 0 0 12px rgba(106, 166, 196, 0.55); }
+      .c4 { background: #74b2d2; box-shadow: 0 0 12px rgba(116, 178, 210, 0.6); }
+      .c5 { background: #88c8e8; box-shadow: 0 0 14px rgba(136, 200, 232, 0.7); }
+
+      .role {
+        color: #8fa0b8;
+        font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.22em;
+      }
+      .cta {
+        display: flex; align-items: center; gap: 12px;
+        padding: 12px 22px;
+        border: 1px solid rgba(140, 170, 255, 0.3);
+        border-radius: 999px;
+        background: rgba(140, 170, 255, 0.06);
+        color: #b8c8e4;
+        font-family: var(--font-mono); font-size: 17px;
+      }
+      .dot {
+        width: 9px; height: 9px; border-radius: 50%;
+        background: #7ff0c0;
+        box-shadow: 0 0 12px rgba(127, 240, 192, 0.85);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">
+      <div class="lightBackground"></div>
+      <div class="aurora"></div>
+      <canvas id="life" width="1584" height="396"></canvas>
+      <div class="grid"></div>
+      <div class="vignette"></div>
+      <div class="photoShade"></div>
+
+      <div class="plate">
+        <div class="logo">
+          <span class="glider">
+            <span class="off"></span><span class="c1"></span><span class="off"></span>
+            <span class="off"></span><span class="off"></span><span class="c2"></span>
+            <span class="c3"></span><span class="c4"></span><span class="c5"></span>
+          </span>
+          mdijkstra.dev
+        </div>
+        <div class="role">STAFF ENGINEER · ARCHITECT</div>
+        <div class="cta"><span class="dot"></span>chat with the AI about my work</div>
+      </div>
+    </div>
+
+    <script type="module">
+      // A real Life still: the site's own rules and paint pass, seeded deterministically so
+      // re-running this script reproduces the same frame.
+      const CELL = 30;
+      const W = 1584, H = 396;
+      const C = Math.ceil(W / CELL);
+      const R = Math.ceil(H / CELL);
+
+      function mulberry32(a) {
+        return function () {
+          a |= 0; a = (a + 0x6d2b79f5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      const inField = (x, y) => x >= 1 && x <= C - 2 && y >= 1 && y <= R - 2;
+
+      function step(g) {
+        const n = new Uint8Array(C * R);
+        for (let y = 0; y < R; y++) {
+          for (let x = 0; x < C; x++) {
+            let s = 0;
+            for (let dy = -1; dy <= 1; dy++)
+              for (let dx = -1; dx <= 1; dx++) {
+                if (!dx && !dy) continue;
+                const nx = x + dx, ny = y + dy;
+                if (nx >= 0 && nx < C && ny >= 0 && ny < R) s += g[ny * C + nx];
+              }
+            const cur = g[y * C + x];
+            let nv = (cur && (s === 2 || s === 3)) || (!cur && s === 3) ? 1 : 0;
+            if (nv && !inField(x, y)) nv = 0;
+            n[y * C + x] = nv;
+          }
+        }
+        return n;
+      }
+
+      const GLIDER = [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]];
+      const BLOCK = [[0, 0], [1, 0], [0, 1], [1, 1]];
+
+      function seed(rng) {
+        const g = new Uint8Array(C * R);
+        for (let i = 0; i < 34; i++) {
+          const shape = rng() < 0.65 ? GLIDER : BLOCK;
+          const ox = 1 + ((rng() * (C - 4)) | 0);
+          const oy = 1 + ((rng() * (R - 4)) | 0);
+          for (const [dx, dy] of shape) if (inField(ox + dx, oy + dy)) g[(oy + dy) * C + ox + dx] = 1;
+        }
+        for (let y = 1; y <= R - 2; y++)
+          for (let x = 1; x <= C - 2; x++) if (rng() < 0.13) g[y * C + x] = 1;
+        return g;
+      }
+
+      function colors(g) {
+        const N = C * R;
+        const label = new Int32Array(N), stack = new Int32Array(N);
+        const hue = new Float32Array(N).fill(240), light = new Float32Array(N).fill(64);
+        const sizes = [0];
+        let next = 1;
+        for (let i = 0; i < N; i++) {
+          if (!g[i] || label[i]) continue;
+          let sp = 0, count = 0;
+          stack[sp++] = i; label[i] = next;
+          while (sp) {
+            const idx = stack[--sp];
+            count++;
+            const x = idx % C, y = (idx / C) | 0;
+            for (let dy = -1; dy <= 1; dy++)
+              for (let dx = -1; dx <= 1; dx++) {
+                if (!dx && !dy) continue;
+                const nx = x + dx, ny = y + dy;
+                if (nx < 0 || nx >= C || ny < 0 || ny >= R) continue;
+                const ni = ny * C + nx;
+                if (g[ni] && !label[ni]) { label[ni] = next; stack[sp++] = ni; }
+              }
+          }
+          sizes[next++] = count;
+        }
+        for (let i = 0; i < N; i++) {
+          if (!g[i]) continue;
+          const f = Math.min(1, (sizes[label[i]] - 1) / 9);
+          hue[i] = 222 + f * 92;
+          light[i] = 64 + f * 8;
+        }
+        return { hue, light };
+      }
+
+      const rng = mulberry32(1584396);
+      let grid = seed(rng);
+      for (let i = 0; i < 5; i++) grid = step(grid);
+      const { hue, light } = colors(grid);
+
+      const ctx = document.getElementById('life').getContext('2d');
+      for (let i = 0; i < C * R; i++) {
+        if (!grid[i]) continue;
+        const x = i % C, y = (i / C) | 0;
+        ctx.fillStyle = `hsla(${hue[i]},80%,${light[i]}%,0.2)`;
+        ctx.fillRect(x * CELL + 7, y * CELL + 7, CELL - 14, CELL - 14);
+      }
+    </script>
+  </body>
+</html>
