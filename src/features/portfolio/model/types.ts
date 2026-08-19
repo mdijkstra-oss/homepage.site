@@ -1,5 +1,6 @@
 export interface ProfilePayload {
   initials: string;
+  photo?: string;
   name: string;
   label: string;
   bio: string;

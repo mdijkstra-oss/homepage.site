@@ -13,7 +13,11 @@ export function ProfileCard({ payload }: { payload: ProfilePayload }) {
       <InteractiveCard>
         <Badge kind="profile">{payload.badge}</Badge>
         <div className={styles.header}>
-          <div className={styles.avatar}>{payload.initials}</div>
+          {payload.photo ? (
+            <img src={payload.photo} alt={payload.name} className={styles.avatar} />
+          ) : (
+            <div className={styles.avatar}>{payload.initials}</div>
+          )}
           <div className={styles.content}>
             <div className={styles.name}>{payload.name}</div>
             <div className={styles.label}>{payload.label}</div>

@@ -67,6 +67,7 @@ export const SECTIONS: readonly ContentSection[] = [
         type: 'profile',
         payload: {
           initials: 'MD',
+          photo: 'uploads/self-480.png',
           name: 'M. Dijkstra',
           label: 'LEAD ENGINEER · ARCHITECT',
           bio: "I'm a software engineer and architect who owns the shape of a system, not just my corner of it. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon, merging engineering practices across two companies.",
@@ -99,7 +100,10 @@ export const SECTIONS: readonly ContentSection[] = [
               text: 'Joined PeerWell in 2016 as the first full-time engineer, building a digital therapeutics platform for surgical preparation and recovery. Patients acted on its guidance and clinicians built it into care pathways.',
             },
             {
-              text: 'Designed and built most of the initial platform, including the architecture [the patent describes](https://patents.google.com/patent/US20180286509A1/en): the recommendation engine, the configurable scoring, and the patient data model behind it.',
+              pre: 'Designed and built most of the initial platform, including the architecture ',
+              linkText: 'the patent describes',
+              url: 'https://patents.google.com/patent/US20180286509A1/en',
+              post: ': the recommendation engine, the configurable scoring, and the patient data model behind it.',
             },
             {
               text: 'Built the early machine learning work on the product, mainly the image and pose recognition behind the AI-assisted movement features, including a system for creating new exercises from sample videos.',
@@ -308,7 +312,7 @@ export const SECTIONS: readonly ContentSection[] = [
           eyebrow: 'PHILOSOPHY',
           title: 'Still curious',
           paragraphs: [
-            "I taught myself to code around 10, for the simple reason that I liked doing it. Twenty-five years later, things haven't changed: I love building things people are glad to use, and I love working out how to get there.",
+            "I taught myself to code around 10, for the simple reason that I liked doing it. Twenty-five years later, things haven't changed: I love building things people are happy to use, and I love working out how to get there.",
           ],
         },
       },
