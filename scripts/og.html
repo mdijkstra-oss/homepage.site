@@ -1,0 +1,334 @@
+<!-- Source for public/og.png. Regenerate by loading this file in a browser at exactly
+     1200x630 and screenshotting the viewport. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>og card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-display: "Space Grotesk", sans-serif;
+        --font-mono: "Space Mono", monospace;
+      }
+      * { box-sizing: border-box; margin: 0; }
+      html, body { background: #0a0b0d; }
+      body { width: 1200px; height: 630px; overflow: hidden; }
+
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        font-family: var(--font-display);
+      }
+
+      /* Background layers, lifted from Background.module.css and scaled 1.5x. */
+      .lightBackground {
+        position: absolute; inset: 0;
+        background: radial-gradient(125% 95% at 76% -6%, #15181e 0%, #0a0b0d 58%);
+      }
+      .aurora {
+        position: absolute; inset: -25%;
+        background:
+          radial-gradient(38% 34% at 28% 22%, rgba(86, 124, 255, 0.22), transparent 60%),
+          radial-gradient(34% 30% at 80% 80%, rgba(178, 84, 255, 0.15), transparent 60%);
+        filter: blur(52px);
+      }
+      #life { position: absolute; inset: 0; opacity: 0.42; }
+      .grid {
+        position: absolute; inset: 0;
+        background-image:
+          linear-gradient(rgba(140, 170, 255, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(140, 170, 255, 0.045) 1px, transparent 1px);
+        background-size: 30px 30px;
+        mask-image: radial-gradient(140% 120% at 50% 26%, #000 56%, transparent 100%);
+      }
+      .vignette {
+        position: absolute; inset: 0;
+        background: radial-gradient(64% 70% at 50% 46%, rgba(8, 9, 13, 0.6), transparent 78%);
+      }
+
+      .content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 46px 64px 44px;
+      }
+
+      /* Header — the glider logo from Logo.module.css at 1.5x. */
+      .logo {
+        display: flex; align-items: center; gap: 16px;
+        color: #eef2f8; font-size: 24px; font-weight: 700;
+      }
+      .glider {
+        display: grid;
+        grid-template-columns: repeat(3, 9px);
+        grid-auto-rows: 9px;
+        gap: 3px;
+      }
+      .glider span { border-radius: 2px; }
+      .off { background: rgba(140, 170, 255, 0.09); }
+      .c1 { background: #9fd8f2; box-shadow: 0 0 10px rgba(140, 210, 240, 0.75); }
+      .c2 { background: #7fc0e0; box-shadow: 0 0 10px rgba(120, 190, 225, 0.65); }
+      .c3 { background: #6aa6c4; box-shadow: 0 0 9px rgba(106, 166, 196, 0.55); }
+      .c4 { background: #74b2d2; box-shadow: 0 0 9px rgba(116, 178, 210, 0.6); }
+      .c5 { background: #88c8e8; box-shadow: 0 0 10px rgba(136, 200, 232, 0.7); }
+
+      .header {
+        display: flex; align-items: center; justify-content: space-between;
+      }
+      .cta {
+        display: flex; align-items: center; gap: 10px;
+        padding: 10px 18px;
+        border: 1px solid rgba(140, 170, 255, 0.3);
+        border-radius: 999px;
+        background: rgba(140, 170, 255, 0.06);
+        color: #b8c8e4;
+        font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.02em;
+      }
+      .dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: #7ff0c0;
+        box-shadow: 0 0 10px rgba(127, 240, 192, 0.8);
+      }
+      .thread {
+        display: flex; flex-direction: column; align-items: flex-end;
+        gap: 34px;
+        margin-top: 28px;
+      }
+
+      .user {
+        max-width: 62%;
+        padding: 17px 24px;
+        border: 1px solid rgba(140, 170, 255, 0.45);
+        border-radius: 22px 22px 8px 22px;
+        background:
+          linear-gradient(140deg, rgba(86, 124, 255, 0.3), rgba(86, 124, 255, 0.12)),
+          linear-gradient(rgba(10, 16, 34, 0.4), rgba(10, 16, 34, 0.4));
+        box-shadow: 0 8px 22px rgba(20, 40, 120, 0.3);
+        color: #eaf0ff;
+        font-size: 22px; line-height: 1.5;
+      }
+
+      .assistant {
+        position: relative;
+        align-self: flex-start;
+        width: 100%;
+        padding: 26px 30px 28px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 22px 22px 22px 8px;
+        background:
+          linear-gradient(140deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.03)),
+          linear-gradient(rgba(12, 14, 19, 0.5), rgba(12, 14, 19, 0.5));
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        color: #d2dae6;
+      }
+      .badge {
+        position: absolute; top: -17px; right: 28px;
+        padding: 7px 18px;
+        border: 1px solid rgba(120, 255, 180, 0.55);
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(30, 74, 54, 0.95), rgba(19, 52, 38, 0.92));
+        color: #c4f7da;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.14em;
+        white-space: nowrap;
+      }
+      .name {
+        color: #f4f7fd;
+        font-size: 46px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.05;
+      }
+      .role {
+        margin-top: 10px;
+        color: #8fa0b8;
+        font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.18em;
+      }
+      .bio {
+        margin-top: 18px;
+        max-width: 92%;
+        color: #c4cee0;
+        font-size: 21px; line-height: 1.55;
+      }
+
+      .composer {
+        display: flex; align-items: center; gap: 14px;
+        margin-top: auto;
+        padding: 21px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 20px;
+        background: linear-gradient(180deg, rgba(28, 33, 44, 0.45), rgba(16, 20, 27, 0.4));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 0 0 5px rgba(120, 160, 230, 0.045),
+          0 14px 34px rgba(0, 0, 0, 0.4);
+      }
+      .caret {
+        width: 2px; height: 22px;
+        background: #6aa6c4;
+      }
+      .placeholder {
+        flex: 1;
+        color: #7d92a8;
+        font-family: var(--font-mono); font-size: 19px;
+      }
+      .send {
+        color: #6aa6c4;
+        font-family: var(--font-mono); font-size: 17px; font-weight: 700;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="lightBackground"></div>
+      <div class="aurora"></div>
+      <canvas id="life" width="1200" height="630"></canvas>
+      <div class="grid"></div>
+      <div class="vignette"></div>
+
+      <div class="content">
+        <div class="header">
+        <div class="logo">
+          <span class="glider">
+            <span class="off"></span><span class="c1"></span><span class="off"></span>
+            <span class="off"></span><span class="off"></span><span class="c2"></span>
+            <span class="c3"></span><span class="c4"></span><span class="c5"></span>
+          </span>
+          mdijkstra.dev
+        </div>
+          <div class="cta"><span class="dot"></span>chat with the AI about my work</div>
+        </div>
+
+        <div class="thread">
+          <div class="user">Who is Matthijn, in a nutshell?</div>
+          <div class="assistant">
+            <div class="badge">AVAILABLE FOR WORK</div>
+            <div class="name">M. Dijkstra</div>
+            <div class="role">STAFF ENGINEER · ARCHITECT</div>
+            <div class="bio">
+              I'm a software engineer and architect who owns the shape of a system, not just my
+              corner of it. First engineer at PeerWell, then led its integration into Bardavon
+              after the 2022 acquisition.
+            </div>
+          </div>
+        </div>
+
+        <div class="composer">
+          <span class="caret"></span>
+          <span class="placeholder">Ask anything about Matthijn</span>
+          <span class="send">↵ send</span>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      // A real Life still: the site's own rules and paint pass, seeded deterministically so
+      // re-running this script reproduces the same frame.
+      const CELL = 30;
+      const C = Math.ceil(1200 / CELL);
+      const R = Math.ceil(630 / CELL);
+
+      function mulberry32(a) {
+        return function () {
+          a |= 0; a = (a + 0x6d2b79f5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      const inField = (x, y) => x >= 1 && x <= C - 2 && y >= 2 && y <= R - 4;
+
+      function step(g) {
+        const n = new Uint8Array(C * R);
+        for (let y = 0; y < R; y++) {
+          for (let x = 0; x < C; x++) {
+            let s = 0;
+            for (let dy = -1; dy <= 1; dy++)
+              for (let dx = -1; dx <= 1; dx++) {
+                if (!dx && !dy) continue;
+                const nx = x + dx, ny = y + dy;
+                if (nx >= 0 && nx < C && ny >= 0 && ny < R) s += g[ny * C + nx];
+              }
+            const cur = g[y * C + x];
+            let nv = (cur && (s === 2 || s === 3)) || (!cur && s === 3) ? 1 : 0;
+            if (nv && !inField(x, y)) nv = 0;
+            n[y * C + x] = nv;
+          }
+        }
+        return n;
+      }
+
+      const GLIDER = [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]];
+      const PULSAR_ISH = [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1]];
+
+      function seed(rng) {
+        const g = new Uint8Array(C * R);
+        for (let i = 0; i < 14; i++) {
+          const shape = rng() < 0.6 ? GLIDER : PULSAR_ISH;
+          const ox = 1 + ((rng() * (C - 4)) | 0);
+          const oy = 2 + ((rng() * (R - 7)) | 0);
+          for (const [dx, dy] of shape) if (inField(ox + dx, oy + dy)) g[(oy + dy) * C + ox + dx] = 1;
+        }
+        for (let y = 2; y <= R - 4; y++)
+          for (let x = 1; x <= C - 2; x++) if (rng() < 0.07) g[y * C + x] = 1;
+        return g;
+      }
+
+      function colors(g) {
+        const N = C * R;
+        const label = new Int32Array(N), stack = new Int32Array(N);
+        const hue = new Float32Array(N).fill(240), light = new Float32Array(N).fill(64);
+        const sizes = [0];
+        let next = 1;
+        for (let i = 0; i < N; i++) {
+          if (!g[i] || label[i]) continue;
+          let sp = 0, count = 0;
+          stack[sp++] = i; label[i] = next;
+          while (sp) {
+            const idx = stack[--sp];
+            count++;
+            const x = idx % C, y = (idx / C) | 0;
+            for (let dy = -1; dy <= 1; dy++)
+              for (let dx = -1; dx <= 1; dx++) {
+                if (!dx && !dy) continue;
+                const nx = x + dx, ny = y + dy;
+                if (nx < 0 || nx >= C || ny < 0 || ny >= R) continue;
+                const ni = ny * C + nx;
+                if (g[ni] && !label[ni]) { label[ni] = next; stack[sp++] = ni; }
+              }
+          }
+          sizes[next++] = count;
+        }
+        for (let i = 0; i < N; i++) {
+          if (!g[i]) continue;
+          const f = Math.min(1, (sizes[label[i]] - 1) / 9);
+          hue[i] = 222 + f * 92;
+          light[i] = 64 + f * 8;
+        }
+        return { hue, light };
+      }
+
+      const rng = mulberry32(20260819);
+      let grid = seed(rng);
+      for (let i = 0; i < 9; i++) grid = step(grid);
+      const { hue, light } = colors(grid);
+
+      const ctx = document.getElementById('life').getContext('2d');
+      for (let i = 0; i < C * R; i++) {
+        if (!grid[i]) continue;
+        const x = i % C, y = (i / C) | 0;
+        ctx.fillStyle = `hsla(${hue[i]},80%,${light[i]}%,0.2)`;
+        ctx.fillRect(x * CELL + 7, y * CELL + 7, CELL - 14, CELL - 14);
+      }
+      document.body.dataset.ready = 'true';
+    </script>
+  </body>
+</html>
