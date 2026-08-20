@@ -51,7 +51,7 @@ export default function BottomBar({
       </div>
 
       <p className={styles.disclaimer}>
-        This chat uses AI. Answers can be wrong and messages are stored. <a href="/privacy.txt">Privacy</a>
+        This chat uses AI. Answers can be wrong. <a href="/privacy.txt">Privacy</a>
       </p>
     </div>
   );
