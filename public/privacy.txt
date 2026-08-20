@@ -4,31 +4,19 @@ mdijkstra.dev
 
 Everything this site does stays in the EU.
 
+Two companies handle it. Scaleway runs the server and generates the chat
+answers. PostHog stores page views and chat turns, so the assistant can be
+checked for accuracy. Both under their own privacy policies:
 
-THE CHAT
+  https://www.scaleway.com/en/privacy-policy/
+  https://posthog.com/privacy
 
-Your message is sent to Scaleway, which generates the answer. It is processed
-in Paris and not kept: the endpoint stores no conversations, and prompts and
-answers are not used to train any model. A request may be held briefly if
-Scaleway is looking into abuse or an error on the service.
+Neither uses anything from this site to train a model. There are no cookies
+and nothing else is stored on your device, so visits cannot be linked to each
+other. Chat messages and analytics are kept for a year, server logs for seven
+days.
 
-The questions and the answers are also stored in PostHog, on servers in
-Frankfurt, so the assistant can be evaluated for accuracy. They are kept for
-one year. They are not linked to a name and are not used to train any model.
 Please don't put confidential information in the chat.
-
-
-ANALYTICS
-
-PostHog also records page views and click positions. Nothing is stored in the
-browser, so visits cannot be linked to each other. Frankfurt, kept for one
-year.
-
-
-SERVER LOGS
-
-The web server records the IP address, the page requested and the time. It
-runs on Scaleway in Amsterdam, and the logs are kept for seven days.
 
 
 WHY
