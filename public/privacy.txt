@@ -1,42 +1,63 @@
 PRIVACY
-mdijkstra.dev
+Last updated: 21 August 2026
+
+Matthijn Dijkstra is the controller for the data described here.
 
 
-Everything this site does stays in the EU.
+HOSTING AND THE ASSISTANT
 
-Two companies handle it. Scaleway runs the server and generates the chat
-answers. PostHog stores page views and chat turns, so the assistant can be
-checked for accuracy. Both under their own privacy policies:
+The site and its backend run on Scaleway in Amsterdam (nl-ams), in the EU.
+The assistant runs on Scaleway's Generative APIs, also in the EU. Chat
+messages are sent there to produce an answer.
 
-  https://www.scaleway.com/en/privacy-policy/
-  https://posthog.com/privacy
+Scaleway keeps server logs for 7 days. These logs contain the usual request
+data, including IP address.
 
-Neither uses anything from this site to train a model. There are no cookies
-and nothing else is stored on your device, so visits cannot be linked to each
-other. Chat messages and analytics are kept for a year, server logs for seven
-days.
+
+ANALYTICS
+
+Page visits and clicks are sent to PostHog on its EU cloud and kept for one
+year.
+
+No cookies are set and nothing is stored on your device, so two visits from
+the same person are not linked to each other.
+
+Neither uses anything from this site to train a model.
+
+
+CHAT
+
+The chat is optional. If you do not use it, only the visit and click data
+above applies.
+
+If you do use it, the text of your questions and the assistant's answers is
+sent to PostHog as well, under the same one-year retention.
 
 Please don't put confidential information in the chat.
 
 
-WHY
+WHY THIS IS COLLECTED
 
 This site presents professional work, and the assistant needs to be evaluated
 to know whether it does that well. The legal basis is legitimate interest
-under Article 6(1)(f) GDPR. The site works without the chat.
+under Article 6(1)(f) GDPR.
 
 
 YOUR RIGHTS
 
-You can request a copy of what is held about you, request its deletion, or
-object to any of the above, by mail. You can also lodge a complaint with the
-Autoriteit Persoonsgegevens at autoriteitpersoonsgegevens.nl.
+Under the GDPR you can ask for a copy of the data held about you, ask for it
+to be corrected or deleted, ask for its processing to be restricted, and
+object to processing based on legitimate interest.
+
+Email the address below to make a request. For chat records, an approximate
+date and time helps to find them.
+
+You can also lodge a complaint with a supervisory authority. In the
+Netherlands that is the Autoriteit Persoonsgegevens
+(autoriteitpersoonsgegevens.nl).
 
 
 CONTACT
 
 Matthijn Dijkstra
-matthijn@me.com
-
-
-Last changed 20 August 2026.
+hello@mdijkstra.dev
