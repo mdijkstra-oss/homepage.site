@@ -10,7 +10,10 @@ let started = false;
 export function startAnalytics(token: string | undefined): void {
   const key = token?.trim() ?? '';
   if (!key) return;
-  posthog.init(key, { api_host: HOST, defaults: DEFAULTS, enable_heatmaps: true });
+  // In-memory persistence stores nothing on the visitor's device, so the site
+  // needs no ePrivacy consent prompt. The cost is that a returning visitor is
+  // indistinguishable from a new one.
+  posthog.init(key, { api_host: HOST, defaults: DEFAULTS, enable_heatmaps: true, persistence: 'memory' });
   started = true;
 }
 

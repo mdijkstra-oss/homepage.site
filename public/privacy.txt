@@ -1,0 +1,54 @@
+PRIVACY
+mdijkstra.dev
+
+
+Everything this site does stays in the EU.
+
+
+THE CHAT
+
+Your message is sent to Scaleway, which generates the answer. It is processed
+in Paris and not kept: the endpoint stores no conversations, and prompts and
+answers are not used to train any model. A request may be held briefly if
+Scaleway is looking into abuse or an error on the service.
+
+The questions and the answers are also stored in PostHog, on servers in
+Frankfurt, so the assistant can be evaluated for accuracy. They are kept for
+one year. They are not linked to a name and are not used to train any model.
+Please don't put confidential information in the chat.
+
+
+ANALYTICS
+
+PostHog also records page views and click positions. Nothing is stored in the
+browser, so visits cannot be linked to each other. Frankfurt, kept for one
+year.
+
+
+SERVER LOGS
+
+The web server records the IP address, the page requested and the time. It
+runs on Scaleway in Amsterdam, and the logs are kept for seven days.
+
+
+WHY
+
+This site presents professional work, and the assistant needs to be evaluated
+to know whether it does that well. The legal basis is legitimate interest
+under Article 6(1)(f) GDPR. The site works without the chat.
+
+
+YOUR RIGHTS
+
+You can request a copy of what is held about you, request its deletion, or
+object to any of the above, by mail. You can also lodge a complaint with the
+Autoriteit Persoonsgegevens at autoriteitpersoonsgegevens.nl.
+
+
+CONTACT
+
+Matthijn Dijkstra
+matthijn@me.com
+
+
+Last changed 20 August 2026.

@@ -49,6 +49,10 @@ export default function BottomBar({
         <PillRail />
         <MessageInput onSend={onSend} isGeneratingResponse={isGeneratingResponse} sendButtonRef={sendRef} />
       </div>
+
+      <p className={styles.disclaimer}>
+        This chat uses AI. Answers can be wrong and messages are stored. <a href="/privacy.txt">Privacy</a>
+      </p>
     </div>
   );
 }
