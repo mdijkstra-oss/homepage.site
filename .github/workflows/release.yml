@@ -28,6 +28,7 @@ jobs:
     # secret.
     env:
       VITE_AGENT_URL: ${{ vars.VITE_AGENT_URL }}
+      VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -59,6 +60,7 @@ jobs:
           IMAGE_REF="$REGISTRY/$NAMESPACE/$IMAGE:$GITHUB_REF_NAME"
           docker build \
             --build-arg "VITE_AGENT_URL=$VITE_AGENT_URL" \
+            --build-arg "VITE_POSTHOG_KEY=$VITE_POSTHOG_KEY" \
             --tag "$IMAGE_REF" \
             .
           docker push "$IMAGE_REF"
