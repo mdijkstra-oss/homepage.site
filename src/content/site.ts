@@ -31,7 +31,7 @@ export const SITE: SiteCopy = {
     },
     {
       label: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/matthijn-dijkstra-65527199/',
+      href: 'https://www.linkedin.com/in/matthijn-dijkstra/',
       target: '_blank',
       rel: 'noopener',
     },
