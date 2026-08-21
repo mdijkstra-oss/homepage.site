@@ -109,7 +109,7 @@ export const SECTIONS: readonly ContentSection[] = [
               text: 'Built the early machine learning work on the product, mainly the image and pose recognition behind the AI-assisted movement features, including a system for creating new exercises from sample videos.',
             },
             {
-              text: 'As the team grew across the US and Europe I took on more of the system design and worked alongside the other engineers on it. I also ran interviews and helped set the hiring bar for a team that was remote almost from the start.',
+              text: 'As the team grew across the US and Europe I took on more of the system design and worked alongside the other engineers on it. I also ran interviews and helped set the hiring bar for a team that was remote almost from the start. Nearly ten years of working remotely with teams spread across the US and Europe started here.',
             },
             {
               pre: 'Co-inventor on published U.S. Patent Application ',
