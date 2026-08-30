@@ -312,7 +312,7 @@ export const SECTIONS: readonly ContentSection[] = [
           eyebrow: 'PHILOSOPHY',
           title: 'Still curious',
           paragraphs: [
-            "I taught myself to code around 10, for the simple reason that I liked doing it. Twenty-five years later, things haven't changed: I love building things people are happy to use, and I love working out how to get there.",
+            "I taught myself to code around 10, for the simple reason that I liked doing it. Decades later, things haven't changed: I love building things people are happy to use, and I love working out how to get there.",
           ],
         },
       },
