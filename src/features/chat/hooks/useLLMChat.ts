@@ -1,5 +1,4 @@
 import { useCallback, useRef, useState } from 'react';
-import { capture } from '../../../lib/analytics';
 import { streamChat } from '../api/client';
 import { buildMessages } from '../conversation/history';
 import type { ChatMessage, ChatTurn } from '../conversation/messages';
@@ -15,10 +14,6 @@ export function useLLMChat(initialMessages: readonly ChatMessage[]) {
       if (!question || isGeneratingResponse) return;
       setIsGeneratingResponse(true);
 
-      const turn = countQuestions(messages) + 1;
-      const startedAt = performance.now();
-      capture('asked question', { question, turn });
-
       const userId = ++idRef.current;
       const assistantId = ++idRef.current;
       setMessages((previous) => [
@@ -31,7 +26,6 @@ export function useLLMChat(initialMessages: readonly ChatMessage[]) {
 
       // Deltas arrive far faster than the eye reads; committing each one re-renders
       // the page and re-parses the whole answer as markdown. Batch them per frame.
-      let answer = '';
       let pending = '';
       let flushHandle = 0;
       const flush = () => {
@@ -53,17 +47,14 @@ export function useLLMChat(initialMessages: readonly ChatMessage[]) {
       try {
         await streamChat(history, {
           onDelta: (chunk) => {
-            answer += chunk;
             pending += chunk;
             if (!flushHandle) flushHandle = requestAnimationFrame(flush);
           },
         });
         settle();
-        captureAnswer({ question, turn, answer, startedAt });
       } catch (error) {
         settle();
         const errorMessage = error instanceof Error ? error.message : String(error);
-        captureAnswer({ question, turn, answer, startedAt, error: errorMessage });
         setMessages((previous) =>
           previous.map((message) =>
             message.id === assistantId ? { ...message, text: withFailureMarker(message.text, errorMessage) } : message,
@@ -77,28 +68,6 @@ export function useLLMChat(initialMessages: readonly ChatMessage[]) {
   );
 
   return { messages, isGeneratingResponse, sendMessage };
-}
-
-function countQuestions(turns: readonly ChatTurn[]): number {
-  return turns.filter((turn) => turn.role === 'user').length;
-}
-
-interface AnsweredQuestion {
-  question: string;
-  turn: number;
-  answer: string;
-  startedAt: number;
-  error?: string;
-}
-
-function captureAnswer({ question, turn, answer, startedAt, error }: AnsweredQuestion): void {
-  capture('received answer', {
-    question,
-    turn,
-    answer,
-    ms: Math.round(performance.now() - startedAt),
-    error: error ?? null,
-  });
 }
 
 function withFailureMarker(streamed: string, errorMessage: string): string {

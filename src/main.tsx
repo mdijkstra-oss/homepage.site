@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { startAnalytics } from './lib/analytics';
+import { startMonitoring } from './lib/monitoring';
 import './styles.css';
 
-startAnalytics(import.meta.env.VITE_POSTHOG_KEY);
+startMonitoring(import.meta.env.VITE_BETTERSTACK_TOKEN);
 
 const rootEl = document.getElementById('root');
 if (!rootEl) throw new Error('#root element not found');

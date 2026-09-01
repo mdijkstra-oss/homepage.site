@@ -1,5 +1,5 @@
 PRIVACY
-Last updated: 21 August 2026
+Last updated: 1 September 2026
 
 Matthijn Dijkstra is the controller for the data described here.
 
@@ -13,33 +13,41 @@ messages are sent there to produce an answer.
 Scaleway keeps server logs for 7 days. These logs contain the usual request
 data, including IP address.
 
+The same request data is also sent to Better Stack, in Germany, and kept for
+three days.
 
-ANALYTICS
 
-Page visits and clicks are sent to PostHog on its EU cloud and kept for one
-year.
+IN THE BROWSER
 
-No cookies are set and nothing is stored on your device, so two visits from
-the same person are not linked to each other.
+Better Stack's script runs on each page, in Germany, and keeps what it records
+for 90 days. It reports:
 
-Neither uses anything from this site to train a model.
+  - JavaScript errors, and the console output around them
+  - page views and loading speed
+  - clicks, form submissions and scrolling
+  - a session replay, which reconstructs what the page looked like and what was
+    typed into it, including the chat
+  - a browser fingerprint, which recognises the same browser on a later visit
+
+Nothing from this site is used to train a model.
 
 
 CHAT
 
-The chat is optional. If you do not use it, only the visit and click data
-above applies.
+The chat is optional. If you do not use it, only the request data above
+applies.
 
-If you do use it, the text of your questions and the assistant's answers is
-sent to PostHog as well, under the same one-year retention.
+If you do use it, your questions and the assistant's answers are sent to
+Scaleway's Generative APIs to produce a reply, and appear in the session replay
+described above.
 
 Please don't put confidential information in the chat.
 
 
 WHY THIS IS COLLECTED
 
-This site presents professional work, and the assistant needs to be evaluated
-to know whether it does that well. The legal basis is legitimate interest
+This site presents professional work, and the records above are what show it is
+running correctly and where it fails. The legal basis is legitimate interest
 under Article 6(1)(f) GDPR.
 
 
