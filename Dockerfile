@@ -26,13 +26,29 @@ RUN npm run build
 
 FROM nginx:alpine-slim
 
+# A Serverless Container has no host to run a log collector on and no second
+# container to put one beside, so the shipper is carried here.
+RUN apk add --no-cache curl jq
+
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /src/dist /usr/share/nginx/html
+
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/ship.sh /usr/local/bin/ship.sh
+
+ENV BETTERSTACK_SERVICE=site
 
 USER nginx
 
 EXPOSE 8080
 
 # The packaged entrypoint templates configuration and adjusts ownership, both of
-# which need root. Naming nginx directly skips it.
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# which need root, so it is bypassed.
+
+# The packaged image stops on QUIT, nginx's graceful shutdown. A shell cannot
+# forward QUIT to a child it started asynchronously, so the runtime is asked for
+# TERM instead and nginx does a fast shutdown. It serves static files in
+# milliseconds, so there is no long request for the graceful path to protect.
+STOPSIGNAL SIGTERM
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh", "nginx", "-g", "daemon off;"]
