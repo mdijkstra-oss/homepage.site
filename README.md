@@ -96,4 +96,6 @@ Released under the [Zero-Clause BSD](LICENSE) (0BSD) license — public-domain-e
 - [homepage.infra](https://github.com/mdijkstra-oss/homepage.infra) — the OpenTofu that deploys this image and owns the DNS.
 - [homepage.backend](https://github.com/mdijkstra-oss/homepage.backend) — the chat agent the composer talks to.
 
+------------
+
 [![Better Stack Badge](https://uptime.betterstack.com/status-badges/v1/monitor/2wp15.svg)](https://uptime.betterstack.com/?utm_source=status_badge)
