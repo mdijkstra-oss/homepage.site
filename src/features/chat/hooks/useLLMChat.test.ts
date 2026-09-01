@@ -167,7 +167,7 @@ describe('useLLMChat error triggers', () => {
   });
 
   it('leaves an ordinary question alone', async () => {
-    stubFetch(() => sseResponse([sseDelta('hello'), SSE_COMPLETED]));
+    stubFetch(async () => sseResponse([sseDelta('hello'), SSE_COMPLETED]));
     const result = renderChat();
 
     await act(async () => {
