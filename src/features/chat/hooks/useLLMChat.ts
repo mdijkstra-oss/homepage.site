@@ -3,6 +3,19 @@ import { streamChat } from '../api/client';
 import { buildMessages } from '../conversation/history';
 import type { ChatMessage, ChatTurn } from '../conversation/messages';
 
+// Typing one of these in the chat fails on purpose, to confirm a browser error
+// reaches the error tracker. Thrown from a timeout so it escapes this handler and
+// React's error boundary and arrives as the unhandled error the tag listens for —
+// caught inside the send path it would never leave the page.
+const ERROR_TRIGGERS: Record<string, () => void> = {
+  '/throw': () => {
+    throw new Error('Deliberate test error: uncaught exception from the chat box');
+  },
+  '/reject': () => {
+    void Promise.reject(new Error('Deliberate test error: unhandled promise rejection'));
+  },
+};
+
 export function useLLMChat(initialMessages: readonly ChatMessage[]) {
   const idRef = useRef(0);
   const [messages, setMessages] = useState<ChatTurn[]>([]);
@@ -12,6 +25,18 @@ export function useLLMChat(initialMessages: readonly ChatMessage[]) {
     async function sendMessage(text: string) {
       const question = text.trim();
       if (!question || isGeneratingResponse) return;
+
+      const trigger = ERROR_TRIGGERS[question.toLowerCase()];
+      if (trigger) {
+        const noticeId = ++idRef.current;
+        setMessages((previous) => [
+          ...previous,
+          { id: noticeId, role: 'assistant', text: `Threw \`${question}\`. It should appear in Better Stack shortly.` },
+        ]);
+        setTimeout(trigger, 0);
+        return;
+      }
+
       setIsGeneratingResponse(true);
 
       const userId = ++idRef.current;

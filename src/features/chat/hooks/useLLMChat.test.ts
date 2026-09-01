@@ -20,6 +20,7 @@ function assistantText(turns: readonly ChatTurn[]): string | undefined {
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe('useLLMChat rendering a rejection', () => {
@@ -122,5 +123,57 @@ describe('useLLMChat composer lock', () => {
       await chat.current.sendMessage('Third');
     });
     expect(calls).toHaveLength(2);
+  });
+});
+
+describe('useLLMChat error triggers', () => {
+  // The trigger is captured rather than run: letting it fire would throw into the
+  // test runner, which is exactly what it is for and exactly what would fail CI.
+  function captureScheduled() {
+    const scheduled: Array<() => void> = [];
+    vi.spyOn(globalThis, 'setTimeout').mockImplementation(((fn: () => void) => {
+      scheduled.push(fn);
+      return 0;
+    }) as unknown as typeof setTimeout);
+    return scheduled;
+  }
+
+  it.each(['/throw', '/reject', '/THROW'])('%s never reaches the backend', async (phrase) => {
+    const scheduled = captureScheduled();
+    const fetchSpy = vi.fn();
+    vi.stubGlobal('fetch', fetchSpy);
+    const result = renderChat();
+
+    await act(async () => {
+      await result.current.sendMessage(phrase);
+    });
+
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(scheduled).toHaveLength(1);
+    expect(assistantText(result.current.messages)).toContain('Better Stack');
+    expect(result.current.isGeneratingResponse).toBe(false);
+  });
+
+  it('throws when the scheduled trigger runs', async () => {
+    const scheduled = captureScheduled();
+    vi.stubGlobal('fetch', vi.fn());
+    const result = renderChat();
+
+    await act(async () => {
+      await result.current.sendMessage('/throw');
+    });
+
+    expect(() => scheduled[0]()).toThrow(/Deliberate test error/);
+  });
+
+  it('leaves an ordinary question alone', async () => {
+    stubFetch(() => sseResponse([sseDelta('hello'), SSE_COMPLETED]));
+    const result = renderChat();
+
+    await act(async () => {
+      await result.current.sendMessage('what did he build?');
+    });
+
+    expect(assistantText(result.current.messages)).toBe('hello');
   });
 });
