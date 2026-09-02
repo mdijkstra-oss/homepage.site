@@ -175,6 +175,25 @@ describe('useLLMChat error triggers', () => {
     expect(consoleError).toHaveBeenCalledWith(thrown);
   });
 
+  it('emits a diagnostic browser log for /log', async () => {
+    const scheduled = captureScheduled();
+    const consoleInfo = vi.spyOn(console, 'info').mockImplementation(() => undefined);
+    const fetchSpy = vi.fn();
+    vi.stubGlobal('fetch', fetchSpy);
+    const result = renderChat();
+
+    await act(async () => {
+      await result.current.sendMessage('/log');
+    });
+
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(scheduled).toHaveLength(1);
+    expect(assistantText(result.current.messages)).toContain('Sent a test log to Better Stack');
+
+    scheduled[0]();
+    expect(consoleInfo).toHaveBeenCalledWith('Deliberate Better Stack test log from the chat box');
+  });
+
   it('leaves an ordinary question alone', async () => {
     stubFetch(async () => sseResponse([sseDelta('hello'), SSE_COMPLETED]));
     const result = renderChat();

@@ -3,18 +3,29 @@ import { streamChat } from '../api/client';
 import { buildMessages } from '../conversation/history';
 import type { ChatMessage, ChatTurn } from '../conversation/messages';
 
-// Typing one of these in the chat fails on purpose, to confirm a browser error
-// reaches the error tracker. Thrown from a timeout so it escapes this handler and
-// React's error boundary and arrives as the unhandled error the tag listens for —
-// caught inside the send path it would never leave the page.
-const ERROR_TRIGGERS: Record<string, () => void> = {
-  '/throw': () => {
-    const error = new Error('Deliberate test error: uncaught exception from the chat box');
-    console.error(error);
-    throw error;
+interface DiagnosticTrigger {
+  confirmation: string;
+  run: () => void;
+}
+
+const DIAGNOSTIC_TRIGGERS: Record<string, DiagnosticTrigger> = {
+  '/log': {
+    confirmation: 'Sent a test log to Better Stack.',
+    run: () => console.info('Deliberate Better Stack test log from the chat box'),
   },
-  '/reject': () => {
-    void Promise.reject(new Error('Deliberate test error: unhandled promise rejection'));
+  '/throw': {
+    confirmation: 'Threw `/throw`. It should appear in Better Stack shortly.',
+    run: () => {
+      const error = new Error('Deliberate test error: uncaught exception from the chat box');
+      console.error(error);
+      throw error;
+    },
+  },
+  '/reject': {
+    confirmation: 'Threw `/reject`. It should appear in Better Stack shortly.',
+    run: () => {
+      void Promise.reject(new Error('Deliberate test error: unhandled promise rejection'));
+    },
   },
 };
 
@@ -28,14 +39,11 @@ export function useLLMChat(initialMessages: readonly ChatMessage[]) {
       const question = text.trim();
       if (!question || isGeneratingResponse) return;
 
-      const trigger = ERROR_TRIGGERS[question.toLowerCase()];
+      const trigger = DIAGNOSTIC_TRIGGERS[question.toLowerCase()];
       if (trigger) {
         const noticeId = ++idRef.current;
-        setMessages((previous) => [
-          ...previous,
-          { id: noticeId, role: 'assistant', text: `Threw \`${question}\`. It should appear in Better Stack shortly.` },
-        ]);
-        setTimeout(trigger, 0);
+        setMessages((previous) => [...previous, { id: noticeId, role: 'assistant', text: trigger.confirmation }]);
+        setTimeout(trigger.run, 0);
         return;
       }
 
