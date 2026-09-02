@@ -9,7 +9,9 @@ import type { ChatMessage, ChatTurn } from '../conversation/messages';
 // caught inside the send path it would never leave the page.
 const ERROR_TRIGGERS: Record<string, () => void> = {
   '/throw': () => {
-    throw new Error('Deliberate test error: uncaught exception from the chat box');
+    const error = new Error('Deliberate test error: uncaught exception from the chat box');
+    console.error(error);
+    throw error;
   },
   '/reject': () => {
     void Promise.reject(new Error('Deliberate test error: unhandled promise rejection'));

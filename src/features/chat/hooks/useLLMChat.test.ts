@@ -154,8 +154,9 @@ describe('useLLMChat error triggers', () => {
     expect(result.current.isGeneratingResponse).toBe(false);
   });
 
-  it('throws when the scheduled trigger runs', async () => {
+  it('logs and throws the same error when the scheduled trigger runs', async () => {
     const scheduled = captureScheduled();
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     vi.stubGlobal('fetch', vi.fn());
     const result = renderChat();
 
@@ -163,7 +164,15 @@ describe('useLLMChat error triggers', () => {
       await result.current.sendMessage('/throw');
     });
 
-    expect(() => scheduled[0]()).toThrow(/Deliberate test error/);
+    let thrown: unknown;
+    try {
+      scheduled[0]();
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toEqual(expect.any(Error));
+    expect(consoleError).toHaveBeenCalledWith(thrown);
   });
 
   it('leaves an ordinary question alone', async () => {
