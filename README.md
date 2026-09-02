@@ -4,13 +4,13 @@ The frontend of [mdijkstra.dev](https://mdijkstra.dev): a portfolio page laid ou
 
 The build is a fully static site. It talks to exactly one external endpoint — the chat backend named by `VITE_AGENT_URL` — using the [OpenAI Responses API streaming shape](https://platform.openai.com/docs/api-reference/responses-streaming) over server-sent events. Everything else on the page ships in the bundle.
 
-## Content
+## 📖 Content
 
 Every card, pill, nav link and piece of copy on the page comes from [`src/content/site.ts`](src/content/site.ts). Editing the `SECTIONS` array changes, adds or reorders cards; the `SITE` object holds the header, nav and composer text. Images live in [`public/uploads/`](public/uploads) and are served at `/uploads/…`; the resume is served at `/resume.pdf`.
 
 There's a chat button at the bottom of the page hooked up to an LLM.
 
-## Quick start
+## 🚀 Quick start
 
 Needs Node `22` and a value for `VITE_AGENT_URL` — a URL that points at nothing still builds and serves, and the chat fails only when used.
 
@@ -46,7 +46,7 @@ dist/assets/index-DygiocX2.js   359.25 kB │ gzip: 115.64 kB
 ✓ built in 866ms
 ```
 
-## Runtime environment
+## ⚙️ Runtime environment
 
 | variable | default | meaning |
 | :--- | :--- | :--- |
@@ -54,7 +54,7 @@ dist/assets/index-DygiocX2.js   359.25 kB │ gzip: 115.64 kB
 
 The variable is read at build time and compiled into the bundle; the built site reads no environment at run time. An unset or malformed value stops `npm run dev` and `npm run build` with `VITE_AGENT_URL is not set. Copy .env.example to .env.local, or set the repository variable.`
 
-## Deployment
+## 🚢 Deployment
 
 ```sh
 docker build --build-arg VITE_AGENT_URL=https://backend.example/cv -t homepage-site .
@@ -72,7 +72,7 @@ The image holds nginx and the built `dist/` . It listens on `8080` as an unprivi
 
 Pushing a tag `v*` runs the release workflow: it verifies the tag matches the `package.json` version, runs the checks and tests, then builds and pushes `rg.nl-ams.scw.cloud/mdijkstra-homepage/homepage-site:<tag>`. Cut releases with `npm version` so tag and version stay in sync. The [homepage.infra](https://github.com/mdijkstra-oss/homepage.infra) repo pins that tag to deploy it.
 
-## Development
+## 🛠️ Development
 
 ```sh
 npm run dev        # vite dev server with hot reload
@@ -87,15 +87,15 @@ npm run preview    # serve the built dist/ locally
 
 `npm install` installs a husky pre-commit hook that runs `biome check --write` on staged files. CI runs `check`, `typecheck`, `test` and `build` on every push and pull request, using a `backend.invalid` fallback URL when the repository variable is unset — nothing published comes from that workflow.
 
-## License
+## 📄 License
 
 Released under the [Zero-Clause BSD](LICENSE) (0BSD) license — public-domain-equivalent, do whatever you like, no attribution required.
 
-## See also
+## 🔗 See also
 
 - [homepage.infra](https://github.com/mdijkstra-oss/homepage.infra) — the OpenTofu that deploys this image and owns the DNS.
 - [homepage.backend](https://github.com/mdijkstra-oss/homepage.backend) — the chat agent the composer talks to.
 
-------------
+## 🗺️ Status
 
-[![Better Stack Badge](https://uptime.betterstack.com/status-badges/v1/monitor/2wp15.svg)](https://mdijkstra.betteruptime.com/)
+[![Better Stack Badge](https://uptime.betterstack.com/status-badges/v1/monitor/2wp15.svg)](https://status.mdijkstra.dev/)
