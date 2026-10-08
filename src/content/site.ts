@@ -110,7 +110,7 @@ export const SECTIONS: readonly ContentSection[] = [
               post: ', on which I am a co-inventor.',
             },
             {
-              text: 'I built image and pose recognition for AI-assisted movement tracking, plus an authoring tool that let the content team define exercises from sample videos without engineering becoming a content bottleneck.',
+              text: 'I built image and pose recognition for AI-assisted movement tracking, plus an authoring tool that let the content team define exercises from sample videos.',
             },
             {
               text: 'As the team grew across the US and Europe, I led system design while continuing to build alongside the other engineers. I mentored engineers, ran interviews and helped set the hiring bar. Across PeerWell and Bardavon, I spent nearly ten years working remotely with teams on both sides of the Atlantic.',
