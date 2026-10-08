@@ -70,9 +70,10 @@ export const SECTIONS: readonly ContentSection[] = [
           photo: 'uploads/self-480.png',
           name: 'M. Dijkstra',
           label: 'STAFF ENGINEER · ARCHITECT',
-          bio: "I'm a software engineer and architect who owns the shape of a system, not just my corner of it. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon, merging engineering practices across two companies.",
+          bio: "I'm a software engineer and architect who takes responsibility for how a system fits together, how it reaches production, and how the team carries it forward. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon and relaunch as Recovery+.",
           badge: 'AVAILABLE FOR WORK',
-          availability: 'Staff/founding roles · Remote or hybrid from Amsterdam · Dutch citizen · EU/US overlap',
+          availability:
+            'Staff, founding & forward-deployed roles · Amsterdam · Remote/hybrid + travel · Dutch citizen · EU/US overlap',
           cta: 'Hire me →',
           note: 'usually replies same day',
           noteHover: '1 of 1 available',
@@ -100,25 +101,19 @@ export const SECTIONS: readonly ContentSection[] = [
               text: 'Joined PeerWell in 2016 as the first full-time engineer, building a digital therapeutics platform for surgical preparation and recovery. Patients acted on its guidance and clinicians built it into care pathways.',
             },
             {
-              pre: 'Designed and built most of the initial platform, including the architecture ',
-              linkText: 'the patent describes',
-              url: 'https://patents.google.com/patent/US20180286509A1/en',
-              post: ': the recommendation engine, the configurable scoring, and the patient data model behind it.',
+              text: 'I designed and built most of the initial platform, including the patient data model, backend services and web applications, supported by HIPAA-compliant infrastructure.',
             },
             {
-              text: 'Built the early machine learning work on the product, mainly the image and pose recognition behind the AI-assisted movement features, including a system for creating new exercises from sample videos.',
-            },
-            {
-              text: 'As the team grew across the US and Europe I took on more of the system design and worked alongside the other engineers on it. I also ran interviews and helped set the hiring bar for a team that was remote almost from the start. Nearly ten years of working remotely with teams spread across the US and Europe started here.',
-            },
-            {
-              pre: 'Co-inventor on published U.S. Patent Application ',
+              pre: 'I designed an adaptive recommendation engine that personalises recovery pathways using patient context, historical outcomes and configurable clinical scoring. Its architecture is described in published U.S. patent application ',
               linkText: 'US20180286509A1',
               url: 'https://patents.google.com/patent/US20180286509A1/en',
-              post: ', an adaptive recommendation engine that combines patient context, historical outcomes, and configurable scoring to personalize surgical prep and recovery pathways.',
+              post: ', on which I am a co-inventor.',
             },
             {
-              text: 'Stayed as first engineer through multiple funding rounds and the 2022 acquisition by Bardavon Health Innovations.',
+              text: 'I built image and pose recognition for AI-assisted movement tracking, plus an authoring tool that let the content team define exercises from sample videos without engineering becoming a content bottleneck.',
+            },
+            {
+              text: 'As the team grew across the US and Europe, I led system design while continuing to build alongside the other engineers. I mentored engineers, ran interviews and helped set the hiring bar. Across PeerWell and Bardavon, I spent nearly ten years working remotely with teams on both sides of the Atlantic.',
             },
           ],
           stats: [
@@ -170,16 +165,16 @@ export const SECTIONS: readonly ContentSection[] = [
           meta: '2022–2025 · LEAD ENGINEER, ACQUISITION INTEGRATION',
           paragraphs: [
             {
-              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. I moved the platform onto Bardavon's infrastructure, integrated it with their visual workflow automation platform, and rebuilt what the shift in focus required, from surgical patients to injured workers. It launched in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches.",
+              text: "When Bardavon acquired PeerWell in 2022, I stayed on to lead the integration. I worked out what to retain and what to rebuild as the product shifted from surgical patients to injured workers. I migrated the platform onto Bardavon's infrastructure and integrated it with their visual workflow automation platform. It launched in April 2024 as Recovery+, which connects people recovering from workplace injuries with licensed clinical coaches.",
             },
             {
-              text: "The other half was working across two teams. PeerWell and Bardavon had different engineering practices and different assumptions about the codebase, and the integration meant reconciling them as we went. I documented the architecture and worked with Bardavon's engineers until they owned it.",
+              text: "The integration also meant bringing together two teams with different engineering practices and assumptions about the codebase. I led that work through to full ownership by Bardavon's engineers, working alongside them on the platform and making the architecture and its decisions explicit so they could maintain and develop it independently.",
             },
             {
-              text: "The premise that made PeerWell worth acquiring carried straight into its new use: give people recovering from injury the right information and guidance, and they get better faster at lower cost. Adapting the platform to deliver that for workers' compensation was the core of the work. That work wrapped in 2025. The measure of a good handover is that you can leave, and by then I could.",
+              text: 'The integration and handover wrapped in 2025. The measure of a good handover is that you can leave, and by then I could.',
             },
           ],
-          tech: ['AWS Fargate', 'Docker', 'GitHub Actions', 'CI/CD', 'IaC/TerraForm'],
+          tech: ['AWS Fargate', 'Docker', 'GitHub Actions', 'CI/CD', 'IaC/Terraform'],
           cta: 'View Recovery+ →',
           ctaNote: '@ bardavon.com',
           href: 'https://www.bardavon.com/injury-recovery/recovery-plus/',
@@ -190,17 +185,17 @@ export const SECTIONS: readonly ContentSection[] = [
   {
     id: 'projects',
     pillLabel: 'Projects',
-    prompt: "What's he building now?",
+    prompt: 'Tell me about his own projects.',
     blocks: [
       {
         type: 'experience',
         payload: {
-          badge: 'OPEN SOURCE · CURRENT',
+          badge: 'OPEN SOURCE',
           video: '',
           name: 'Nabu',
           meta: '2025–PRESENT · SOLO · OPEN SOURCE',
           blurb:
-            'Nabu: an AI-native Integrated Research Environment (IRE) that treats prose documents as the source of truth. Developed a local-first, agentic research platform combining LLM-powered qualitative coding, RAG, structured data extraction, multimodal consensus, SQL querying, and document versioning.',
+            'Nabu is a local-first research environment that turns source documents into structured information people can query and explore. It combines AI-assisted qualitative coding and structured data extraction with querying and document versioning. The original documents remain the source of truth, with derived data kept up to date for local analysis.',
           tech: ['React', 'DuckDB-WASM', 'Go', 'RAG/HyDE', 'Multi-model voting'],
           cta: 'View on GitHub →',
           ctaNote: 'source + docs',
@@ -265,8 +260,7 @@ export const SECTIONS: readonly ContentSection[] = [
           eyebrow: 'INDEPENDENT · 2007–2016',
           title: 'Freelance',
           paragraphs: [
-            'I freelanced for close to nine years, alongside studying and later full-time work. It was the same loop repeated across very different clients: work out what someone actually needs from what they say they want, agree what to deliver, then build it and ship it. Usually I was the only engineer, working with designers and whoever the client had in house.',
-            'The work ran the full range. At one end, WordPress and marketing sites for local businesses. At the other, an online restaurant ordering and payments platform with orders printing straight to the counter.',
+            'I freelanced for close to nine years, alongside studying and later full-time work. It was the same loop repeated across very different clients: work out what someone actually needs from what they say they want, agree what to deliver, then build it, deploy it and support it in use. Usually I was the only engineer, working with designers and whoever the client had in house.',
             'The client relationship was mine as much as the code: scoping the work, and taking the call when something broke.',
           ],
           loop: {
