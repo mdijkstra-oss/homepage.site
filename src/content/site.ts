@@ -70,7 +70,7 @@ export const SECTIONS: readonly ContentSection[] = [
           photo: 'uploads/self-480.png',
           name: 'M. Dijkstra',
           label: 'STAFF ENGINEER · ARCHITECT',
-          bio: "I'm a software engineer and architect who takes responsibility for how a system fits together, how it reaches production, and how the team carries it forward. I joined PeerWell as its first full-time engineer and designed and built most of a digital therapeutics platform, then stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon and relaunch as Recovery+.",
+          bio: "I'm a software engineer and architect who takes responsibility for how a system fits together, how it reaches production, and how the team carries it forward. I joined PeerWell as its first full-time engineer, built much of the initial digital therapeutics platform, and led system design as the engineering team grew. I stayed through funding rounds and the 2022 acquisition to lead its integration into Bardavon and relaunch as Recovery+.",
           badge: 'AVAILABLE FOR WORK',
           availability:
             'Staff, founding & forward-deployed roles · Amsterdam · Remote/hybrid + travel · Dutch citizen · EU/US overlap',
